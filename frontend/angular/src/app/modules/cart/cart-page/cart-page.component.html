@@ -1,1 +1,8 @@
-<p>cart-page works!</p>
+<div>
+  <h1>Cart</h1>
+  <ul>
+    <li *ngFor="let item of cart">
+      {{item.price}} x {{item.name}} - {{item.inCartNumber}} TL = {{getItemPrice(item)}}
+    </li>
+  </ul>
+</div>

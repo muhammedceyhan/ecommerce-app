@@ -1,1 +1,12 @@
-<p>product-details works!</p>
+<button (click)="goBack()">Shopping List</button>
+<div *ngIf="product">
+  <img [src]="product.imageUrl" />
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.description }}</p>
+  <p>{{ product.price | currency }}</p>
+  <p *ngIf="product.stock > 0">In Stock: {{ product.stock }}</p>
+  <p *ngIf="product.stock === 0">Out of Stock</p>
+  <button (click)="addToCart(product.id)">Add to Cart</button>
+  <p>Number of product in cart: {{product.inCartNumber}}</p>
+</div>
+
