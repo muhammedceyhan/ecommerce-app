@@ -55,12 +55,6 @@ export class LoginComponent implements OnInit {
           error: () => alert("Giriş başarısız!")
         }
       });
-
-
-
     }
   }
-
-
-
 }

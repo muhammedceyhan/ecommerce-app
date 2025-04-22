@@ -9,12 +9,17 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class ProductListComponent implements OnInit {
+  searchTerm = ""
+
   products: Product[] = [];
 
-  constructor(private productService: ProductService, private router: Router) {}
+
+  constructor(private productService: ProductService, private router: Router) {
+    this.productService.getAll().subscribe(data => this.products = data);
+  }
 
   ngOnInit(): void {
-    this.productService.getAll().subscribe(data => this.products = data);
+
   }
 
   viewDetail(id: number) {
@@ -22,5 +27,14 @@ export class ProductListComponent implements OnInit {
   }
   goToCart(){
     this.router.navigate(['/cart'])
+  }
+  showSearchResults(): Product[] {
+    let showedProducts: Product[] = [];
+    this.products.forEach(product => {
+      if(product.name.toLowerCase().includes(this.searchTerm.toLowerCase())){
+        showedProducts.push(product);
+      }
+    });
+    return showedProducts;
   }
 }

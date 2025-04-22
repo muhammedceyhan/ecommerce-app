@@ -1,8 +1,15 @@
+<button (click)="returnToMainPage()">Home</button>
 <div>
   <h1>Cart</h1>
   <ul>
     <li *ngFor="let item of cart">
-      {{item.price}} x {{item.name}} - {{item.inCartNumber}} TL = {{getItemPrice(item)}}
+      {{item.inCartNumber}} x {{item.name}} - {{item.price}} TL = {{getItemPrice(item)}}
+      <button (click)="decreaseItem(item)">-</button>
+      <button (click)="increaseItem(item)">+</button>
     </li>
   </ul>
 </div>
+<hr>
+<p>Total purchase: {{calculateTotalPurchase()}}</p>
+
+<button (click)="goToCheckOut()">Check Out</button>
