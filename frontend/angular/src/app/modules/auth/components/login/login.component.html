@@ -1,1 +1,18 @@
-<p>login works!</p>
+<h2>Giriş Yap</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <label>Email:</label>
+  <input type="email" formControlName="email" /><br /><br />
+
+  <label>Şifre:</label>
+  <input type="password" formControlName="password" /><br /><br />
+
+  <button type="submit" [disabled]="loginForm.invalid">Giriş Yap</button>
+</form>
+
+<!-- Mevcut form burada olacak -->
+
+<div class="auth-links" style="margin-top: 20px; text-align: center; font-size: 14px;">
+  <a routerLink="/auth/forgot-password" style="margin-right: 15px;">🔐 Şifremi unuttum</a>
+  <span>|</span>
+  <a routerLink="/auth/register" style="margin-left: 15px;">🆕 Hesabınız yok mu? Kayıt olun</a>
+</div>

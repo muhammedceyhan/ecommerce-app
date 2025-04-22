@@ -1,0 +1,24 @@
+<h2>Kullanıcı Yönetimi</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Ad</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>İşlemler</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <button (click)="deleteUser(user.id!)">Sil</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

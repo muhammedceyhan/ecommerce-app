@@ -1,1 +1,20 @@
-<p>register works!</p>
+<h2>Kayıt Ol</h2>
+
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <label>Ad Soyad:</label>
+  <input type="text" formControlName="fullName" /><br /><br />
+
+  <label>Email:</label>
+  <input type="email" formControlName="email" /><br /><br />
+
+  <label>Şifre:</label>
+  <input type="password" formControlName="password" /><br /><br />
+
+  <label>Rol:</label>
+  <select formControlName="role">
+    <option value="USER">Kullanıcı</option>
+    <option value="ADMIN">Yönetici</option>
+  </select><br /><br />
+
+  <button type="submit" [disabled]="registerForm.invalid">Kayıt Ol</button>
+</form>
