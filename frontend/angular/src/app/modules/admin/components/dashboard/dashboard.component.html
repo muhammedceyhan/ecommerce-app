@@ -1,0 +1,17 @@
+<h1>Admin Paneli</h1>
+
+<nav>
+  <button routerLink="/admin/products">Ürünleri Yönet</button>
+  <button routerLink="/admin/orders">Siparişleri Yönet</button>
+  <button routerLink="/admin/users">Kullanıcıları Yönet</button>
+</nav>
+
+<h2>Admin Paneli</h2>
+
+<div class="stats">
+  <div class="card">Toplam Kullanıcı: {{ totalUsers }}</div>
+  <div class="card">Toplam Ürün: {{ totalProducts }}</div>
+  <div class="card">Toplam Sipariş: {{ totalOrders }}</div>
+</div>
+
+<router-outlet></router-outlet>

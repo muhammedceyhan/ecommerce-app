@@ -3,9 +3,12 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductDetailsComponent } from './modules/product/components/product-list/product-details/product-details.component';
+import { ProductDetailsComponent } from './modules/product/components/product-details/product-details.component';
 import { CartPageComponent } from './modules/cart/cart-page/cart-page.component';
 import { CheckoutComponent } from './modules/cart/checkout/checkout.component';
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +19,9 @@ import { CheckoutComponent } from './modules/cart/checkout/checkout.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RouterModule,
+    HttpClientModule
   ],
   providers: [
     provideClientHydration(withEventReplay())
