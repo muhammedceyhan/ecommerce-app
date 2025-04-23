@@ -12,6 +12,7 @@ import { ProductEditComponent } from './components/product-edit/product-edit.com
 import { OrderManagementComponent } from './components/order-management/order-management.component';
 
 import { AdminProductService } from './services/admin-product.service';
+import { UserManagementComponent } from './components/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AdminProductService } from './services/admin-product.service';
     ProductCreateComponent,
     ProductEditComponent,
     OrderManagementComponent,
-    DashboardComponent
+    DashboardComponent,
+    UserManagementComponent
   ],
   imports: [
     CommonModule,

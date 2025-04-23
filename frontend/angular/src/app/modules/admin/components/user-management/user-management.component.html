@@ -10,15 +10,14 @@
       <th>İşlemler</th>
     </tr>
   </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.id }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.role }}</td>
+
+    <ul *ngFor="let user of users">
+      <li>{{ user.id }}</li>
+      <li>{{ user.name }}</li>
+      <li>{{ user.email }}</li>
+      <li>{{ user.role }}</li>
       <td>
         <button (click)="deleteUser(user.id!)">Sil</button>
       </td>
-    </tr>
-  </tbody>
+    </ul>
 </table>

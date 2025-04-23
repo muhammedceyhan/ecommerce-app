@@ -1,32 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 declare var Stripe: any;
 
 @Component({
   selector: 'app-checkout',
-  standalone: false,
   templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.scss'
+  standalone: false
 })
-
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   stripe: any;
+  card: any;
 
-  constructor() {
-    this.stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY'); // ← kendi anahtarın
+  async ngOnInit() {
+    await this.loadStripeScript();
+
+    this.stripe = Stripe('pk_test_51RGjCwRs8KJ5Rk107wdjWgXK61XUXbSsH0rTVOuvIHPpuZkodBVl0wtkCynKz5HoZ5A0LpQok1sAF5KQbX3bpDpW00oHT8ldqF');
+    const elements = this.stripe.elements();
+    this.card = elements.create('card');
+    this.card.mount('#card-element');  // Stripe kart input'u buraya yerleşir
   }
 
-  checkout(): void {
-    this.stripe.redirectToCheckout({
-      lineItems: [
-        { price: "price_1RGjIjRs8KJ5Rk101ggdKRws", quantity: 1 } // Stripe'ta tanımlı ürünün price_id'si
-      ],
-      mode: 'payment',
-      successUrl: 'http://localhost:4200/success',
-      cancelUrl: 'http://localhost:4200/cancel',
-    }).then((result: any) => {
-      if (result.error) {
-        alert(result.error.message);
+  loadStripeScript(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
+        resolve();
+        return;
       }
+
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.onload = () => resolve();
+      script.onerror = () => reject('Stripe.js yüklenemedi');
+      document.body.appendChild(script);
     });
   }
 }
