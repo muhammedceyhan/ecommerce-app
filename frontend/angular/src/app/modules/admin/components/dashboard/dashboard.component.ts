@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminDashboardService } from '../../services/admin-dashboard.service';
-
+import { AuthService } from '../../../../modules/auth/services/auth.service';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -12,7 +14,7 @@ export class DashboardComponent implements OnInit {
   totalProducts: number = 0;
   totalOrders: number = 0;
 
-  constructor(private dashboardService: AdminDashboardService) {}
+  constructor(private dashboardService: AdminDashboardService,private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -24,5 +26,10 @@ export class DashboardComponent implements OnInit {
       this.totalProducts = stats.totalProducts;
       this.totalOrders = stats.totalOrders;
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Observable, Subscription, fromEvent, of, timer } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  email: string = '';
+  password: string = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
@@ -26,35 +29,23 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
-      // this.authService.login(credentials).subscribe({
-      //   next: () => {
-      //     const role = localStorage.getItem('role');
-      //     if (role === 'ADMIN') {
-      //       this.router.navigate(['/admin']);
-      //     } else {
-      //       this.router.navigate(['/']);
-      //     }
-      //   },
-      //   error: () => alert("Giriş başarısız!")
-      // });
-
-
-      this.authService.login(this.loginForm.value).subscribe({
+      this.authService.login(credentials).subscribe({
         next: (res) => {
-          const role = this.authService.getRole();
-
-          // Eğer adminse admin dashboard'a yönlendir
+          const role = res.role; // doğrudan response içinden al
           if (role === 'ADMIN') {
             this.router.navigate(['/admin']);
           } else {
-            // Kullanıcıysa anasayfaya ya da başka yere
-            this.router.navigate(['/']);
+            this.router.navigate(['/products']);
           }
-        },
-        error: (err) => {
-          error: () => alert("Giriş başarısız!")
         }
+
+        ,
+        error: () => alert("Giriş başarısız!")
       });
     }
+  }
+
+  goToHome() {
+    this.router.navigate(['/products']);
   }
 }

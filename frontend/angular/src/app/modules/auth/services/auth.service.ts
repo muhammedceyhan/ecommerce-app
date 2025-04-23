@@ -1,40 +1,83 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
+
+interface AuthUser {
+  id?: number;
+  name: string;
+  email: string;
+  password: string;
+  role: 'USER' | 'ADMIN';
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth'; // BACKEND URL
+  private registeredUsers: AuthUser[] = [];
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)){
+      const savedUsers = localStorage.getItem('registeredUsers');
+    if (savedUsers) {
+      this.registeredUsers = JSON.parse(savedUsers);
+    } else {
+      // Örnek admin hesabı ekleyelim
+      this.registeredUsers.push({
+        id: 1,
+        name: 'Admin Demo',
+        email: 'admin@example.com',
+        password: 'admin123',
+        role: 'ADMIN'
+      });
 
-  // // Giriş
-  // login(credentials: { email: string; password: string }): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-  //     tap((res: any) => {
-  //       if (isPlatformBrowser(this.platformId)) {
-  //         localStorage.setItem('token', res.token);
-  //         localStorage.setItem('role', res.role);
-  //       }
-  //     })
-  //   );
-  // }
+      this.registeredUsers.push({
+        id: 2,
+        name: 'Mehmet Yılmaz',
+        email: 'mehmet@example.com',
+        password: '12345678',
+        role: 'USER'
+      });
+      localStorage.setItem('registeredUsers', JSON.stringify(this.registeredUsers));
 
-  // // ✅ Yeni kullanıcı kaydı
-  // register(userData: { fullName: string; email: string; password: string; role: string }): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/register`, userData);
-  // }
-
-  isAuthenticated(): boolean {
-    return isPlatformBrowser(this.platformId) && !!localStorage.getItem('token');
+      this.syncToStorage();
+    }
+  }
   }
 
-  getRole(): string | null {
-    return isPlatformBrowser(this.platformId) ? localStorage.getItem('role') : null;
+  private syncToStorage() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('registeredUsers', JSON.stringify(this.registeredUsers));
+    }
+  }
+
+  register(userData: AuthUser): Observable<any> {
+    const exists = this.registeredUsers.some(u => u.email === userData.email);
+    if (exists) {
+      return throwError(() => new Error('Email already exists'));
+    }
+
+    userData.id = this.registeredUsers.length + 1;
+    this.registeredUsers.push(userData);
+    this.syncToStorage();
+    return of({ message: 'Kayıt başarılı' });
+  }
+
+  login(credentials: { email: string; password: string }): Observable<any> {
+    const user = this.registeredUsers.find(
+      u => u.email === credentials.email && u.password === credentials.password
+    );
+
+    if (user) {
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('token', 'mock-token');
+        localStorage.setItem('role', user.role);
+      }
+      return of({ message: 'Giriş başarılı', role: user.role });
+    }
+
+    return throwError(() => new Error('Invalid credentials'));
   }
 
   logout(): void {
@@ -44,19 +87,11 @@ export class AuthService {
     }
   }
 
-
-
-  login(credentials: { email: string, password: string }): Observable<any> {
-    return of({ token: 'mock-token', role: 'ADMIN' }).pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
-      })
-    );
+  isAuthenticated(): boolean {
+    return isPlatformBrowser(this.platformId) && !!localStorage.getItem('token');
   }
 
-  register(userData: any): Observable<any> {
-    return of({ message: 'Registered successfully' });
+  getRole(): string | null {
+    return isPlatformBrowser(this.platformId) ? localStorage.getItem('role') : null;
   }
-
 }

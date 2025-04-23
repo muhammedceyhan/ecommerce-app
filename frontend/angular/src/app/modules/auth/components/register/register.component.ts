@@ -7,12 +7,16 @@ import { Router } from '@angular/router';
   selector: 'app-register',
 
   templateUrl: './register.component.html',
-  standalone: false
+  standalone: false,
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Kayıt formu oluşturuluyor
@@ -20,7 +24,7 @@ export class RegisterComponent implements OnInit {
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      role: ['USER', Validators.required] // varsayılan rol: USER
+      role: ['USER', Validators.required], // varsayılan rol: USER
     });
   }
 
@@ -31,10 +35,15 @@ export class RegisterComponent implements OnInit {
         alert('Kayıt başarılı!');
         this.router.navigate(['/auth/login']); // Bu doğruysa login sayfasına gider
       },
-      error: err => {
+      error: (err) => {
         console.error('Kayıt başarısız:', err);
         alert('Kayıt başarısız!');
-      }
+      },
     });
+  }
+
+  // Geri butonuna tıklandığında çalışır
+  goBack(): void {
+    this.router.navigate(['/login']);
   }
 }

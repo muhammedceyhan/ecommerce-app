@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../modules/auth/services/auth.service';
+
 
 @Component({
   selector: 'app-product-list',
@@ -14,7 +16,7 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
 
 
-  constructor(private productService: ProductService, private router: Router) {
+  constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
     this.productService.getAll().subscribe(data => this.products = data);
   }
 
@@ -36,5 +38,10 @@ export class ProductListComponent implements OnInit {
       }
     });
     return showedProducts;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

@@ -1,4 +1,7 @@
 <h2>Giriş Yap</h2>
+
+<button (click)="goToHome()">Ana Sayfa</button>
+
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <label>Email:</label>
   <input type="email" formControlName="email" /><br /><br />

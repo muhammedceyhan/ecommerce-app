@@ -1,5 +1,7 @@
 <h2>Kayıt Ol</h2>
 
+<button (click)="goBack()">Geri</button>
+
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <label>Ad Soyad:</label>
   <input type="text" formControlName="fullName" /><br /><br />

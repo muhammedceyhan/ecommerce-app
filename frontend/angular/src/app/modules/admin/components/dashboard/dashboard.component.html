@@ -1,6 +1,7 @@
 <h1>Admin Paneli</h1>
 
 <nav>
+  <button (click)="logout()">🚪 Çıkış Yap</button>
   <button routerLink="/admin/products">Ürünleri Yönet</button>
   <button routerLink="/admin/orders">Siparişleri Yönet</button>
   <button routerLink="/admin/users">Kullanıcıları Yönet</button>
@@ -13,5 +14,6 @@
   <div class="card">Toplam Ürün: {{ totalProducts }}</div>
   <div class="card">Toplam Sipariş: {{ totalOrders }}</div>
 </div>
+
 
 <router-outlet></router-outlet>
