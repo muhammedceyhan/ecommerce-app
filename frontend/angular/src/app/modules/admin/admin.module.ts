@@ -21,8 +21,7 @@ import { UserManagementComponent } from './components/user-management/user-manag
     ProductEditComponent,
     OrderManagementComponent,
     DashboardComponent,
-    UserManagementComponent
-
+    UserManagementComponen
   ],
   imports: [
     CommonModule,
