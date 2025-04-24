@@ -11,14 +11,15 @@
       <th>İşlemler</th>
     </tr>
   </thead>
-
-    <ul *ngFor="let user of users">
-      <li>{{ user.id }}</li>
-      <li>{{ user.name }}</li>
-      <li>{{ user.email }}</li>
-      <li>{{ user.role }}</li>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
       <td>
         <button (click)="deleteUser(user.id!)">Sil</button>
       </td>
-    </ul>
+    </tr>
+  </tbody>
 </table>

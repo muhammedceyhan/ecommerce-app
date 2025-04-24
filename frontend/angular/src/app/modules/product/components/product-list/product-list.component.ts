@@ -11,17 +11,22 @@ import { AuthService } from '../../../../modules/auth/services/auth.service';
   standalone: false
 })
 export class ProductListComponent implements OnInit {
+  [x: string]: any;
   searchTerm = ""
 
   products: Product[] = [];
 
 
-  constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
-    this.productService.getAll().subscribe(data => this.products = data);
+// <<<<<<< HEAD
+//   constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
+//     this.productService.getAll().subscribe(data => this.products = data);
+// =======
+  constructor(private productService: ProductService, private router: Router) {
+    this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
   ngOnInit(): void {
-
+    this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
   viewDetail(id: number) {
@@ -43,5 +48,22 @@ export class ProductListComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+
+  //temperary add product button
+  addProduct(){
+    let newProduct: Product = {
+      name: "New Product",
+      price: 0,
+      description: "New Product Description",
+      stock: 1,
+      imageUrl: "",
+      inCartNumber: 0
+    }
+    this.productService.addProduct(newProduct).subscribe(data => {
+      this.products.push(data);
+      console.log("Product added");
+    });
   }
 }

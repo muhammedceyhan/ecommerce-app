@@ -9,7 +9,9 @@
     <img [src]="product.imageUrl" alt="{{ product.name }}" />
     <h3>{{ product.name }}</h3>
     <p>Price: {{ product.price }}</p>
-    <button (click)="viewDetail(product.id)">View Detail</button>
+    <button (click)="viewDetail(product.id!)">View Detail</button>
   </div>
 </div>
+
+<button (click)="addProduct()">addProduct</button>
 

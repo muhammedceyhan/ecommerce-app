@@ -19,7 +19,7 @@ export class ProductDetailComponent implements OnInit {
   //initliazes the product list
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.product = this.productService.getById(id);
+    //this.product = this.productService.getById(id);
   }
   //Navigates to previous page
   goBack() {
@@ -28,16 +28,16 @@ export class ProductDetailComponent implements OnInit {
 
   // Adds products to cart
   addToCart(productid: number) {
-    let product = this.productService.getById(productid);
-    if(product.inCartNumber < product.stock){
-      if(this.cartService.getCart().includes(product)){
-        product.inCartNumber!++;
-      }else{
-        this.cartService.addToCart(product);
-      }
+    // let product = this.productService.getById(productid);
+    // if(product.inCartNumber < product.stock){
+    //   if(this.cartService.getCart().includes(product)){
+    //     product.inCartNumber!++;
+    //   }else{
+    //     this.cartService.addToCart(product);
+    //   }
 
-    }else{
-      alert("Can't be add to cart more than stock.");
-    }
+    // }else{
+    //   alert("Can't be add to cart more than stock.");
+    // }
   }
 }
