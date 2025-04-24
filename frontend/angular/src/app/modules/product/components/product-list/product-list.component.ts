@@ -15,11 +15,11 @@ export class ProductListComponent implements OnInit {
 
 
   constructor(private productService: ProductService, private router: Router) {
-    this.productService.getAll().subscribe(data => this.products = data);
+    this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
   ngOnInit(): void {
-
+    this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
   viewDetail(id: number) {
@@ -36,5 +36,22 @@ export class ProductListComponent implements OnInit {
       }
     });
     return showedProducts;
+  }
+
+  //temperary add product button
+  addProduct(){
+    let newProduct: Product = {
+      name: "New Product",
+      price: 0,
+      description: "New Product Description",
+      stock: 1,
+      imageUrl: "",
+      inCartNumber: 0
+    }
+    this.productService.addProduct(newProduct).subscribe(data => {
+      this.products.push(data);
+      console.log("Product added");
+    });
+
   }
 }

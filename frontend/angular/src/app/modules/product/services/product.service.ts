@@ -1,41 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Product } from '../models/product.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  private mockProducts: Product[] = [
-    {
-      id: 0,
-      name: 'Elma',
-      description: 'Taze kırmızı elma',
-      price: 5,
-      imageUrl: './elma.jpeg',
-      stock: 20,
-      inCartNumber: 0,
-    },
-    {
-      id: 1,
-      name: 'Armut',
-      description: 'Lezzetli sarı armut',
-      price: 6,
-      imageUrl: './armut.png',
-      stock: 12,
-      inCartNumber: 0,
-    }
-  ];
+  private apiUrl = 'http://localhost:8080/api/products';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Product[]> {
-    return of(this.mockProducts); // HTTP yerine mock veri döner
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
+  }
+  addProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
   }
 
-  getById(id: number): Product{
-    const product = this.mockProducts[id];
-    return product;
-  }
 }
