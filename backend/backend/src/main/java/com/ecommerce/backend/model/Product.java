@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Otomatik artan ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automaticly increase ID
     private Long id;
 
     @Column(nullable = false)
@@ -20,17 +20,49 @@ public class Product {
 
     private String imageUrl;
 
-    private int quantity; // stok adedi
+    @Column(nullable = false)
+    private int stock; // stok adedi
 
-    // --- Constructors ---
+    private String category;
+
+    @Column(nullable = false)
+    private int inCartNumber;
+
+    @Column(nullable = false)
+    private int discountPercentage;
+
+    @Column(nullable = false)
+    private double rating;
+
+    @Column(nullable = false)
+    private boolean isFavorite;
+
+    @Column(nullable = false)
+    private boolean isInWishlist;
+
+    @Column(nullable = false)
+    private boolean isInCompare;
+
+    @Column(nullable = false)
+    private boolean isInSale;
+
     public Product() {}
 
-    public Product(String name, String description, double price, String imageUrl, int quantity) {
+    public Product(String name, String description, double price, String imageUrl, int stock, String category, int inCartNumber,
+                    int discountPercentage, double rating, boolean isFavorite, boolean isInWishlist, boolean isInCompare, boolean isInSale) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.quantity = quantity;
+        this.stock = stock;
+        this.category = category;
+        this.inCartNumber = inCartNumber;
+        this.discountPercentage = discountPercentage;
+        this.rating = rating;
+        this.isFavorite = isFavorite;
+        this.isInWishlist = isInWishlist;
+        this.isInCompare = isInCompare;
+        this.isInSale = isInSale;
     }
 
     // --- Getters and Setters ---
@@ -74,11 +106,75 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getStock() {
+        return stock;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getInCartNumber() {
+        return inCartNumber;
+    }
+
+    public void setInCartNumber(int inCartNumber) {
+        this.inCartNumber = inCartNumber;
+    }
+
+    public int getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(int discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public boolean isInCompare() {
+        return isInCompare;
+    }
+
+    public void setInCompare(boolean inCompare) {
+        isInCompare = inCompare;
+    }
+
+    public boolean isInSale() {
+        return isInSale;
+    }
+
+    public void setInSale(boolean inSale) {
+        isInSale = inSale;
+    }
+
+    public boolean isInWishlist() {
+        return isInWishlist;
+    }
+
+    public void setInWishlist(boolean inWishlist) {
+        isInWishlist = inWishlist;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

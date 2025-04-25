@@ -9,34 +9,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Repository
-interface ProductRepository extends JpaRepository<Product, Long> {
+interface CartRepository extends JpaRepository<Product, Long> {
     List<Product> findByInCartNumberGreaterThan(int number);
 }
 
 @Service
-public class ProductService {
+public class CartService {
     @Autowired
-    private ProductRepository productRepository;
+    private CartRepository cartRepository;
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return cartRepository.findAll();
     }
 
     public Product addProduct(Product product) {
-        System.out.println(product.isFavorite());
-        System.out.println(product.isInCompare());
-        System.out.println(product.isInSale());
-        System.out.println(product.isInWishlist());
-
-        return productRepository.save(product);
+        return cartRepository.save(product);
     }
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        return cartRepository.findById(id).orElse(null);
     }
     public Product updateProduct(Product product) {
-        return productRepository.save(product);
+        return cartRepository.save(product);
     }
     public List<Product> getProductsInCart() {
-        return productRepository.findByInCartNumberGreaterThan(0);
+        return cartRepository.findByInCartNumberGreaterThan(0);
     }
 }

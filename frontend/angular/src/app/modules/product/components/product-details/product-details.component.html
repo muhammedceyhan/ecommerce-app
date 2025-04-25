@@ -2,11 +2,13 @@
 <div *ngIf="product">
   <img [src]="product.imageUrl" />
   <h2>{{ product.name }}</h2>
+  <p>{{ product.category }}</p>
   <p>{{ product.description }}</p>
   <p>{{ product.price | currency }}</p>
   <p *ngIf="product.stock > 0">In Stock: {{ product.stock }}</p>
   <p *ngIf="product.stock === 0">Out of Stock</p>
-  <button (click)="addToCart(product.id!)">Add to Cart</button>
+  <button (click)="addToCart()">Add to Cart</button>
   <p>Number of product in cart: {{product.inCartNumber}}</p>
 </div>
 
+<button (click)="goToCart()">Go To Cart</button>

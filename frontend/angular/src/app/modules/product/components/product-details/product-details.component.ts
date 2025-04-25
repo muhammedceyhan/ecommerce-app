@@ -11,33 +11,48 @@ import { CartService } from '../../../cart/services/cart.service';
   standalone: false
 })
 export class ProductDetailComponent implements OnInit {
-  product?: Product;
+  product!: Product;
 
   constructor(private route: ActivatedRoute, private productService: ProductService,
-    private router: Router, private cartService:CartService) {}
+    private router: Router, private cartService:CartService) {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.productService.getProductById(id).subscribe(data => {
+        this.product = data;
+      });
+    }
 
   //initliazes the product list
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    //this.product = this.productService.getById(id);
+        this.productService.getProductById(id).subscribe(data => {
+        this.product = data;
+      });
+
+
   }
+
   //Navigates to previous page
   goBack() {
     this.router.navigate(['/products']);
   }
 
-  // Adds products to cart
-  addToCart(productid: number) {
-    // let product = this.productService.getById(productid);
-    // if(product.inCartNumber < product.stock){
-    //   if(this.cartService.getCart().includes(product)){
-    //     product.inCartNumber!++;
-    //   }else{
-    //     this.cartService.addToCart(product);
-    //   }
+  goToCart(){
+    this.router.navigate(['/cart']);
+  }
 
-    // }else{
-    //   alert("Can't be add to cart more than stock.");
-    // }
+  // Adds products to cart
+  addToCart() {
+    if(this.product.inCartNumber < this.product.stock){
+        this.product.inCartNumber++;
+    }else{
+      alert("Can't be add to cart more than stock.");
+    }
+    this.updateProductDatabase(this.product);
+  }
+
+  updateProductDatabase(product: Product) {
+    this.productService.updateProduct(product).subscribe(data => {
+      product = data;
+    });
   }
 }

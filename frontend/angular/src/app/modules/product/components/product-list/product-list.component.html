@@ -1,9 +1,12 @@
 <div>
   <button (click)="goToCart()">Cart</button>
 </div>
-<div style="border: 1px solid black;">
-  <input type="text"  (keyup)="showSearchResults()" [(ngModel)]="searchTerm" placeholder="Search products"/>
-  <div *ngFor="let product of showSearchResults()" class="product-card" style="border: 1px solid black; width: 150px; height: 150px; margin-bottom: 20px;">
+
+<input type="text"  (keyup)="showSearchResults()" [(ngModel)]="searchTerm" placeholder="Search products"/>
+
+<div style="border: 1px solid black; display: flex; width: 100%;height: fit-content;flex-wrap: wrap;">
+  <div *ngFor="let product of showSearchResults()" class="product-card"
+   style="border: 1px solid black; width: 150px; height: 150px; margin: 15px;">
     <img [src]="product.imageUrl" alt="{{ product.name }}" />
     <h3>{{ product.name }}</h3>
     <p>Price: {{ product.price }}</p>
