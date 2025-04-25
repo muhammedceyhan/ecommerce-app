@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminDashboardService } from '../../services/admin-dashboard.service';
 import { AuthService } from '../../../../modules/auth/services/auth.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

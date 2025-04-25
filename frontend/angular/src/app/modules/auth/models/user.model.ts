@@ -3,5 +3,5 @@ export interface AuthUser {
   fullName: string;
   email: string;
   password: string;
-  role: 'USER' | 'ADMIN';
+  role: 'USER' | 'ADMIN' |'SELLER';
 }

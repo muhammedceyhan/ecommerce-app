@@ -3,18 +3,12 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { AuthModule } from './modules/auth/auth.module';
-import { ProductModule } from './modules/product/product.module';
-import { CartModule } from './modules/cart/cart.module';
-import { AdminModule } from './modules/admin/admin.module';
-import { AuthGuard } from './core/guards/auth.guard';
-import { AdminGuard } from './core/guards/admin.guard';
-import { ProductListComponent } from './modules/product/components/product-list/product-list.component';
-import { ProductDetailComponent } from './modules/product/components/product-details/product-details.component';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -23,13 +17,17 @@ import { ProductDetailComponent } from './modules/product/components/product-det
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule,
+
     HttpClientModule,
-    ReactiveFormsModule,
-    CommonModule
+    ReactiveFormsModule
   ],
   providers: [
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true  // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
+    }
   ],
   bootstrap: [AppComponent]
 })

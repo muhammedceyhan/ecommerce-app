@@ -1,84 +1,49 @@
 import { Injectable, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-
-interface AuthUser {
-  id?: number;
-  name: string;
-  email: string;
-  password: string;
-  role: 'USER' | 'ADMIN';
-}
+import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthUser } from '../models/user.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private registeredUsers: AuthUser[] = [];
+  private baseUrl = `${environment.apiUrl}/auth`;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    if (isPlatformBrowser(this.platformId)){
-      const savedUsers = localStorage.getItem('registeredUsers');
-    if (savedUsers) {
-      this.registeredUsers = JSON.parse(savedUsers);
-    } else {
-      // Örnek admin hesabı ekleyelim
-      this.registeredUsers.push({
-        id: 1,
-        name: 'Admin Demo',
-        email: 'admin@example.com',
-        password: 'admin123',
-        role: 'ADMIN'
-      });
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private http: HttpClient
+  ) {}
 
-      this.registeredUsers.push({
-        id: 2,
-        name: 'Mehmet Yılmaz',
-        email: 'mehmet@example.com',
-        password: '12345678',
-        role: 'USER'
-      });
-      localStorage.setItem('registeredUsers', JSON.stringify(this.registeredUsers));
-
-      this.syncToStorage();
-    }
-  }
-  }
-
-  private syncToStorage() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('registeredUsers', JSON.stringify(this.registeredUsers));
-    }
-  }
-
+  // ← eskisini tamamen silip bunu koy
   register(userData: AuthUser): Observable<any> {
-    const exists = this.registeredUsers.some(u => u.email === userData.email);
-    if (exists) {
-      return throwError(() => new Error('Email already exists'));
-    }
-
-    userData.id = this.registeredUsers.length + 1;
-    this.registeredUsers.push(userData);
-    this.syncToStorage();
-    return of({ message: 'Kayıt başarılı' });
+    return this.http.post<any>(`${this.baseUrl}/register`, {
+      username: userData.fullName,  // back-end DTO’su username bekliyor
+      email:    userData.email,
+      password: userData.password,
+      role:     userData.role       // “ROLE_USER” | “ROLE_SELLER” | “ROLE_ADMIN”
+    });
   }
 
-  login(credentials: { email: string; password: string }): Observable<any> {
-    const user = this.registeredUsers.find(
-      u => u.email === credentials.email && u.password === credentials.password
+  // auth.service.ts
+
+login(credentials: { email: string, password: string }): Observable<{ token: string; role: string }> {
+  return this.http
+    .post<{ token: string; role: string }>(
+      'http://localhost:8081/api/auth/login',
+      credentials
+    )
+    .pipe(
+      tap((res) => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('role', res.role);     // ← rolü de saklıyoruz
+        }
+      })
     );
-
-    if (user) {
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem('token', 'mock-token');
-        localStorage.setItem('role', user.role);
-      }
-      return of({ message: 'Giriş başarılı', role: user.role });
-    }
-
-    return throwError(() => new Error('Invalid credentials'));
-  }
+}
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -94,4 +59,23 @@ export class AuthService {
   getRole(): string | null {
     return isPlatformBrowser(this.platformId) ? localStorage.getItem('role') : null;
   }
+
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role;
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRole() === 'ROLE_ADMIN';
+  }
+
+
+  /** LocalStorage’dan JWT token’ı okur */
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+
 }

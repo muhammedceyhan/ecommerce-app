@@ -46,7 +46,7 @@ export class ProductListComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this['authService'].logout();
     this.router.navigate(['/login']);
   }
 

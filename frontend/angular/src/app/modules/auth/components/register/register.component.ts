@@ -28,22 +28,41 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  // Form gönderildiğinde çalışır
+  // register.component.ts
   onSubmit(): void {
-    this.authService.register(this.registerForm.value).subscribe({
-      next: () => {
-        alert('Kayıt başarılı!');
-        this.router.navigate(['/auth/login']); // Bu doğruysa login sayfasına gider
-      },
-      error: (err) => {
-        console.error('Kayıt başarısız:', err);
-        alert('Kayıt başarısız!');
-      },
-    });
+    if (this.registerForm.invalid) return;
+
+    const { fullName, email, password, role } = this.registerForm.value;
+    this.authService.register({ fullName, email, password, role })
+      .subscribe({
+        next: () => {
+          alert('Kayıt başarılı!');
+          this.router.navigate(['/auth/login']);
+        },
+        error: err => {
+          console.error('Register error:', err);
+          // err.error büyük ihtimalle back-end’in gönderdiği mesajı içeren obje
+          const msg = err.error?.message || JSON.stringify(err.error) || err.statusText;
+          alert(`Kayıt başarısız: ${msg}`);
+        }
+      });
   }
+
+
 
   // Geri butonuna tıklandığında çalışır
   goBack(): void {
     this.router.navigate(['/login']);
+  }
+
+  register() {
+    this.authService.register(this.registerForm.value).subscribe(
+      (response) => {
+        // Handle successful registration
+      },
+      (error) => {
+        // Handle registration error
+      }
+    );
   }
 }

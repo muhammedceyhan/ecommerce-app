@@ -7,7 +7,7 @@ import { AdminProduct } from '../models/admin-product.model';
   providedIn: 'root'
 })
 export class AdminProductService {
-  private apiUrl = 'http://localhost:8080/api/admin/products'; // örnek endpoint
+  private apiUrl = 'http://localhost:8081/api/admin/products'; // örnek endpoint
 
   constructor(private http: HttpClient) {}
 

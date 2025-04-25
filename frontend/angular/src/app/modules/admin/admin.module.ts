@@ -21,7 +21,8 @@ import { UserManagementComponent } from './components/user-management/user-manag
     ProductEditComponent,
     OrderManagementComponent,
     DashboardComponent,
-    UserManagementComponen
+    OrderManagementComponent,
+    UserManagementComponent
   ],
   imports: [
     CommonModule,
@@ -29,8 +30,8 @@ import { UserManagementComponent } from './components/user-management/user-manag
     FormsModule,
     HttpClientModule,
     AdminRoutingModule,
-    RouterModule
+    RouterModule,
   ],
-  providers: [AdminProductService]
+  providers: [AdminProductService],
 })
-export class AdminModule { }
+export class AdminModule {}

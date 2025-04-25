@@ -12,7 +12,7 @@ interface DashboardStats {
   providedIn: 'root'
 })
 export class AdminDashboardService {
-  private apiUrl = 'http://localhost:8080/api/admin/dashboard';
+  private apiUrl = 'http://localhost:8081/api/admin/dashboard';
 
   constructor(private http: HttpClient) {}
 

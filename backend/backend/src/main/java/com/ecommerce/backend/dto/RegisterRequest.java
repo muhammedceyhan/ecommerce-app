@@ -1,48 +1,21 @@
-package com.ecommerce.backend.model;
+package com.ecommerce.backend.dto;
 
-import jakarta.persistence.*;
+import com.ecommerce.backend.model.Role;
 
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
+public class RegisterRequest {
     private String username;
-
-    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
     private String password;
+    private Role role;
 
-    @Enumerated(EnumType.STRING)  // Enum olarak saklanmasını sağlıyoruz
-    @Column(nullable = false)
-    private Role role = Role.ROLE_USER;  // Varsayılan olarak USER rolü
-
-    // --- Constructorlar ---
-
-    public User() {
+    public RegisterRequest() {
     }
 
-    public User(String username, String email, String password, Role role) {
+    public RegisterRequest(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    // --- Getter & Setterlar ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {

@@ -3,8 +3,9 @@
 <button (click)="goBack()">Geri</button>
 
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <label>Ad Soyad:</label>
-  <input type="text" formControlName="fullName" /><br /><br />
+  <!-- register.component.html -->
+  <label for="fullName">Kullanıcı Adı:</label>
+  <input id="fullName" type="text" formControlName="fullName" />
 
   <label>Email:</label>
   <input type="email" formControlName="email" /><br /><br />
@@ -12,11 +13,14 @@
   <label>Şifre:</label>
   <input type="password" formControlName="password" /><br /><br />
 
-  <label>Rol:</label>
+  <!-- register.component.html :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1} -->
+<label>Rol:</label>
   <select formControlName="role">
-    <option value="USER">Kullanıcı</option>
-    <option value="ADMIN">Yönetici</option>
-  </select><br /><br />
+    <option value="ROLE_USER">Kullanıcı</option>
+    <option value="ROLE_SELLER">Satıcı</option>
+    <option value="ROLE_ADMIN">Yönetici</option>
+  </select>
+<br /><br />
 
   <button type="submit" [disabled]="registerForm.invalid">Kayıt Ol</button>
 </form>
