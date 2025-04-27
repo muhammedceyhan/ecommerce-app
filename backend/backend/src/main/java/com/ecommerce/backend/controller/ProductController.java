@@ -6,6 +6,7 @@ import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.model.ProductDTO;
 import com.ecommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -47,9 +48,23 @@ public class ProductController {
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
+    // @PutMapping("/{id}")
+    // public Product updateProductById(@RequestBody Product product) {
+    //     return productService.updateProduct(product);
+    // }
+
     @PutMapping("/{id}")
-    public Product updateProductById(@RequestBody Product product) {
-        return productService.updateProduct(product);
-    }
+public Product updateProductById(@PathVariable Long id, @RequestBody Product product) {
+    product.setId(id); // ID'yi manuel set ediyoruz
+    return productService.updateProduct(product);
+}
+
+
+    @DeleteMapping("/{id}")
+public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+    productService.deleteProduct(id);
+    return ResponseEntity.ok("Product deleted successfully.");
+}
+
 
 }

@@ -37,4 +37,9 @@ public class ProductService {
         return productRepository.findByInCartNumberGreaterThan(0);
     }
 
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    
 }

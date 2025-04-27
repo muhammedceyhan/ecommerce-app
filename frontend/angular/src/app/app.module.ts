@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor'; // kendi doğru yoluna göre güncelle!
 
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
@@ -27,7 +28,9 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true  // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
-    }
+    },
+    //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+
   ],
   bootstrap: [AppComponent]
 })

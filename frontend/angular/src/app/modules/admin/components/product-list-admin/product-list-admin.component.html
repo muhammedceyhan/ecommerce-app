@@ -1,22 +1,26 @@
 <button routerLink="/admin">⬅️ Admin Paneline Dön</button>
-<h2>Ürün Listesi</h2>
+<h2>Ürün Yönetimi</h2>
+
+<button routerLink="/admin/products/create">Yeni Ürün Ekle</button>
 
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
-      <th>Ad</th>
+      <th>ID</th>
+      <th>İsim</th>
       <th>Fiyat</th>
       <th>Stok</th>
-      <th>Açıklama</th>
+      <th>Kategori</th>
       <th>İşlemler</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let product of products">
+      <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
-      <td>{{ product.price | currency:'TRY' }}</td>
+      <td>{{ product.price }}</td>
       <td>{{ product.stock }}</td>
-      <td>{{ product.description }}</td>
+      <td>{{ product.category }}</td>
       <td>
         <button (click)="editProduct(product.id!)">Düzenle</button>
         <button (click)="deleteProduct(product.id!)">Sil</button>

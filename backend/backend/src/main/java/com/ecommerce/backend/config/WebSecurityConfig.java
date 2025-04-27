@@ -27,7 +27,7 @@ public class WebSecurityConfig {
           .authorizeHttpRequests(auth -> auth
               // Kayıt ve giriş endpoint'leri herkese açık
               .requestMatchers("/api/auth/**").permitAll()
-
+              .requestMatchers("/error").permitAll()
               // Ürünler GET herkese açık
               .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
 
