@@ -24,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProduct();
   }
 
@@ -41,6 +42,7 @@ export class ProductDetailsComponent implements OnInit {
       );
     }
   }
+
 
   // Ürünü sepete ekle
   addToCart(): void {

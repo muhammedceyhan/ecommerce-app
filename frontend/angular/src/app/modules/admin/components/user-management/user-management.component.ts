@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminUserService } from '../../services/admin-user.service';
 import { AdminUser } from '../../models/admin-user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-management',
@@ -11,7 +12,7 @@ import { AdminUser } from '../../models/admin-user.model';
 export class UserManagementComponent implements OnInit {
   users: AdminUser[] = [];
 
-  constructor(private userService: AdminUserService) {}
+  constructor(private userService: AdminUserService,private router: Router) {}
 
   ngOnInit(): void {
     this.fetchUsers();
@@ -32,4 +33,9 @@ export class UserManagementComponent implements OnInit {
       });
     }
   }
+
+  goBack() {
+    this.router.navigate(['/admin']);
+  }
+
 }

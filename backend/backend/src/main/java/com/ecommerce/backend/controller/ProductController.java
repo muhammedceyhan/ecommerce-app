@@ -2,6 +2,7 @@ package com.ecommerce.backend.controller;
 
 import java.util.List;
 import com.ecommerce.backend.model.Product;
+
 import com.ecommerce.backend.model.ProductDTO;
 import com.ecommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
+
 
     @PostMapping()
     public Product addProduct(@RequestBody ProductDTO dto) {

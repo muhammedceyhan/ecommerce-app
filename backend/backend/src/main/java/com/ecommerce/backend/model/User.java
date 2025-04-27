@@ -3,7 +3,7 @@ package com.ecommerce.backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")  // veritabanı tablosu adı
+@Table(name = "users")
 public class User {
 
     @Id
@@ -19,15 +19,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)  // Enum olarak saklanmasını sağlıyoruz
     @Column(nullable = false)
-    private String role = "ROLE_USER";  // varsayılan kullanıcı rolü
+    private Role role = Role.ROLE_USER;  // Varsayılan olarak USER rolü
 
     // --- Constructorlar ---
 
     public User() {
     }
 
-    public User(String username, String email, String password, String role) {
+    public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -68,11 +69,11 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

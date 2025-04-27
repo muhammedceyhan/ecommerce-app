@@ -7,7 +7,7 @@ import { AdminUser } from '../models/admin-user.model';
   providedIn: 'root'
 })
 export class AdminUserService {
-  private apiUrl = 'http://localhost:8080/api/admin/users';
+  private apiUrl = 'http://localhost:8081/api/admin/users';
 
   constructor(private http: HttpClient) {}
 

@@ -1,33 +1,56 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthUser } from '../models/user.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth'; // BACKEND URL
+  private baseUrl = `${environment.apiUrl}/auth`;
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private http: HttpClient
+  ) {}
 
-  // // Giriş
-  // login(credentials: { email: string; password: string }): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-  //     tap((res: any) => {
-  //       if (isPlatformBrowser(this.platformId)) {
-  //         localStorage.setItem('token', res.token);
-  //         localStorage.setItem('role', res.role);
-  //       }
-  //     })
-  //   );
-  // }
+  // ← eskisini tamamen silip bunu koy
+  register(userData: AuthUser): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/register`, {
+      username: userData.fullName,  // back-end DTO’su username bekliyor
+      email:    userData.email,
+      password: userData.password,
+      role:     userData.role       // “ROLE_USER” | “ROLE_SELLER” | “ROLE_ADMIN”
+    });
+  }
 
-  // // ✅ Yeni kullanıcı kaydı
-  // register(userData: { fullName: string; email: string; password: string; role: string }): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/register`, userData);
-  // }
+  // auth.service.ts
+
+login(credentials: { email: string, password: string }): Observable<{ token: string; role: string }> {
+  return this.http
+    .post<{ token: string; role: string }>(
+      'http://localhost:8081/api/auth/login',
+      credentials
+    )
+    .pipe(
+      tap((res) => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('role', res.role);     // ← rolü de saklıyoruz
+        }
+      })
+    );
+}
+
+  logout(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+    }
+  }
 
   isAuthenticated(): boolean {
     return isPlatformBrowser(this.platformId) && !!localStorage.getItem('token');
@@ -37,26 +60,22 @@ export class AuthService {
     return isPlatformBrowser(this.platformId) ? localStorage.getItem('role') : null;
   }
 
-  logout(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-    }
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role;
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRole() === 'ROLE_ADMIN';
   }
 
 
-
-  login(credentials: { email: string, password: string }): Observable<any> {
-    return of({ token: 'mock-token', role: 'ADMIN' }).pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
-      })
-    );
+  /** LocalStorage’dan JWT token’ı okur */
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  register(userData: any): Observable<any> {
-    return of({ message: 'Registered successfully' });
-  }
 
 }

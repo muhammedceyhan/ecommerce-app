@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Repository
+
 interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByInCartNumberGreaterThan(int number);
 }
+
 
 @Service
 public class ProductService {
@@ -23,11 +25,6 @@ public class ProductService {
     }
 
     public Product addProduct(Product product) {
-        System.out.println(product.isFavorite());
-        System.out.println(product.isInCompare());
-        System.out.println(product.isInSale());
-        System.out.println(product.isInWishlist());
-
         return productRepository.save(product);
     }
     public Product getProductById(Long id) {
@@ -39,4 +36,5 @@ public class ProductService {
     public List<Product> getProductsInCart() {
         return productRepository.findByInCartNumberGreaterThan(0);
     }
+
 }

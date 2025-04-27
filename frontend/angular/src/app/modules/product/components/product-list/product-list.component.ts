@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../modules/auth/services/auth.service';
+
 
 @Component({
   selector: 'app-product-list',
@@ -10,11 +12,16 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class ProductListComponent implements OnInit {
+  [x: string]: any;
   searchTerm = ""
 
   products: Product[] = [];
 
 
+// <<<<<<< HEAD
+//   constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
+//     this.productService.getAll().subscribe(data => this.products = data);
+// =======
   constructor(private productService: ProductService, private router: Router) {
     this.productService.getAllProducts().subscribe(data => this.products = data);
   }
@@ -38,11 +45,17 @@ export class ProductListComponent implements OnInit {
     });
     return showedProducts;
   }
+  
+  logout(): void {
+    this['authService'].logout();
+    this.router.navigate(['/login']);
+  }
 
   //temperary add product button
   addProduct(){
     let newProduct: Product = {
       name: "New Product",
+
       price: 20,
       description: "New Product Description",
       stock: 10,
@@ -55,6 +68,5 @@ export class ProductListComponent implements OnInit {
     this.productService.addProduct(newProduct).subscribe(data => {
       this.products.push(data);
     });
-
   }
 }

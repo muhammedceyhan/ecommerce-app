@@ -6,6 +6,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password/forgot-password.component';
+import { Router } from 'express';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -18,7 +20,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     CommonModule,
     ReactiveFormsModule,
     AuthRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ]
 })
 export class AuthModule {}
