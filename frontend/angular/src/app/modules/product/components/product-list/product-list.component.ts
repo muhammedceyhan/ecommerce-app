@@ -1,10 +1,9 @@
-import { User } from '../../../auth/models/user.model';
+import { AuthUser } from '../../../../modules/auth/models/user.model';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../modules/auth/services/auth.service';
-
 
 @Component({
   selector: 'app-product-list',
@@ -17,12 +16,7 @@ export class ProductListComponent implements OnInit {
 
   products: Product[] = [];
 
-
-// <<<<<<< HEAD
-//   constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
-//     this.productService.getAll().subscribe(data => this.products = data);
-// =======
-  constructor(private productService: ProductService, private router: Router) {
+  constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
     this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
@@ -45,7 +39,7 @@ export class ProductListComponent implements OnInit {
     });
     return showedProducts;
   }
-  
+
   logout(): void {
     this['authService'].logout();
     this.router.navigate(['/login']);
@@ -69,4 +63,11 @@ export class ProductListComponent implements OnInit {
       this.products.push(data);
     });
   }
+  goToLogin(){
+    this.router.navigate(['/login'])
+  }
+  isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
 }

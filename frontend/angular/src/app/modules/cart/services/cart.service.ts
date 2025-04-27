@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,7 +9,8 @@ import { CartItem } from '../models/cart.model'; // Doğru DTO modeli kullanıl�
 })
 export class CartService {
 
-  private apiUrl = `http://localhost:8080/api/cart`; // Örnek: http://localhost:8080/api/cart
+
+  private apiUrl = `${environment.apiUrl}/cart`;
 
   constructor(private http: HttpClient) {}
 

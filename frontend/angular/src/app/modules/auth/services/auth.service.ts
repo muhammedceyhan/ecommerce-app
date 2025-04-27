@@ -32,7 +32,7 @@ export class AuthService {
 login(credentials: { email: string, password: string }): Observable<{ token: string; role: string }> {
   return this.http
     .post<{ token: string; role: string }>(
-      'http://localhost:8081/api/auth/login',
+      `${this.baseUrl}/login`,
       credentials
     )
     .pipe(
@@ -72,10 +72,13 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
   }
 
 
-  /** LocalStorage’dan JWT token’ı okur */
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
+
 
 
 }

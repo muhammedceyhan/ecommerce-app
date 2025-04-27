@@ -2,6 +2,7 @@ package com.ecommerce.backend;
 
 import com.ecommerce.backend.model.Role;
 import com.ecommerce.backend.model.User;
+import com.ecommerce.backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;

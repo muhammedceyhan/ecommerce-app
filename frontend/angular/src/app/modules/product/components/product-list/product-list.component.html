@@ -1,7 +1,9 @@
 <div>
-  <button (click)="logout()">🚪 Çıkış Yap</button>
-
   <button (click)="goToCart()">Cart</button>
+</div>
+<div style="position: fixed; top: 20px; right: 20px;">
+  <button *ngIf="!isLoggedIn()" (click)="goToLogin()" class="login-button">Giriş Yap </button>
+  <button *ngIf="isLoggedIn()"(click)="logout()">🚪 Çıkış Yap</button>
 </div>
 
 <input type="text"  (keyup)="showSearchResults()" [(ngModel)]="searchTerm" placeholder="Search products"/>
