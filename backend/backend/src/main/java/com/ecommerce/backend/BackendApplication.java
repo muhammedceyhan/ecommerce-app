@@ -1,7 +1,6 @@
 package com.ecommerce.backend;
 
 import com.ecommerce.backend.model.User;
-import com.ecommerce.backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,14 +13,5 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner run(UserRepository userRepository) {
-		return args -> {
-			if (!userRepository.existsByUsername("ozkan")) {
-				User user = new User("ozkan", "ozkan@example.com", "123456", "ROLE_USER");
-				userRepository.save(user);
-				System.out.println("✅ Örnek kullanıcı oluşturuldu.");
-			}
-		};
-	}
+
 }

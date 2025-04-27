@@ -1,37 +1,75 @@
 package com.ecommerce.backend.service;
 
+import com.ecommerce.backend.model.Cart;
+import com.ecommerce.backend.model.CartDTO;
 import com.ecommerce.backend.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Repository
-interface CartRepository extends JpaRepository<Product, Long> {
-    List<Product> findByInCartNumberGreaterThan(int number);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+interface CartRepository extends JpaRepository<Cart, Long> {
+    Optional<Cart> findByUserIdAndProductId(Long userId, Long productId);
+    List<Cart> findByUserId(Long userId);
 }
 
 @Service
 public class CartService {
+
+    @Autowired
+    private ProductService productService; // ProductService içinde getProductById methodu olmalı
+
     @Autowired
     private CartRepository cartRepository;
 
-    public List<Product> getAllProducts() {
-        return cartRepository.findAll();
+    public void addProductToCart(Long userId, Long productId) {
+        Optional<Cart> existingItem = cartRepository.findByUserIdAndProductId(userId, productId);
+
+        if (existingItem.isPresent()) {
+            Cart cart = existingItem.get();
+            cart.setQuantity(cart.getQuantity() + 1);
+            cartRepository.save(cart);
+        } else {
+            Cart newCart = new Cart(userId, productId, 1);
+            cartRepository.save(newCart);
+        }
     }
 
-    public Product addProduct(Product product) {
-        return cartRepository.save(product);
+    public List<CartDTO> getUserCart(Long userId) {
+        List<Cart> cartItems = cartRepository.findByUserId(userId);
+
+        return cartItems.stream().map(cart -> {
+            Product product = productService.getProductById(cart.getProductId());
+            return new CartDTO(
+                    cart.getId(),
+                    product.getId(),
+                    product.getName(),
+                    product.getImageUrl(),
+                    product.getPrice(),
+                    cart.getQuantity()
+            );
+        }).collect(Collectors.toList());
     }
-    public Product getProductById(Long id) {
-        return cartRepository.findById(id).orElse(null);
+    public int getProductQuantityInCart(Long userId, Long productId) {
+        return cartRepository.findByUserIdAndProductId(userId, productId)
+                .map(Cart::getQuantity)
+                .orElse(0); // Ürün sepette yoksa 0 döner
     }
-    public Product updateProduct(Product product) {
-        return cartRepository.save(product);
+
+    public void updateCartItemQuantity(Long cartItemId, int quantity) {
+        Cart cartItem = cartRepository.findById(cartItemId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+        cartItem.setQuantity(quantity);
+        cartRepository.save(cartItem);
     }
-    public List<Product> getProductsInCart() {
-        return cartRepository.findByInCartNumberGreaterThan(0);
+
+    public void removeCartItem(Long cartItemId) {
+        cartRepository.deleteById(cartItemId);
     }
+
 }

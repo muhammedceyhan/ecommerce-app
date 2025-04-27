@@ -1,38 +1,38 @@
-import { HttpClient } from '@angular/common/http';
-import { Product } from './../../product/models/product.model';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CartItem } from '../models/cart.model'; // Doğru DTO modeli kullanılıyor
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
 
-  private apiUrl = 'http://localhost:8080/api/products';
+  private apiUrl = `http://localhost:8080/api/cart`; // Örnek: http://localhost:8080/api/cart
 
-  private cart = new BehaviorSubject<Product[]>([]);
-  cart$ = this.cart.asObservable();
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) {
-    this.loadCart(); // otomatik yüklenmesi için constructor'da çağrılır
+  // Kullanıcının sepetindeki ürünleri getir
+  getCartedProducts(userId: number = 1): Observable<CartItem[]> {
+    return this.http.get<CartItem[]>(`${this.apiUrl}/${userId}`);
   }
 
-  loadCart() {
-    this.getCartedProducts().subscribe(data => {
-      this.cart.next(data); // HATA BUYDU
-    });
+  // Sepete ürün ekle (İstersen bunu da kullanabilirsin)
+  addProductToCart(userId: number, productId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add?userId=${userId}&productId=${productId}`, {});
+  }
+    // cart.service.ts içine ekle
+  getProductQuantityInCart(userId: number, productId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${userId}/quantity/${productId}`);
+  }
+    // Ürün adedini güncelle
+  updateCartItemQuantity(cartItemId: number, quantity: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${cartItemId}/update-quantity?quantity=${quantity}`, {});
   }
 
-  getCartedProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>('http://localhost:8080/api/cart/items');
+  // Sepetten ürünü tamamen kaldır
+  removeCartItem(cartItemId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${cartItemId}/remove`);
   }
 
-  updateProduct(product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product);
-  }
-
-  // İstersen bu methodu tutabilirsin ama:
-  getCart(): Product[] {
-    return this.cart.getValue(); // doğru hali
-  }
 }

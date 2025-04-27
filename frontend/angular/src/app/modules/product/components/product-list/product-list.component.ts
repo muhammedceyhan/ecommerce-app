@@ -47,13 +47,9 @@ export class ProductListComponent implements OnInit {
       description: "New Product Description",
       stock: 10,
       imageUrl: "",
-      inCartNumber: 5,
       category: "New Category",
       discountPercentage: 10,
       rating: 10,
-      isFavorite: true,
-      isInWishlist: true,
-      isInCompare: true,
       isInSale: true
     }
     this.productService.addProduct(newProduct).subscribe(data => {

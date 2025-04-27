@@ -38,7 +38,6 @@ public class ProductController {
         product.setInCompare(dto.isInCompare);
         product.setInSale(dto.isInSale);
 
-
         return productService.addProduct(product);
     }
 
