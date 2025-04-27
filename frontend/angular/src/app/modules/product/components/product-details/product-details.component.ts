@@ -1,43 +1,94 @@
+
+import { CommonModule } from '@angular/common';
+import { CartService } from './../../../cart/services/cart.service';
+import { Product } from './../../models/product.model';
+import { ProductService } from './../../services/product.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Routes, Router } from '@angular/router';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../models/product.model';
-import { CartService } from '../../../cart/services/cart.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
-  standalone: false
+  standalone: false,
 })
-export class ProductDetailComponent implements OnInit {
-  product?: Product;
+export class ProductDetailsComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private productService: ProductService,
-    private router: Router, private cartService:CartService) {}
+  product!: Product;
 
-  //initliazes the product list
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private productService: ProductService,
+    private cartService: CartService
+  ) {}
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    //this.product = this.productService.getById(id);
+    this.loadProduct();
   }
-  //Navigates to previous page
-  goBack() {
+
+  loadProduct(): void {
+    const productId = Number(this.route.snapshot.paramMap.get('id'));
+    if (productId) {
+      this.productService.getProductById(productId).subscribe(
+        (data: Product) => {
+          this.product = data;
+          this.loadProductQuantityInCart();
+        },
+        (error) => {
+          console.error('Product load error:', error);
+        }
+      );
+    }
+  }
+
+
+  // Ürünü sepete ekle
+  addToCart(): void {
+    const userId = 1; // Şu anda sabit bir kullanıcı id
+    this.cartService.addProductToCart(userId, this.product.id!).subscribe(
+      (response) => {
+        console.log('Product added to cart successfully');
+        // İstersen burada kullanıcıya başarı mesajı gösterebilirsin
+        this.loadProductQuantityInCart()
+      },
+      (error) => {
+        console.error('Error adding product to cart:', error);
+      }
+    );
+  }
+
+  // Alışveriş listesine dön
+  goBack(): void {
     this.router.navigate(['/products']);
   }
 
-  // Adds products to cart
-  addToCart(productid: number) {
-    // let product = this.productService.getById(productid);
-    // if(product.inCartNumber < product.stock){
-    //   if(this.cartService.getCart().includes(product)){
-    //     product.inCartNumber!++;
-    //   }else{
-    //     this.cartService.addToCart(product);
-    //   }
-
-    // }else{
-    //   alert("Can't be add to cart more than stock.");
-    // }
+  // Sepete git
+  goToCart(): void {
+    this.router.navigate(['/cart']);
   }
+
+  // İndirimli fiyatı hesapla
+  getDiscountedPrice(): number {
+    return this.product.price * (1 - this.product.discountPercentage / 100);
+  }
+
+  productQuantityInCart: number = 0; // Sepetteki ürün miktarını tutacak değişken
+
+// Bu yeni method:
+loadProductQuantityInCart(): void {
+  const userId = 1; // Şu anda sabit
+  if (this.product && this.product.id) {
+    this.cartService.getProductQuantityInCart(userId, this.product.id).subscribe(
+      (quantity: number) => {
+        this.productQuantityInCart = quantity;
+      },
+      (error) => {
+        console.error('Error fetching product quantity in cart:', error);
+      }
+    );
+  }
+}
+
 }

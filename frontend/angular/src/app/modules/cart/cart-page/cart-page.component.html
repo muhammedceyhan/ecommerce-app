@@ -3,7 +3,7 @@
   <h1>Cart</h1>
   <ul>
     <li *ngFor="let item of cart">
-      {{item.inCartNumber}} x {{item.name}} - {{item.price}} TL = {{getItemPrice(item)}}
+      {{item.quantity}} x {{item.productName}} - {{item.productPrice}} TL = {{getItemPrice(item)}}
       <button (click)="decreaseItem(item)">-</button>
       <button (click)="increaseItem(item)">+</button>
     </li>

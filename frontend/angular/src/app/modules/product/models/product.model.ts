@@ -1,3 +1,4 @@
+
 export interface Product{
   id? : number;
   name: string;
@@ -6,5 +7,7 @@ export interface Product{
   imageUrl: string;
   stock:number;
   category?:string;
-  inCartNumber: number;
+  discountPercentage: number;
+  rating: number;
+  isInSale: boolean;
 }

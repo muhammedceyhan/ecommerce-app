@@ -1,50 +1,95 @@
+import { Component, OnInit } from '@angular/core';
+import { CartService } from '../services/cart.service';
+import { CartItem } from '../models/cart.model';
 import { Router } from '@angular/router';
-import { Product } from './../../product/models/product.model';
-import { CartService } from './../services/cart.service';
-import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-cart-page',
-  standalone: false,
   templateUrl: './cart-page.component.html',
-  styleUrl: './cart-page.component.scss'
+  standalone: false,
 })
-export class CartPageComponent {
-  cart: Product[] = [];
+export class CartPageComponent implements OnInit {
 
-  constructor(private cartService: CartService, private router: Router) {
-    this.cart = this.cartService.getCart();
+  cart: CartItem[] = [];
+
+  constructor(private cartService: CartService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadCart();
   }
 
-  getItemPrice(product: Product): number {
-    return product.price * product.inCartNumber
+  // Sepeti backend'den çek
+  loadCart(): void {
+    this.cartService.getCartedProducts().subscribe(
+      (data: CartItem[]) => {
+        this.cart = data;
+      },
+      (error) => {
+        console.error('Sepet yüklenirken hata oluştu:', error);
+      }
+    );
   }
-  decreaseItem(product: Product){
-    if(product.inCartNumber > 1){
-      product.inCartNumber--;
-    }else {
-      this.cart.splice(this.cart.indexOf(product), 1);
+
+  // Sepetteki ürünün toplam fiyatını hesapla
+  getItemPrice(item: CartItem): number {
+    return item.productPrice * item.quantity;
+  }
+
+  // Sepetteki tüm ürünlerin toplam tutarını hesapla
+  calculateTotalPurchase(): number {
+    return this.cart.reduce((total, item) => total + this.getItemPrice(item), 0);
+  }
+
+  increaseItem(item: CartItem): void {
+    item.quantity++;
+    this.cartService.updateCartItemQuantity(item.cartItemId, item.quantity).subscribe(
+      () => {
+        console.log('Item quantity increased.');
+      },
+      (error) => {
+        console.error('Error increasing item quantity:', error);
+      }
+    );
+  }
+
+  decreaseItem(item: CartItem): void {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.cartService.updateCartItemQuantity(item.cartItemId, item.quantity).subscribe(
+        () => {
+          console.log('Item quantity decreased.');
+        },
+        (error) => {
+          console.error('Error decreasing item quantity:', error);
+        }
+      );
+    } else {
+      // Quantity 1 ise, ürünü tamamen sepetten kaldırıyoruz
+      this.cartService.removeCartItem(item.cartItemId).subscribe(
+        () => {
+          this.cart = this.cart.filter(cartItem => cartItem.cartItemId !== item.cartItemId);
+          console.log('Item removed from cart.');
+        },
+        (error) => {
+          console.error('Error removing item from cart:', error);
+        }
+      );
     }
   }
-  increaseItem(product: Product){
-    if(product.inCartNumber < product.stock){
-      product.inCartNumber++
-    }else{
-      alert("Can't be add to cart more than stock.");
-    }
-  }
-  calculateTotalPurchase(): number{
-    let total = 0;
-    this.cart.forEach(item => {
-      total += this.getItemPrice(item);
-    });
-    return total;
-  }
-  returnToMainPage(){
-    this.router.navigate(['/products']);
-  }
-  goToCheckOut(){
-    this.router.navigate(['/cart/checkout']);
+
+
+  // Ürünü sepetten tamamen kaldır
+  removeItem(item: CartItem): void {
+    this.cart = this.cart.filter(cartItem => cartItem.cartItemId !== item.cartItemId);
   }
 
+  // Ana sayfaya dön
+  returnToMainPage(): void {
+    this.router.navigate(['/products']); // Eğer ana sayfan başka bir şeyse değiştir
+  }
+
+  // Checkout sayfasına git
+  goToCheckOut(): void {
+    this.router.navigate(['/checkout']); // Checkout sayfanın route'u burası
+  }
 }

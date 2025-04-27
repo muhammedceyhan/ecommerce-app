@@ -1,3 +1,4 @@
+import { User } from '../../../auth/models/user.model';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
@@ -44,26 +45,28 @@ export class ProductListComponent implements OnInit {
     });
     return showedProducts;
   }
-
+  
   logout(): void {
     this['authService'].logout();
     this.router.navigate(['/login']);
   }
 
-
   //temperary add product button
   addProduct(){
     let newProduct: Product = {
       name: "New Product",
-      price: 0,
+
+      price: 20,
       description: "New Product Description",
-      stock: 1,
+      stock: 10,
       imageUrl: "",
-      inCartNumber: 0
+      category: "New Category",
+      discountPercentage: 10,
+      rating: 10,
+      isInSale: true
     }
     this.productService.addProduct(newProduct).subscribe(data => {
       this.products.push(data);
-      console.log("Product added");
     });
   }
 }
