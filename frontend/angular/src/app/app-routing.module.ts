@@ -9,6 +9,8 @@ import { RegisterComponent } from './modules/auth/components/register/register.c
 // Guards
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
+import { StoreManagementComponent } from './modules/seller/store-management/store-management.component';
+import { SellerModule } from './modules/seller/seller.module';
 
 const routes: Routes = [
   // 1) Ana sayfa ürün listesi
@@ -30,8 +32,11 @@ const routes: Routes = [
   // 6) Admin paneli — sadece ADMIN
   { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule), canActivate: [AdminGuard] },
 
-  // 7) Eğer satıcı modülü eklediysen (örnek)
+  // 6) seller module - sadece seller
   { path: 'seller', loadChildren: () => import('./modules/seller/seller.module').then(m => m.SellerModule), canActivate: [AuthGuard] },
+
+
+
 
   // 8) Aksi tüm yolları ana sayfaya at
   { path: '**', redirectTo: '' }

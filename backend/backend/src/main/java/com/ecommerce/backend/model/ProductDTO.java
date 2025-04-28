@@ -14,4 +14,6 @@ public class ProductDTO {
     public boolean isInWishlist;
     public boolean isInCompare;
     public boolean isInSale;
+    public Long sellerId;
+
 }

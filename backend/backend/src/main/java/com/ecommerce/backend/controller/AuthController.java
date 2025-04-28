@@ -63,7 +63,7 @@ public class AuthController {
         }
 
         // JWT token oluşturuluyor
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
         return ResponseEntity.ok(new JwtResponse(token, user.getRole()));
     }
 }

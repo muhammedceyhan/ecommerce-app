@@ -49,7 +49,7 @@ export class ProductListComponent implements OnInit {
   addProduct(){
     let newProduct: Product = {
       name: "New Product",
-
+      sellerId: 1,
       price: 20,
       description: "New Product Description",
       stock: 10,
@@ -68,6 +68,22 @@ export class ProductListComponent implements OnInit {
   }
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+  manageStore(){
+    if(this.isLoggedIn()){
+      const role = this.authService.getUserRole();
+
+      if(role == "ROLE_SELLER"){
+        this.router.navigate(['/seller/store-management'])
+      }
+      else{
+        alert("You are not authorized to access this page.")
+      }
+    }
+    else{
+      alert("Please Log in!")
+      this.router.navigate(['/login']);
+    }
   }
 
 }

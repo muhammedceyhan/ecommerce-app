@@ -12,6 +12,7 @@ import java.util.List;
 
 interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByInCartNumberGreaterThan(int number);
+    List<Product> findBySellerId(Long sellerId);
 }
 
 
@@ -36,5 +37,7 @@ public class ProductService {
     public List<Product> getProductsInCart() {
         return productRepository.findByInCartNumberGreaterThan(0);
     }
-
+    public List<Product> getProductsByUserId(Long userId) {
+        return productRepository.findBySellerId(userId);
+    }
 }
