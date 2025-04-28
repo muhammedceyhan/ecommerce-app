@@ -1,41 +1,73 @@
-<h2>Yeni Ürün Ekle</h2>
+<h2>Ürün Ekle</h2>
 
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <label>
-    Ad:
-    <input formControlName="name" />
-  </label>
-  <br />
+  <div>
+    <label>Ürün Adı:</label>
+    <input type="text" formControlName="name">
+  </div>
 
-  <label>
-    Fiyat:
-    <input type="number" formControlName="price" />
-  </label>
-  <br />
+  <div>
+    <label>Fiyat:</label>
+    <input type="number" formControlName="price">
+  </div>
 
-  <label>
-    Stok:
-    <input type="number" formControlName="stock" />
-  </label>
-  <br />
+  <div>
+    <label>Stok:</label>
+    <input type="number" formControlName="stock">
+  </div>
 
-  <label>
-    Açıklama:
+  <div>
+    <label>Açıklama:</label>
     <textarea formControlName="description"></textarea>
-  </label>
-  <br />
+  </div>
 
-  <label>
-    Kategori:
-    <input formControlName="category" />
-  </label>
-  <br />
+  <div>
+    <label>Kategori:</label>
+    <input type="text" formControlName="category">
+  </div>
 
-  <label>
-    Görsel URL:
-    <input formControlName="imageUrl" />
-  </label>
-  <br />
+  <div>
+    <label>Resim URL:</label>
+    <input type="text" formControlName="imageUrl">
+  </div>
 
-  <button type="submit" [disabled]="productForm.invalid">Kaydet</button>
+  <div>
+    <label>Sepetteki Ürün Sayısı:</label>
+    <input type="number" formControlName="inCartNumber">
+  </div>
+
+  <div>
+    <label>İndirim Yüzdesi:</label>
+    <input type="number" formControlName="discountPercentage">
+  </div>
+
+  <div>
+    <label>Rating:</label>
+    <input type="number" formControlName="rating">
+  </div>
+
+  <div>
+    <label>Favori mi?</label>
+    <input type="checkbox" formControlName="isFavorite">
+  </div>
+
+  <div>
+    <label>İstek Listesinde mi?</label>
+    <input type="checkbox" formControlName="isInWishlist">
+  </div>
+
+  <div>
+    <label>Karşılaştırmada mı?</label>
+    <input type="checkbox" formControlName="isInCompare">
+  </div>
+
+  <div>
+    <label>İndirimde mi?</label>
+    <input type="checkbox" formControlName="isInSale">
+  </div>
+
+  <div>
+    <button type="submit">Ürünü Kaydet</button>
+    <button type="button" (click)="goBack()">Geri Dön</button>
+  </div>
 </form>

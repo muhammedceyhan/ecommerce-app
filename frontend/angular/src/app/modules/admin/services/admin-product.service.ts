@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AdminProduct } from '../models/admin-product.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminProductService {
-  private apiUrl = 'http://localhost:8081/api/admin/products'; // örnek endpoint
+  [x: string]: any;
+  private apiUrl = `${environment.apiUrl}/products`;
 
   constructor(private http: HttpClient) {}
 
@@ -78,4 +80,5 @@ export class AdminProductService {
     // Backend ile bağlantı kurulana kadar sadece başarılı yanıt simülasyonu
     return of({ success: true });
   }
+
 }

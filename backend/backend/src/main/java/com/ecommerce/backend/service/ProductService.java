@@ -37,7 +37,16 @@ public class ProductService {
     public List<Product> getProductsInCart() {
         return productRepository.findByInCartNumberGreaterThan(0);
     }
+
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    
+
     public List<Product> getProductsByUserId(Long userId) {
         return productRepository.findBySellerId(userId);
     }
+
 }

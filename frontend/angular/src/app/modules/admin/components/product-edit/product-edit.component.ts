@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminProductService } from '../../services/admin-product.service';
 import { AdminProduct } from '../../models/admin-product.model';
+import { Location } from '@angular/common';  // dikkat: bunu import et!
+
 
 @Component({
   selector: 'app-product-edit',
-  
+
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.scss'],
   standalone: false
@@ -19,7 +21,8 @@ export class ProductEditComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private productService: AdminProductService,
-    private router: Router
+    private router: Router,
+    private location: Location, 
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
@@ -39,6 +42,10 @@ export class ProductEditComponent implements OnInit {
     this.productService.getProductById(this.productId).subscribe((product: AdminProduct) => {
       this.productForm.patchValue(product); // Formu doldur
     });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   onSubmit(): void {

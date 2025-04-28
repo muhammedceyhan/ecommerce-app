@@ -1,33 +1,25 @@
 <button routerLink="/admin">⬅️ Admin Paneline Dön</button>
+
 <h2>Sipariş Yönetimi</h2>
 
-<table>
+<table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
       <th>ID</th>
-      <th>Müşteri</th>
-      <th>Toplam Tutar</th>
+      <th>Kullanıcı ID</th>
+      <th>Satın Alma Tarihi</th>
       <th>Durum</th>
-      <th>Ürünler</th>
-      <th>Durumu Değiştir</th>
+
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let order of orders">
       <td>{{ order.id }}</td>
-      <td>{{ order.customer }}</td>
-      <td>{{ order.total }} ₺</td>
+      <td>{{ order.userId }}</td>
+      <td>{{ order.purchaseDate | date: 'medium' }}</td>
       <td>{{ order.status }}</td>
-      <td>
-        <ul>
-          <li *ngFor="let product of order.products">{{ product.name }} - {{ product.price }} ₺</li>
-        </ul>
-      </td>
-      <td>
-        <select [value]="order.status" (change)="updateOrderStatus(order.id, getEventValue($event))">
-          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
-        </select>
-      </td>
+
     </tr>
   </tbody>
 </table>
+
