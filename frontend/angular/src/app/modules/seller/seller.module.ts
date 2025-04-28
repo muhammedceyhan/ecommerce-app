@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { StoreManagementComponent } from './store-management/store-management.component';
 import { SellerRoutingModule } from './seller-routing.module';
-import { SellerDashboardComponent } from './components/dashboard/seller-dashboard/seller-dashboard.component';
+
 @NgModule({
-  declarations: [SellerDashboardComponent],
+  declarations: [StoreManagementComponent],
   imports: [
     CommonModule,
-    SellerRoutingModule
+    SellerRoutingModule,
   ]
 })
-export class SellerModule {}
+export class SellerModule { }

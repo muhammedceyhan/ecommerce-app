@@ -10,6 +10,18 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Automaticly increase ID
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "seller_id", referencedColumnName = "id")
+    private User seller;
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
     @Column(nullable = false)
     private String name;
 

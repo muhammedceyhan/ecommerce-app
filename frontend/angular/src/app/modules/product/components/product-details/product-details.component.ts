@@ -5,6 +5,7 @@ import { Product } from './../../models/product.model';
 import { ProductService } from './../../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 
 
 @Component({
@@ -15,16 +16,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductDetailsComponent implements OnInit {
 
   product!: Product;
-
+  userId = 0;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private cartService: CartService
-  ) {}
+    private cartService: CartService,
+    private authService: AuthService
+  ) {
+    const temp = this.authService.getUserId();
+    if(temp == null) {
+      alert("Please Log in!")
+      this.router.navigate(['/login']);
+    }
+    else{
+      this.userId = temp;
+    }
+  }
+
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+
     this.loadProduct();
   }
 
@@ -46,17 +58,23 @@ export class ProductDetailsComponent implements OnInit {
 
   // Ürünü sepete ekle
   addToCart(): void {
-    const userId = 1; // Şu anda sabit bir kullanıcı id
-    this.cartService.addProductToCart(userId, this.product.id!).subscribe(
-      (response) => {
-        console.log('Product added to cart successfully');
-        // İstersen burada kullanıcıya başarı mesajı gösterebilirsin
-        this.loadProductQuantityInCart()
-      },
-      (error) => {
-        console.error('Error adding product to cart:', error);
-      }
-    );
+ // Şu anda sabit bir kullanıcı id
+    if(this.userId != null) {
+      this.cartService.addProductToCart(this.userId, this.product.id!).subscribe(
+        (response) => {
+          console.log('Product added to cart successfully');
+          // İstersen burada kullanıcıya başarı mesajı gösterebilirsin
+          this.loadProductQuantityInCart()
+        },
+        (error) => {
+          console.error('Error adding product to cart:', error);
+        }
+      );
+    }
+    else{
+      alert("Please Log in!")
+      this.router.navigate(['/login']);
+    }
   }
 
   // Alışveriş listesine dön
@@ -78,9 +96,8 @@ export class ProductDetailsComponent implements OnInit {
 
 // Bu yeni method:
 loadProductQuantityInCart(): void {
-  const userId = 1; // Şu anda sabit
   if (this.product && this.product.id) {
-    this.cartService.getProductQuantityInCart(userId, this.product.id).subscribe(
+    this.cartService.getProductQuantityInCart(this.userId, this.product.id).subscribe(
       (quantity: number) => {
         this.productQuantityInCart = quantity;
       },
