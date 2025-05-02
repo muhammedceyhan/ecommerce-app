@@ -81,21 +81,25 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     }
     return null;
   }
-  // getUserId(): number | null {
-  //   const token = this.getToken();
-  //   if (!token) return null;
-  // }
 
-  // getCurrentUser() {
-  //   const userData = localStorage.getItem('user');
-  //   return userData ? JSON.parse(userData) : null;
-  // }
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.id || null; // Assuming 'id' exists in the token payload
+  }
 
-  // getCurrentUser() {
-  //   const payload = JSON.parse(atob(token.split('.')[1]));
-  //   return payload.id || null;
-  // }
-
+  getCurrentUser(): { id: number, username: string, email: string, role: string } | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      id: payload.id,
+      username: payload.sub, // JWT içeriğine göre değişebilir
+      email: payload.email, // eğer token’da email varsa
+      role: payload.role,
+    };
+  }
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }

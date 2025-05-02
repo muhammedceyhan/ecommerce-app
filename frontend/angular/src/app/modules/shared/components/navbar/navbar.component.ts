@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../../modules/auth/services/auth.service';
 import { CartService } from '../../../cart/services/cart.service';
 
@@ -12,6 +12,7 @@ import { CartService } from '../../../cart/services/cart.service';
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
   isAdminUser = false;
+  isAuthPage = false;
   cartItemCount = 0;
   searchQuery: string = '';
   currentUserName: string | null = null;
@@ -23,22 +24,48 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.checkAuthStatus();
-    this.cartService.getCartedProducts(1).subscribe({
-      next: (cartItems) => {
-        this.cartItemCount = cartItems.length;
-      },
-      error: (err) => {
-        console.error('Sepet bilgisi alınamadı', err);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.checkAuthStatus();
+        this.checkIfAuthPage();
       }
     });
+
+    const currentUser = this.authService.getCurrentUser();
+    const userId = currentUser ? currentUser.id : null;
+
+    if (userId) {
+      this.cartService.getCartedProducts(userId).subscribe({
+        next: (cartItems) => {
+          this.cartItemCount = cartItems.length;
+        },
+        error: (err) => {
+          console.error('Sepet bilgisi alınamadı', err);
+        }
+      });
+    }
   }
 
   checkAuthStatus() {
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.isAdminUser = this.authService.getRole() === 'ROLE_ADMIN';
-    const currentUser = this.authService.getCurrentUser(); // yeni ekledik
+    this.isAdminUser = this.authService.getUserRole() === 'ROLE_ADMIN';
+    const currentUser = this.authService.getCurrentUser();
     this.currentUserName = currentUser ? currentUser.username : null;
+  }
+
+  checkIfAuthPage() {
+    const currentUrl = this.router.url;
+    this.isAuthPage = currentUrl.includes('/login') || currentUrl.includes('/register');
+  }
+
+  getUserInitials(): string {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.username) {
+      return currentUser.username.substring(0, 2).toUpperCase();
+    } else if (currentUser && currentUser.email) {
+      return currentUser.email.substring(0, 2).toUpperCase();
+    }
+    return 'US';  // fallback default
   }
 
   logout(): void {

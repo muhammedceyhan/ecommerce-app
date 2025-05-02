@@ -84,3 +84,21 @@
     margin: 0.5rem 0;
   }
 }
+
+
+.profile-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  width: 200px;
+  padding: 10px;
+}
+
+.avatar {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dropdown-toggle {
+  font-weight: bold;
+}

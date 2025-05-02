@@ -1,7 +1,7 @@
 <div>
   <button (click)="goToCart()">Cart</button>
 </div>
-<div style="position: fixed; top: 20px; right: 20px;">
+<div style="position: fixed; top: 80px; right: 20px;">
   <button (click)="manageStore()">Manage Store</button>
   <button *ngIf="!isLoggedIn()" (click)="goToLogin()" class="login-button">Giriş Yap </button>
   <button *ngIf="isLoggedIn()"(click)="logout()">🚪 Çıkış Yap</button>
