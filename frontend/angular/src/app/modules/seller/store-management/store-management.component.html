@@ -1,0 +1,10 @@
+
+<div style="border: 1px solid black; display: flex; width: 100%;height: fit-content;flex-wrap: wrap;">
+  <div *ngFor="let product of products" class="product-card"
+   style="border: 1px solid black; width: 150px; height: 150px; margin: 15px;">
+    <img [src]="product.imageUrl" alt="{{ product.name }}" />
+    <h3>{{ product.name }}</h3>
+    <p>Price: {{ product.price }}</p>
+    <button (click)="deleteProduct(product.id!)">View Detail</button>
+  </div>
+</div>

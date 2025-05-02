@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cart.service';
 import { CartItem } from '../models/cart.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -12,7 +13,7 @@ export class CartPageComponent implements OnInit {
 
   cart: CartItem[] = [];
 
-  constructor(private cartService: CartService, private router: Router) {}
+  constructor(private cartService: CartService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadCart();
@@ -20,14 +21,21 @@ export class CartPageComponent implements OnInit {
 
   // Sepeti backend'den çek
   loadCart(): void {
-    this.cartService.getCartedProducts().subscribe(
-      (data: CartItem[]) => {
-        this.cart = data;
-      },
-      (error) => {
-        console.error('Sepet yüklenirken hata oluştu:', error);
-      }
-    );
+    const userId = this.authService.getUserId();
+    if(userId != null) {
+      this.cartService.getCartedProducts(userId).subscribe(
+        (data: CartItem[]) => {
+          this.cart = data;
+        },
+        (error) => {
+          console.error('Sepet yüklenirken hata oluştu:', error);
+        }
+      );
+    }
+    else{
+      alert("Please Log in!")
+      this.router.navigate(['/login']);
+    }
   }
 
   // Sepetteki ürünün toplam fiyatını hesapla

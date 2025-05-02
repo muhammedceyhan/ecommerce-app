@@ -16,7 +16,7 @@ export class CartService {
   constructor(private http: HttpClient) {}
 
   // Kullanıcının sepetindeki ürünleri getir
-  getCartedProducts(userId: number = 1): Observable<CartItem[]> {
+  getCartedProducts(userId: number): Observable<CartItem[]> {
     return this.http.get<CartItem[]>(`${this.apiUrl}/${userId}`);
   }
 

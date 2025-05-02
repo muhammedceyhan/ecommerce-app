@@ -81,12 +81,20 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     }
     return null;
   }
+  // getUserId(): number | null {
+  //   const token = this.getToken();
+  //   if (!token) return null;
+  // }
 
-  getCurrentUser() {
-    const userData = localStorage.getItem('user');
-    return userData ? JSON.parse(userData) : null;
-  }
+  // getCurrentUser() {
+  //   const userData = localStorage.getItem('user');
+  //   return userData ? JSON.parse(userData) : null;
+  // }
 
+  // getCurrentUser() {
+  //   const payload = JSON.parse(atob(token.split('.')[1]));
+  //   return payload.id || null;
+  // }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.tokenKey);
