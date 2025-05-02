@@ -11,6 +11,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class AuthService {
   private baseUrl = `${environment.apiUrl}/auth`;
+  private tokenKey = 'auth_token';
+  private usernameKey = 'auth_username';
+  private roleKey = 'auth_role';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -79,6 +82,18 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     return null;
   }
 
+  getCurrentUser() {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
+  }
 
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem(this.tokenKey);
+  }
+
+  getUsername(): string {
+    return localStorage.getItem(this.usernameKey) || '';
+  }
 
 }

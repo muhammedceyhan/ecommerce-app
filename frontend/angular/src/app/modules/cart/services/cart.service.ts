@@ -8,6 +8,7 @@ import { CartItem } from '../models/cart.model'; // Doğru DTO modeli kullanıl�
   providedIn: 'root'
 })
 export class CartService {
+[x: string]: any;
 
 
   private apiUrl = `${environment.apiUrl}/cart`;
