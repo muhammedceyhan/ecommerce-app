@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SellerService } from '../../services/seller.service';
 import { AuthService } from '../../../auth/services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -9,21 +10,18 @@ import { AuthService } from '../../../auth/services/auth.service';
   standalone: false,
 })
 export class AddProductComponent implements OnInit {
-
+  @Output() productAdded = new EventEmitter<void>();
   productForm!: FormGroup;
+  isEditMode = false;
+  currentProductId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private sellerService: SellerService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
-
-
-  showAddForm = false;
-
-  toggleAddForm() {
-    this.showAddForm = !this.showAddForm;
-  }
 
   ngOnInit(): void {
     this.productForm = this.fb.group({
@@ -33,35 +31,68 @@ export class AddProductComponent implements OnInit {
       stock: [0, [Validators.required, Validators.min(0)]],
       category: ['', Validators.required],
       imgUrl: ['', Validators.required],
-      sellerId: [null, Validators.required]  // BUNUN OLMASI ŞART!
+    });
+
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.isEditMode = true;
+        this.currentProductId = +id;
+        this.sellerService.getProductById(this.currentProductId).subscribe({
+          next: (product) => {
+            if (product) {
+              this.productForm.patchValue(product);
+            } else {
+              console.error('Ürün bulunamadı!');
+            }
+          },
+          error: (err) => {
+            console.error('Ürün getirilemedi:', err);
+          }
+        });
+      }
     });
   }
 
   submitProduct(): void {
-    console.log("✅ SubmitProduct() çalıştı!");
-    if (this.productForm.valid) {
-      const productData = {
-        ...this.productForm.value,
-        sellerId: 3 // 👈 bunu elle ekle
-        //sellerId: this.authService.getUserId()
-      };
+    if (this.productForm.invalid) {
+      alert('Lütfen tüm alanları doğru doldurun.');
+      return;
+    }
 
-      console.log('Product to add:', productData);  // ✅ Konsol için
+    const productData = {
+      ...this.productForm.value,
+      sellerId: this.authService.getUserId(),
+    };
 
-      this.sellerService.addProduct(productData).subscribe({
+    if (this.isEditMode && this.currentProductId) {
+      this.sellerService.updateProduct(this.currentProductId, productData).subscribe({
         next: () => {
-          alert('Product added successfully!');
-          this.productForm.reset();
+          alert('Ürün başarıyla güncellendi!');
+          this.router.navigate(['/seller/store-management']);
         },
         error: (err) => {
-          console.error('Error adding product:', err);
-          alert('Failed to add product.');
+          console.error('Güncelleme hatası:', err);
+          alert('Ürün güncellenemedi.');
         }
       });
     } else {
-      alert('Please fill in all fields correctly.');
+      this.sellerService.addProduct(productData).subscribe({
+        next: () => {
+          alert('Ürün başarıyla eklendi!');
+          this.router.navigate(['/seller/store-management']);
+        },
+        error: (err) => {
+          console.error('Ekleme hatası:', err);
+          alert('Ürün eklenemedi.');
+        }
+      });
+
     }
   }
 
+  goBack(): void {
+    this.router.navigate(['/seller/store-management']);
+  }
 
 }

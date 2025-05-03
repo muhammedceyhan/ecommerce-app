@@ -1,4 +1,5 @@
-<h2>Add Product</h2>
+<h2>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h2>
+<button (click)="goBack()">← Back</button>
 
 <form (ngSubmit)="submitProduct()" [formGroup]="productForm" style="max-width: 600px;">
   <div>
@@ -23,10 +24,8 @@
   </div>
   <div>
     <label>Image URL:</label>
-    <input type="text" formControlName="imageUrl" required>
+    <input type="text" formControlName="imgUrl" required>
   </div>
 
-  <button type="submit">Add Product</button>
-  <button (click)="toggleAddForm()">+ Add Product</button>
-
+  <button type="submit">{{ isEditMode ? 'Update' : 'Add' }} Product</button>
 </form>

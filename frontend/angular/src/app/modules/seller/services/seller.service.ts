@@ -22,4 +22,13 @@ export class SellerService {
   getMyProducts(sellerId: number): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.baseUrl}/seller/${sellerId}`);
   }
+
+  getProductById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
+  }
+
+  updateProduct(id: number, productData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, productData);
+  }
+
 }
