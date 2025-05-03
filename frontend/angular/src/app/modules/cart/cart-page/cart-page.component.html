@@ -1,15 +1,17 @@
-<button (click)="returnToMainPage()">Home</button>
-<div>
-  <h1>Cart</h1>
-  <ul>
-    <li *ngFor="let item of cart">
-      {{item.quantity}} x {{item.productName}} - {{item.productPrice}} TL = {{getItemPrice(item)}}
+<ul>
+  <li *ngFor="let item of cart" style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: flex; align-items: center;">
+    <img [src]="item.productImageUrl" alt="{{ item.productName }}" width="80" style="margin-right: 10px;" />
+    <div style="flex: 1;">
+      <strong>{{item.productName}}</strong><br>
+      {{item.quantity}} x {{item.productPrice}} TL = {{ getItemPrice(item) }} TL
+    </div>
+    <div>
       <button (click)="decreaseItem(item)">-</button>
       <button (click)="increaseItem(item)">+</button>
-    </li>
-  </ul>
-</div>
+      <button (click)="removeItem(item)">🗑️</button>
+    </div>
+  </li>
+</ul>
 <hr>
-<p>Total purchase: {{calculateTotalPurchase()}}</p>
-
+<p><strong>Total purchase: {{ calculateTotalPurchase() | currency }}</strong></p>
 <button (click)="goToCheckOut()">Check Out</button>

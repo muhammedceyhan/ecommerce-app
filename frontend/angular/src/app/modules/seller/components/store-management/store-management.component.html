@@ -1,0 +1,32 @@
+<h2>My Products</h2>
+<button routerLink="/seller/add-product">+ Add Product</button>
+
+<div *ngIf="myProducts.length === 0">
+  <p>No products found.</p>
+</div>
+
+<table *ngIf="myProducts.length > 0" border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of myProducts">
+      <td><img [src]="product.imageUrl" width="50"></td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.stock }}</td>
+      <td>{{ product.category }}</td>
+      <td>
+        <button>Edit</button>
+        <button>Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

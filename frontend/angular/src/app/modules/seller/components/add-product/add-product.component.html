@@ -1,0 +1,32 @@
+<h2>Add Product</h2>
+
+<form (ngSubmit)="submitProduct()" [formGroup]="productForm" style="max-width: 600px;">
+  <div>
+    <label>Product Name:</label>
+    <input type="text" formControlName="name" required>
+  </div>
+  <div>
+    <label>Description:</label>
+    <textarea formControlName="description" required></textarea>
+  </div>
+  <div>
+    <label>Price:</label>
+    <input type="number" formControlName="price" required>
+  </div>
+  <div>
+    <label>Stock:</label>
+    <input type="number" formControlName="stock" required>
+  </div>
+  <div>
+    <label>Category:</label>
+    <input type="text" formControlName="category" required>
+  </div>
+  <div>
+    <label>Image URL:</label>
+    <input type="text" formControlName="imageUrl" required>
+  </div>
+
+  <button type="submit">Add Product</button>
+  <button (click)="toggleAddForm()">+ Add Product</button>
+
+</form>

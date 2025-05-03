@@ -1,6 +1,6 @@
 package com.ecommerce.backend.controller;
 
-import com.ecommerce.backend.model.Cart;
+
 import com.ecommerce.backend.model.CartDTO;
 import com.ecommerce.backend.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;

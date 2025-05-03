@@ -35,10 +35,23 @@ export class ProductDetailsComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
 
-    this.loadProduct();
-  }
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+        this.productService.getProductById(id).subscribe({
+            next: (data) => {
+                this.product = data;
+                // Ürün detayını çektikten hemen sonra:
+                this.loadProductQuantityInCart(); 
+            },
+            error: (err) => {
+                console.error('Failed to load product', err);
+            }
+        });
+    }
+}
+
 
   loadProduct(): void {
     const productId = Number(this.route.snapshot.paramMap.get('id'));

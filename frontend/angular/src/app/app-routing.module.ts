@@ -9,9 +9,7 @@ import { RegisterComponent } from './modules/auth/components/register/register.c
 // Guards
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
-import { StoreManagementComponent } from './modules/seller/store-management/store-management.component';
-import { SellerModule } from './modules/seller/seller.module';
-
+import { SellerGuard } from './core/guards/seller.guard';
 const routes: Routes = [
   // 1) Ana sayfa ürün listesi
   { path: '', redirectTo: 'products', pathMatch: 'full' },

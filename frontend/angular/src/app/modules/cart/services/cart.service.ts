@@ -38,4 +38,10 @@ export class CartService {
     return this.http.delete(`${this.apiUrl}/${cartItemId}/remove`);
   }
 
+  checkout(userId: number, orderRequest: any): Observable<any> {
+    const ordersApiUrl = `${environment.apiUrl}/orders`;
+    return this.http.post(`${ordersApiUrl}/checkout?userId=${userId}`, orderRequest);
+  }
+
+
 }

@@ -4,6 +4,7 @@ import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../modules/auth/services/auth.service';
+import { CartService } from '../../../cart/services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -11,12 +12,14 @@ import { AuthService } from '../../../../modules/auth/services/auth.service';
   standalone: false
 })
 export class ProductListComponent implements OnInit {
+
   [x: string]: any;
   searchTerm = ""
 
   products: Product[] = [];
-
-  constructor(private productService: ProductService, private router: Router,private authService: AuthService) {
+  private cartService: CartService;
+  constructor(private productService: ProductService, private router: Router, public authService: AuthService, cartService: CartService) {
+    this.cartService = cartService;
     this.productService.getAllProducts().subscribe(data => this.products = data);
   }
 
@@ -85,5 +88,23 @@ export class ProductListComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
+
+  addToCart(productId: number): void {
+    const userId = this.authService.getUserId();
+    if (userId) {
+        this.cartService.addProductToCart(userId, productId).subscribe(
+            () => {
+                console.log('Product added to cart successfully.');
+            },
+            (error) => {
+                console.error('Error adding product to cart:', error);
+            }
+        );
+    } else {
+        alert('Please log in!');
+        this.router.navigate(['/login']);
+    }
+}
+
 
 }

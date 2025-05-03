@@ -20,16 +20,20 @@ export class ProductService {
     return this.http.post<Product>(this.apiUrl, product);
 
   }
+
   getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
+
+
+
   updateProduct(product: Product): Observable<Product> {
     return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product);
   }
   getProductsByLoggedUser(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/seller/me`);
   }
-  
+
 
 
 }

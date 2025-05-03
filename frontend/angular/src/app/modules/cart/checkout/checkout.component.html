@@ -1,5 +1,17 @@
-<form id="payment-form">
-  <div id="card-element" style="width: 500; border: 1px solid black ;"></div>
-  <div id="card-errors" role="alert"></div>
-  <button type="submit">Ödeme Yap</button>
+<form (ngSubmit)="submitOrder()" style="max-width: 500px; margin: auto;">
+  <h2>Checkout</h2>
+
+  <label>Payment Method:</label>
+  <select [(ngModel)]="paymentMethod" name="paymentMethod" required>
+    <option value="Credit Card">Credit Card</option>
+    <option value="Cash on Delivery">Cash on Delivery</option>
+  </select>
+
+  <label>Shipping Address:</label>
+  <textarea [(ngModel)]="shippingAddress" name="shippingAddress" required></textarea>
+
+  <label>Note (optional):</label>
+  <textarea [(ngModel)]="note" name="note"></textarea>
+
+  <button type="submit">Complete Order</button>
 </form>
