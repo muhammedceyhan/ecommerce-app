@@ -7,13 +7,13 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.ecommerce.backend.model.ProductDTO;
 import com.ecommerce.backend.model.User;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,60 +30,68 @@ public class ProductController {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+
     @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
+    @PreAuthorize("hasRole('SELLER')")
+@PostMapping()
+public Product addProduct(@RequestBody ProductDTO dto) {
 
-    @PostMapping()
-    public Product addProduct(@RequestBody ProductDTO dto) {
+    Product product = new Product();
+    product.setName(dto.name);
+    product.setDescription(dto.description);
+    product.setPrice(dto.price);
+    product.setImageUrl(dto.imageUrl);
+    product.setStock(dto.stock);
+    product.setCategory(dto.category);
+    product.setDiscountPercentage(dto.discountPercentage);
+    product.setRating(dto.rating);
+    product.setInSale(dto.isInSale);
 
-        Product product = new Product();
-        product.setName(dto.name);
-        product.setDescription(dto.description);
-        product.setPrice(dto.price);
-        product.setImageUrl(dto.imageUrl);
-        product.setStock(dto.stock);
-        product.setCategory(dto.category);
-        product.setDiscountPercentage(dto.discountPercentage);
-        product.setRating(dto.rating);
-        product.setInSale(dto.isInSale);
-        User seller = userRepository.findById(dto.sellerId)
-                .orElseThrow(() -> new RuntimeException("Seller not found"));
-        product.setSeller(seller);
-        return productService.addProduct(product);
-    }
+    // 👇 sellerId'yi dto'dan çekiyoruz
+    User seller = userRepository.findById(dto.sellerId)
+        .orElseThrow(() -> new RuntimeException("Seller not found"));
 
+    product.setSeller(seller);  // ✅ seller'i set ediyorsun
+    return productService.addProduct(product);
+}
+
+    
+
+
+
+    @PreAuthorize("hasRole('SELLER')")
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
-    // @PutMapping("/{id}")
-    // public Product updateProductById(@RequestBody Product product) {
-    //     return productService.updateProduct(product);
-    // }
+    
 
+    @PreAuthorize("hasRole('SELLER')")
     @PutMapping("/{id}")
 public Product updateProductById(@PathVariable Long id, @RequestBody Product product) {
     product.setId(id); // ID'yi manuel set ediyoruz
     return productService.updateProduct(product);
 }
 
-
-    @DeleteMapping("/{id}")
+@DeleteMapping("/{id}")
 public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
     productService.deleteProduct(id);
     return ResponseEntity.ok("Product deleted successfully.");
 }
 
-
+    @PreAuthorize("hasRole('SELLER')")
     @GetMapping("/seller/{userId}")
     public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable Long userId) {
         List<Product> products = productService.getProductsByUserId(userId);
         return ResponseEntity.ok(products);
     }
 
+    @PreAuthorize("hasRole('SELLER')")
     @GetMapping("/seller/me")
     public ResponseEntity<List<Product>> getProductsForLoggedUser(HttpServletRequest request) {
         String token = extractToken(request);
@@ -103,6 +111,10 @@ public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         }
         return null;
     }
+
+    
+
+
 
 
 }

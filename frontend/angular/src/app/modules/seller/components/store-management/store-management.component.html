@@ -1,0 +1,25 @@
+<button (click)="goHome()">Go to Home</button>
+<button (click)="navigateToAdd()">+ Add Product</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Stock</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of myProducts">
+      <td>{{ product.name }}</td>
+      <td>{{ product.stock }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.category }}</td>
+      <td>
+        <button (click)="editProduct(product.id!)">Edit</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

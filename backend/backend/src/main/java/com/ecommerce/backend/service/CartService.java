@@ -3,6 +3,7 @@ package com.ecommerce.backend.service;
 import com.ecommerce.backend.model.Cart;
 import com.ecommerce.backend.model.CartDTO;
 import com.ecommerce.backend.model.Product;
+import com.ecommerce.backend.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-
-interface CartRepository extends JpaRepository<Cart, Long> {
-    Optional<Cart> findByUserIdAndProductId(Long userId, Long productId);
-    List<Cart> findByUserId(Long userId);
-}
 
 @Service
 public class CartService {
@@ -71,5 +65,10 @@ public class CartService {
     public void removeCartItem(Long cartItemId) {
         cartRepository.deleteById(cartItemId);
     }
+
+    public List<Cart> getCartItemsByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+    
 
 }

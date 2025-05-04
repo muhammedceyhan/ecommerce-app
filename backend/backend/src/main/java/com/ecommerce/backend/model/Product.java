@@ -13,7 +13,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
     private User seller;
-
+    
     public User getSeller() {
         return seller;
     }
@@ -57,6 +57,7 @@ public class Product {
 
     @Column(nullable = false)
     private boolean isInSale;
+
 
     public Product() {}
 
@@ -189,4 +190,6 @@ public class Product {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
+    
+    
 }

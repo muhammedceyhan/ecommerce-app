@@ -1,0 +1,26 @@
+<p>orders works!</p>
+<h2>My Orders</h2>
+<div *ngIf="orders.length === 0">No orders yet.</div>
+
+<table *ngIf="orders.length > 0">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Buyer</th>
+      <th>Note</th>
+      <th>Payment</th>
+      <th>Status</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.productName }}</td>
+      <td>{{ order.buyerName }}</td>
+      <td>{{ order.note }}</td>
+      <td>{{ order.paymentMethod }}</td>
+      <td>{{ order.status }}</td>
+      <td>{{ order.purchaseDate | date }}</td>
+    </tr>
+  </tbody>
+</table>

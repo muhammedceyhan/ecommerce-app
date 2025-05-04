@@ -98,6 +98,6 @@ export class CartPageComponent implements OnInit {
 
   // Checkout sayfasına git
   goToCheckOut(): void {
-    this.router.navigate(['/checkout']); // Checkout sayfanın route'u burası
+    this.router.navigate(['/cart/checkout']); // Checkout sayfanın route'u burası
   }
 }

@@ -1,7 +1,7 @@
 <div>
   <button (click)="goToCart()">Cart</button>
 </div>
-<div style="position: fixed; top: 20px; right: 20px;">
+<div style="position: fixed; top: 80px; right: 20px;">
   <button (click)="manageStore()">Manage Store</button>
   <button *ngIf="!isLoggedIn()" (click)="goToLogin()" class="login-button">Giriş Yap </button>
   <button *ngIf="isLoggedIn()"(click)="logout()">🚪 Çıkış Yap</button>
@@ -11,13 +11,19 @@
 
 <div style="border: 1px solid black; display: flex; width: 100%;height: fit-content;flex-wrap: wrap;">
   <div *ngFor="let product of showSearchResults()" class="product-card"
-   style="border: 1px solid black; width: 150px; height: 150px; margin: 15px;">
+     style="border: 1px solid black; width: 200px; height: 150px; margin: 15px; display: flex; flex-direction: column; justify-content: space-between;">
     <img [src]="product.imageUrl" alt="{{ product.name }}" />
     <h3>{{ product.name }}</h3>
     <p>Price: {{ product.price }}</p>
     <button (click)="viewDetail(product.id!)">View Detail</button>
-  </div>
-</div>
 
+    <!-- Add to Cart Butonu -->
+    <button *ngIf="isLoggedIn() && authService.getUserRole() === 'ROLE_USER'" (click)="addToCart(product.id!)">
+      Add to Cart
+   </button>
+   </div>
+
+</div>
+<br><br><br><br>
 <button (click)="addProduct()">addProduct</button>
 

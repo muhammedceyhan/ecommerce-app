@@ -11,6 +11,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class AuthService {
   private baseUrl = `${environment.apiUrl}/auth`;
+  private tokenKey = 'auth_token';
+  private usernameKey = 'auth_username';
+  private roleKey = 'auth_role';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -78,12 +81,31 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     }
     return null;
   }
+
   getUserId(): number | null {
     const token = this.getToken();
     if (!token) return null;
-
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.id || null;
+    return payload.id || null; // Assuming 'id' exists in the token payload
+  }
+
+  getCurrentUser(): { id: number, username: string, email: string, role: string } | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      id: payload.id,
+      username: payload.sub, // JWT içeriğine göre değişebilir
+      email: payload.email, // eğer token’da email varsa
+      role: payload.role,
+    };
+  }
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem(this.tokenKey);
+  }
+
+  getUsername(): string {
+    return localStorage.getItem(this.usernameKey) || '';
   }
 
 }

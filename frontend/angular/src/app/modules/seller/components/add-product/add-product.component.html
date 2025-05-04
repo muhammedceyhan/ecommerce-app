@@ -1,0 +1,31 @@
+<h2>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h2>
+<button (click)="goBack()">← Back</button>
+
+<form (ngSubmit)="submitProduct()" [formGroup]="productForm" style="max-width: 600px;">
+  <div>
+    <label>Product Name:</label>
+    <input type="text" formControlName="name" required>
+  </div>
+  <div>
+    <label>Description:</label>
+    <textarea formControlName="description" required></textarea>
+  </div>
+  <div>
+    <label>Price:</label>
+    <input type="number" formControlName="price" required>
+  </div>
+  <div>
+    <label>Stock:</label>
+    <input type="number" formControlName="stock" required>
+  </div>
+  <div>
+    <label>Category:</label>
+    <input type="text" formControlName="category" required>
+  </div>
+  <div>
+    <label>Image URL:</label>
+    <input type="text" formControlName="imgUrl" required>
+  </div>
+
+  <button type="submit">{{ isEditMode ? 'Update' : 'Add' }} Product</button>
+</form>

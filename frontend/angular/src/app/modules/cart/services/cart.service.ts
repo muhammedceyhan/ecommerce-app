@@ -8,6 +8,7 @@ import { CartItem } from '../models/cart.model'; // Doğru DTO modeli kullanıl�
   providedIn: 'root'
 })
 export class CartService {
+[x: string]: any;
 
 
   private apiUrl = `${environment.apiUrl}/cart`;
@@ -36,5 +37,11 @@ export class CartService {
   removeCartItem(cartItemId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${cartItemId}/remove`);
   }
+
+  checkout(userId: number, orderRequest: any): Observable<any> {
+    const ordersApiUrl = `${environment.apiUrl}/orders`;
+    return this.http.post(`${ordersApiUrl}/checkout?userId=${userId}`, orderRequest);
+  }
+
 
 }

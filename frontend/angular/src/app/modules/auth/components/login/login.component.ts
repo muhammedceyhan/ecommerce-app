@@ -43,9 +43,12 @@ onSubmit(): void {
         // artık res.role içi dolu dönüyor
         if (res.role === 'ROLE_ADMIN' || res.role === 'ADMIN') {
           this.router.navigate(['/admin']);
-        } else {
+      } else if (res.role === 'ROLE_SELLER') {
+          this.router.navigate(['/seller/store-management']);
+      } else {
           this.router.navigate(['/products']);
-        }
+      }
+
       },
       error: () => alert('Giriş başarısız!'),
     });

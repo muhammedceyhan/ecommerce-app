@@ -1,1 +1,36 @@
-<p>navbar works!</p>
+<nav class="navbar">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="logo">
+      <a routerLink="/products">E-Commerce</a>
+    </div>
+
+    <!-- Navbar linkleri sadece login/register sayfasında değilse göster -->
+    <div class="nav-links d-flex align-items-center" *ngIf="!isAuthPage">
+      <!-- Giriş yapmadıysa -->
+      <ng-container *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/login">Giriş Yap</a>
+        <a class="nav-link" routerLink="/register">Kayıt Ol</a>
+      </ng-container>
+
+      <!-- Giriş yaptıysa avatar + dropdown -->
+      <ng-container *ngIf="isLoggedIn">
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle rounded-circle d-flex justify-content-center align-items-center"
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  style="width: 50px; height: 50px; font-size: 20px;">
+            {{ getUserInitials() }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/products">Ana Sayfa</a></li>
+            <li><a class="dropdown-item" routerLink="/orders">Siparişler</a></li>
+            <li><a class="dropdown-item" routerLink="/cart">Sepet ({{ cartItemCount }})</a></li>
+            <li><a class="dropdown-item" routerLink="/wishlist">Favoriler</a></li>
+            <li *ngIf="isAdminUser"><a class="dropdown-item" routerLink="/admin">Admin Panel</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()">Çıkış Yap</a></li>
+          </ul>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</nav>

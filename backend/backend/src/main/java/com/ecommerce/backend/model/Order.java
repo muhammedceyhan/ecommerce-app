@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "orders") // Tablo adı "orders"
 public class Order {
@@ -25,8 +27,13 @@ private LocalDateTime purchaseDate;  // Sipariş zamanı
 @Column(nullable = false)
 private String status;  // Sipariş durumu ("PREPARING", "SHIPPED" vs)
 
+private String paymentMethod;
+private String shippingAddress;
+private String note;
+
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> items;
 
     // --- Constructorlar ---
@@ -90,6 +97,31 @@ private String status;  // Sipariş durumu ("PREPARING", "SHIPPED" vs)
     
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
     
 }
