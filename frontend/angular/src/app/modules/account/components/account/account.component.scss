@@ -1,0 +1,48 @@
+.account-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+  color: #2c3e50;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .info-card {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+
+    h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #34495e;
+    }
+
+    p {
+      margin: 0.5rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    button {
+      margin-top: 0.5rem;
+      padding: 6px 12px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}

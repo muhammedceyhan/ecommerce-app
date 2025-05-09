@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthUser } from '../models/user.model';
 import { environment } from '../../../../environments/environment';
 
@@ -108,4 +108,20 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     return localStorage.getItem(this.usernameKey) || '';
   }
 
+
+  // Kullanıcı bilgilerini güncelle (adres dahil)
+  updateUser(updatedUser: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${updatedUser.id}`, updatedUser);
+  }
+
+  // Şifre değiştirme
+  changePassword(userId: number, oldPassword: string, newPassword: string): Observable<any> {
+    const params = new HttpParams()
+      .set('oldPassword', oldPassword)
+      .set('newPassword', newPassword);
+    return this.http.post(`${this.baseUrl}/${userId}/change-password`, {}, { params });
+  }
+
+
 }
+

@@ -33,7 +33,9 @@ export class ProductService {
   getProductsByLoggedUser(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/seller/me`);
   }
-
+  getFavoriteCount(productId: number): Observable<number> {
+  return this.http.get<number>(`http://localhost:8080/api/favorites/product/${productId}/count`);
+}
 
 
 }

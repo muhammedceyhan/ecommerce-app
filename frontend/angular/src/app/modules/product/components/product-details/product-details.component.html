@@ -1,17 +1,51 @@
-<button (click)="goBack()">Shopping List</button>
-<div *ngIf="product">
-  <img [src]="product.imageUrl" />
+<div class="product-container" *ngIf="product">
+  <button class="secondary" (click)="goBack()">← Ürün Listesine Dön</button><br><br>
+
+  <img [src]="product.imageUrl" alt="{{ product.name }}" />
+
   <h2>{{ product.name }}</h2>
-  <p>{{ product.category }}</p>
+  <p><strong>Kategori:</strong> {{ product.category }}</p>
   <p>{{ product.description }}</p>
-  <p *ngIf="product.discountPercentage == 0">{{ product.price | currency }}</p>
-  <p><s *ngIf="product.discountPercentage > 0">{{ product.price | currency }}</s> Discount: %{{product.discountPercentage}} </p>
-  <p *ngIf="product.discountPercentage > 0">{{ getDiscountedPrice() | currency }}</p>
-  <p *ngIf="product.stock > 0">In Stock: {{ product.stock }}</p>
-  <p *ngIf="product.stock === 0">Out of Stock</p>
 
-  <button (click)="addToCart()">Add to Cart</button>
-  <p>Number of product in cart: {{ productQuantityInCart }}</p>
+  <!-- Fiyat Bilgisi -->
+  <div class="price-section">
+    <p *ngIf="product.discountPercentage === 0" class="price">
+      {{ product.price | currency:'TRY' }}
+    </p>
+    <div *ngIf="product.discountPercentage > 0">
+      <p class="old-price">{{ product.price | currency:'TRY' }}</p>
+      <p class="discount-info">İndirim: %{{ product.discountPercentage }}</p>
+      <p class="price">{{ getDiscountedPrice() | currency:'TRY' }}</p>
+    </div>
+  </div>
+
+  <!-- Stok Durumu -->
+  <p class="stock" [ngClass]="{ 'available': product.stock > 0, 'unavailable': product.stock === 0 }">
+    {{ product.stock > 0 ? 'Stokta: ' + product.stock : 'Tükendi' }}
+  </p>
+
+  <!-- Favori Sayısı -->
+  <p class="favorites">❤️ Favorilenme Sayısı: {{ favoriteCount }}</p>
+
+  <!-- Sepete Ekleme -->
+  <div class="actions">
+    <button
+      *ngIf="authService.getUserRole() === 'ROLE_USER'"
+      [disabled]="product.stock === 0"
+      (click)="addToCart()"
+      class="primary"
+    >
+      Sepete Ekle
+    </button>
+
+    <button class="secondary" (click)="goToCart()">Sepete Git</button>
+  </div>
+
+  <!-- Sepetteki Miktar -->
+  <p class="cart-info">🛒 Sepetteki ürün sayısı: {{ productQuantityInCart }}</p>
+
+  <!-- Basit Toast -->
+  <div *ngIf="alertMessage" class="alert-toast">
+    {{ alertMessage }}
+  </div>
 </div>
-
-<button (click)="goToCart()">Go To Cart</button>

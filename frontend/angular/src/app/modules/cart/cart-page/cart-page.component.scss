@@ -1,0 +1,149 @@
+.cart-container {
+  max-width: 960px;
+  margin: 3rem auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: #2c3e50;
+}
+
+h2 {
+  text-align: left;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+  }
+
+  .info {
+    flex: 1;
+
+    h4 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .item-total {
+      font-weight: bold;
+      margin-top: 0.5rem;
+      color: #2c3e50;
+    }
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    button {
+      background-color: #ecf0f1;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #dfe6e9;
+      }
+
+      &.delete {
+        background-color: #e74c3c;
+        color: white;
+
+        &:hover {
+          background-color: #c0392b;
+        }
+      }
+    }
+
+    span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 500;
+    }
+  }
+}
+
+.cart-footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+
+  .total {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #1e8449;
+    }
+  }
+}
+
+.empty-cart {
+  text-align: center;
+  margin-top: 5rem;
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}

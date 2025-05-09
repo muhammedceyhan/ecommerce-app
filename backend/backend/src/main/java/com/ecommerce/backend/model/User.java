@@ -27,6 +27,13 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.ROLE_USER;  // Varsayılan olarak USER rolü
 
+    @Column(name = "address")
+private String address;
+
+@Column(name = "phone")
+private String phone;
+
+
     // --- Constructorlar ---
 
     public User() {
@@ -80,4 +87,21 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getAddress() {
+    return address;
+}
+
+public void setAddress(String address) {
+    this.address = address;
+}
+
+public String getPhone() {
+    return phone;
+}
+
+public void setPhone(String phone) {
+    this.phone = phone;
+}
+
 }

@@ -9,15 +9,35 @@ declare var Stripe: any;
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.scss'],
   standalone: false
 })
 export class CheckoutComponent implements OnInit {
+
   stripe: any;
   card: any;
 
   paymentMethod: string = '';
 shippingAddress: string = '';
 note: string = '';
+
+userAddresses: string[] = [
+  'Ev: Antalya, Muratpaşa, 07010',
+  'Ofis: İstanbul, Beşiktaş, 34353'
+];
+
+userCards: { last4: string }[] = [
+  { last4: '4242' },
+  { last4: '1111' }
+];
+
+addNewAddress() {
+  alert('Yeni adres ekleme özelliği yakında aktif olacak.');
+}
+
+addNewCard() {
+  alert('Yeni kart ekleme özelliği yakında aktif olacak.');
+}
 
 constructor(
   private cartService: CartService,
@@ -42,7 +62,8 @@ submitOrder(): void {
   this.cartService.checkout(userId, orderRequest).subscribe(
     () => {
       alert('Order placed successfully!');
-      this.router.navigate(['/products']);
+      this.router.navigate(['/user-orders']);
+      //this.router.navigate(['/products']);
     },
     (error: any) => {
       console.error('Checkout error:', error);

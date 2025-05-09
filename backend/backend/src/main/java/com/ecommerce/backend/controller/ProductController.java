@@ -64,7 +64,7 @@ public Product addProduct(@RequestBody ProductDTO dto) {
 
 
 
-    @PreAuthorize("hasRole('SELLER')")
+    //@PreAuthorize("hasRole('SELLER')")
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);

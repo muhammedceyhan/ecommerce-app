@@ -10,21 +10,25 @@ import { CommonModule } from '@angular/common';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor'; // kendi doğru yoluna göre güncelle!
 
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { OrdersComponent } from './modules/seller/components/orders/orders.component';
+import { PaymentMethodsComponent } from './modules/payment/components/payment-methods/payment-methods.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
-    ],
+    NavbarComponent,
+    OrdersComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     provideClientHydration(withEventReplay()),
@@ -33,6 +37,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
       useClass: AuthInterceptor,
       multi: true  // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
     },
+provideHttpClient(withFetch()),  // 👈 sadece bunu ekle
     //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
 
   ],

@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   cartItemCount = 0;
   searchQuery: string = '';
   currentUserName: string | null = null;
+  isSellerUser = false;
 
   constructor(
     private authService: AuthService,
@@ -79,4 +80,36 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/products'], { queryParams: { search: this.searchQuery.trim() } });
     }
   }
+
+  get isUser(): boolean {
+  const role = this.authService.getUserRole();
+  return role === 'ROLE_USER';
+}
+
+get isSeller(): boolean {
+  const role = this.authService.getUserRole();
+  return role === 'ROLE_SELLER';
+}
+
+get isAdmin(): boolean {
+  const role = this.authService.getUserRole();
+  return role === 'ROLE_ADMIN';
+}
+
+get showCart(): boolean {
+  return this.isUser || this.isAdmin;
+}
+
+get showAccount(): boolean {
+  return this.isUser || this.isSeller || this.isAdmin;
+}
+
+get ordersRoute(): string {
+  const role = this.authService.getUserRole();
+  if (role === 'ROLE_SELLER') return '/seller/orders';
+  if (role === 'ROLE_USER') return '/user-orders';
+  if (role === 'ROLE_ADMIN') return '/admin/orders'; // opsiyonel
+  return '/';
+}
+
 }

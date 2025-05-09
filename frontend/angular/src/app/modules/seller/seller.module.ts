@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [StoreManagementComponent, DashboardComponent,
     ProductsComponent, AddProductComponent,
-     OrdersComponent
     ],
   imports: [
     CommonModule,

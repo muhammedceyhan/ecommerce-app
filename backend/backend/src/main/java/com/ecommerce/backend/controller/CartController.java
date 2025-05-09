@@ -50,11 +50,18 @@ public class CartController {
         return ResponseEntity.ok("Cart item quantity updated.");
     }
 
-    // Sepetten ürünü kaldır
-    @DeleteMapping("/{cartItemId}/remove")
-    public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
-        cartService.removeCartItem(cartItemId);
-        return ResponseEntity.ok("Cart item removed from cart.");
-    }
+    // // Sepetten ürünü kaldır
+    // @DeleteMapping("/{cartItemId}/remove")
+    // public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
+    //     cartService.removeCartItem(cartItemId);
+    //     return ResponseEntity.ok("Cart item removed from cart.");
+    // }
+
+// ✅ Yeni hali:
+@DeleteMapping("/{cartItemId}/remove")
+public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
+    cartService.removeCartItem(cartItemId);
+    return ResponseEntity.ok().build();
+}
 
 }

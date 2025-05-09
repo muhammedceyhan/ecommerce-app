@@ -1,17 +1,34 @@
-<ul>
-  <li *ngFor="let item of cart" style="border: 1px solid #ddd; padding: 10px; margin: 10px; display: flex; align-items: center;">
-    <img [src]="item.productImageUrl" alt="{{ item.productName }}" width="80" style="margin-right: 10px;" />
-    <div style="flex: 1;">
-      <strong>{{item.productName}}</strong><br>
-      {{item.quantity}} x {{item.productPrice}} TL = {{ getItemPrice(item) }} TL
+<div class="cart-container">
+  <h2>Sepetim</h2>
+
+  <!-- Sepet boşsa -->
+  <div *ngIf="cart.length === 0" class="empty-cart">
+    <p>Sepetiniz boş.</p>
+    <button (click)="returnToMainPage()">Alışverişe Başla</button>
+  </div>
+
+  <!-- Sepet doluysa -->
+  <div *ngIf="cart.length > 0">
+    <div class="cart-item" *ngFor="let item of cart">
+      <img [src]="item.productImageUrl" alt="{{ item.productName }}" />
+
+      <div class="info">
+        <h4>{{ item.productName }}</h4>
+        <p>{{ item.quantity }} x {{ item.productPrice }} TL</p>
+        <p class="item-total">{{ getItemPrice(item) | currency }}</p>
+      </div>
+
+      <div class="controls">
+        <button (click)="decreaseItem(item)">−</button>
+        <span>{{ item.quantity }}</span>
+        <button (click)="increaseItem(item)">+</button>
+        <button class="delete" (click)="removeItem(item)">🗑️</button>
+      </div>
     </div>
-    <div>
-      <button (click)="decreaseItem(item)">-</button>
-      <button (click)="increaseItem(item)">+</button>
-      <button (click)="removeItem(item)">🗑️</button>
+
+    <div class="cart-footer">
+      <p class="total">Toplam: {{ calculateTotalPurchase() | currency }}</p>
+      <button (click)="goToCheckOut()">Satın Al</button>
     </div>
-  </li>
-</ul>
-<hr>
-<p><strong>Total purchase: {{ calculateTotalPurchase() | currency }}</strong></p>
-<button (click)="goToCheckOut()">Check Out</button>
+  </div>
+</div>
