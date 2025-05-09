@@ -2,9 +2,13 @@ package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.dto.CheckoutRequest;
 import com.ecommerce.backend.model.Order;
-import com.ecommerce.backend.security.JwtUtil;
+import com.ecommerce.backend.model.OrderItem;
+import com.ecommerce.backend.model.OrderResponse;
 import com.ecommerce.backend.service.OrderService;
-import io.jsonwebtoken.Claims;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
+
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +26,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+
 
 
     // 🔵 Sipariş oluştur
@@ -57,21 +60,50 @@ public class OrderController {
     
 
     @PostMapping("/checkout")
-public ResponseEntity<?> checkout(@RequestBody CheckoutRequest checkoutRequest, HttpServletRequest request) {
-    String token = extractToken(request);
-    if (token == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-    }
-    Claims claims = jwtUtil.extractAllClaims(token);  // artık instance üzerinden çağırıyoruz
-    Long userId = claims.get("id", Long.class);
+    public ResponseEntity<OrderResponse> checkout(@RequestParam Long userId, @RequestBody CheckoutRequest request) {
+        
 
-    try {
-        Order order = orderService.createOrderFromCart(userId, checkoutRequest);
-        return ResponseEntity.ok(order);
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        try {
+            Order order = orderService.createOrderFromCart(userId, request);
+            System.out.println("çalıştı 1");
+
+            if ("Credit Card".equalsIgnoreCase(request.getPaymentMethod())) {
+                PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                    .setAmount(calculateTotalAmount(order.getItems())* 100)
+                    .setCurrency("usd")
+                    .setPaymentMethod(request.getPaymentMethodId())
+                    .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.AUTOMATIC) // ✅
+                    .build(); // confirm = false by default
+
+                PaymentIntent intent = PaymentIntent.create(params);
+
+                return ResponseEntity.ok(new OrderResponse(
+                    order.getId(),
+                    "success",
+                    "Stripe clientSecret created",
+                    intent.getClientSecret()  // ✅ BURASI
+                ));
+            } else {
+                return ResponseEntity.ok(new OrderResponse(
+                    order.getId(),
+                    "pending",
+                    "Cash on Delivery siparişi oluşturuldu",
+                    null
+                ));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Burda hata varrr: "+ e);
+            return ResponseEntity.status(500).body(new OrderResponse(
+                null, "failed", e.getMessage(), null
+            ));
+        }
     }
-}
+    private long calculateTotalAmount(List<OrderItem> items) {
+        return items.stream()
+            .mapToLong(item -> item.getPrice().longValue() * item.getQuantity())
+            .sum();
+    }
 
 @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
 @PutMapping("/{orderId}/status")

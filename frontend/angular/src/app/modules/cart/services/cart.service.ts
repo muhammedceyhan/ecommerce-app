@@ -1,8 +1,10 @@
 import { environment } from './../../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CartItem } from '../models/cart.model'; // Doğru DTO modeli kullanılıyor
+import { OrderRequest } from '../models/OrderRequest';
+import { OrderResponse } from '../models/OrderResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -38,9 +40,11 @@ export class CartService {
     return this.http.delete(`${this.apiUrl}/${cartItemId}/remove`);
   }
 
-  checkout(userId: number, orderRequest: any): Observable<any> {
-    const ordersApiUrl = `${environment.apiUrl}/orders`;
-    return this.http.post(`${ordersApiUrl}/checkout?userId=${userId}`, orderRequest);
+  checkout(userId: number, orderRequest: OrderRequest): Observable<OrderResponse> {
+    const url = `${environment.apiUrl}/orders/checkout`;
+    const params = new HttpParams().set('userId', userId.toString());
+    console.log("post address is: " + url)
+    return this.http.post<OrderResponse>(url, orderRequest, { params });
   }
 
 

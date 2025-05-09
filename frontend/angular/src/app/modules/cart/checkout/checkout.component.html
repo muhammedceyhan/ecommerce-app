@@ -3,15 +3,22 @@
 
   <label>Payment Method:</label>
   <select [(ngModel)]="paymentMethod" name="paymentMethod" required>
-    <option value="Credit Card">Credit Card</option>
+    <option value="Credit Card">Stripe</option>
     <option value="Cash on Delivery">Cash on Delivery</option>
   </select>
 
-  <label>Shipping Address:</label>
+  <div *ngIf="paymentMethod === 'Credit Card'">
+    <label>Card Details:</label>
+    <div id="card-element" style="padding: 10px; border: 1px solid gray; border-radius: 5px;"></div>
+    <div id="card-errors" role="alert" style="color: red; margin-top: 5px;"></div>
+  </div>
+  <p>424242424242424242</p>
+
+  <p>Shipping Address:</p>
   <textarea [(ngModel)]="shippingAddress" name="shippingAddress" required></textarea>
 
-  <label>Note (optional):</label>
+  <p>Note (optional):</p>
   <textarea [(ngModel)]="note" name="note"></textarea>
-
+  <br>
   <button type="submit">Complete Order</button>
 </form>

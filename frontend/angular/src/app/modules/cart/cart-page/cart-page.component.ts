@@ -98,6 +98,10 @@ export class CartPageComponent implements OnInit {
 
   // Checkout sayfasına git
   goToCheckOut(): void {
+    if (!this.cart || this.cart.length === 0) {
+      alert('❌ Sepet boş! Lütfen ürün ekleyin.');
+      return;
+    }
     this.router.navigate(['/cart/checkout']); // Checkout sayfanın route'u burası
   }
 }
