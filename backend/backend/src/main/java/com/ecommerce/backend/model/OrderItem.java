@@ -14,7 +14,7 @@ public class OrderItem {
 
     private Long productId;
     private int quantity;
-    private double price; // sipariş zamanındaki ürün fiyatı
+    private Double price; // sipariş zamanındaki ürün fiyatı
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
@@ -52,11 +52,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

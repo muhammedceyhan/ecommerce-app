@@ -1,8 +1,11 @@
 package com.ecommerce.backend.controller;
 
 
+
 import com.ecommerce.backend.model.CartDTO;
+
 import com.ecommerce.backend.service.CartService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,7 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
 
     @PostMapping("/add")
     public ResponseEntity<Map<String, String>> addToCart(@RequestParam Long userId, @RequestParam Long productId) {
@@ -63,5 +67,7 @@ public ResponseEntity<?> removeCartItem(@PathVariable Long cartItemId) {
     cartService.removeCartItem(cartItemId);
     return ResponseEntity.ok().build();
 }
+
+    
 
 }

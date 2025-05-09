@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CartService } from '../services/cart.service';
+import { CartItem } from '../models/cart.model';
+import { OrderRequest } from '../models/OrderRequest';
+import { OrderResponse } from '../models/OrderResponse';
 import { AuthService } from '../../auth/services/auth.service';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 
 declare var Stripe: any;
 
@@ -12,14 +14,16 @@ declare var Stripe: any;
   styleUrls: ['./checkout.component.scss'],
   standalone: false
 })
-export class CheckoutComponent implements OnInit {
 
+export class CheckoutComponent implements AfterViewInit,OnInit {
+  paymentMethod = 'Credit Card';
+  shippingAddress = '';
+  note = '';
   stripe: any;
   card: any;
+  cartItems: CartItem[] = [];
 
-  paymentMethod: string = '';
-shippingAddress: string = '';
-note: string = '';
+  userId: number = 1; // Gerçek projede AuthService'den alınmalı
 
 userAddresses: string[] = [
   'Ev: Antalya, Muratpaşa, 07010',
@@ -39,60 +43,106 @@ addNewCard() {
   alert('Yeni kart ekleme özelliği yakında aktif olacak.');
 }
 
-constructor(
-  private cartService: CartService,
-  private authService: AuthService,
-  private router: Router
-) {}
 
-submitOrder(): void {
-  const userId = this.authService.getUserId();
-  if (!userId) {
-    alert('Please log in!');
-    this.router.navigate(['/login']);
-    return;
-  }
-
-  const orderRequest = {
-    paymentMethod: this.paymentMethod,
-    shippingAddress: this.shippingAddress,
-    note: this.note
-  };
-
-  this.cartService.checkout(userId, orderRequest).subscribe(
-    () => {
-      alert('Order placed successfully!');
-      this.router.navigate(['/user-orders']);
-      //this.router.navigate(['/products']);
-    },
-    (error: any) => {
-      console.error('Checkout error:', error);
-      alert('Failed to complete order.');
+  constructor(
+    private http: HttpClient,
+    private cartService: CartService,
+    private authService: AuthService
+  ) {
+    if(authService.getUserId()){
+      this.userId = this.authService.getUserId() ?? 1;
     }
-  );
-}
 
-  async ngOnInit() {
-    await this.loadStripeScript();
-
-    this.stripe = Stripe('pk_test_51RGjCwRs8KJ5Rk107wdjWgXK61XUXbSsH0rTVOuvIHPpuZkodBVl0wtkCynKz5HoZ5A0LpQok1sAF5KQbX3bpDpW00oHT8ldqF');
-    const elements = this.stripe.elements();
-    this.card = elements.create('card');
-    this.card.mount('#card-element');  // Stripe kart input'u buraya yerleşir
   }
 
-  loadStripeScript(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
-        resolve();
+  ngAfterViewInit(): void {
+    if (this.paymentMethod === 'Credit Card') {
+      this.stripe = Stripe('pk_test_51RLjXdQawFGxfZWi57ntlcVj0mpdmn51jdNatsOpesmxhlk4j6qPpAwqHGEKJSwrfGhobc5SNp9J76TntnMKlOFA00IXBUVnlX'); // PUBLISHABLE KEY buraya
+      const elements = this.stripe.elements();
+      this.card = elements.create('card');
+      this.card.mount('#card-element');
+
+
+      this.card.on('change', (event: any) => {
+        const displayError = document.getElementById('card-errors');
+        if (event.error && displayError) {
+          displayError.textContent = event.error.message;
+        } else if (displayError) {
+          displayError.textContent = '';
+        }
+      });
+    }
+
+    // Sepet ürünlerini al
+    this.cartService.getCartedProducts(this.userId).subscribe(items => {
+      this.cartItems = items;
+    });
+  }
+
+  async submitOrder() {
+
+    if (this.paymentMethod == 'Credit Card') {
+      const { paymentMethod, error } = await this.stripe.createPaymentMethod({
+        type: 'card',
+        card: this.card
+      });
+
+      if (error) {
+        alert('Ödeme hatası: ' + error.message);
         return;
       }
 
-      const script = document.createElement('script');
-      script.src = 'https://js.stripe.com/v3/';
-      script.onload = () => resolve();
-      script.onerror = () => reject('Stripe.js yüklenemedi');
-      document.body.appendChild(script);
-    });
+      const orderRequest: OrderRequest = {
+        shippingAddress: this.shippingAddress,
+        note: this.note,
+        paymentMethod: 'Credit Card',
+        paymentMethodId: paymentMethod.id,
+        cartItems: this.cartItems
+      };
+      console.log('🛒 OrderRequest:', orderRequest);
+
+      this.cartService.checkout(this.userId, orderRequest).subscribe({
+        next: (response: OrderResponse) => {
+          console.log('✅ Backend response:', response);
+          if (response.clientSecret) {
+            this.stripe.confirmCardPayment(response.clientSecret, {
+              payment_method: paymentMethod.id // ✅ "pm_1..."
+            }).then((result: { error: { message: string; }; paymentIntent: { status: string; }; }) => {
+              if (result.error) {
+                console.error('❌ Stripe ödeme hatası:', result.error.message);
+                alert('Ödeme başarısız: ' + result.error.message);
+              } else if (result.paymentIntent?.status === 'succeeded') {
+                console.log('🎉 Ödeme başarıyla tamamlandı!');
+                alert('Ödeme başarıyla tamamlandı!');
+              }
+            });
+          } else {
+            alert(response.message || 'Sipariş başarıyla oluşturuldu.');
+          }
+        },
+        error: (err) => {
+          alert('🚨 Sipariş gönderilemedi!');
+          console.error(err);
+        }
+      });
+    } else {
+      // Kapıda ödeme
+      const orderRequest: OrderRequest = {
+        shippingAddress: this.shippingAddress,
+        note: this.note,
+        paymentMethod: 'Cash on Delivery',
+        cartItems: this.cartItems
+      };
+
+      this.cartService.checkout(this.userId, orderRequest).subscribe({
+        next: (response) => {
+          alert(response.message || 'Kapıda ödeme ile sipariş oluşturuldu.');
+        },
+        error: (err) => {
+          alert('🚨 Sipariş gönderilemedi!');
+          console.error(err);
+        }
+      });
+    }
   }
 }

@@ -1,7 +1,11 @@
-<div class="checkout-container">
-  <h2>🧾 Sipariş Tamamlama</h2>
+<h2>🧾 Sipariş Tamamlama</h2>
 
-  <div class="section">
+
+
+<form (ngSubmit)="submitOrder()" style="max-width: 500px; margin: auto;">
+  <h2>Checkout</h2>
+  
+   <div class="section">
     <h3>📍 Adres Seçimi</h3>
     <select>
       <option disabled selected>-- Kayıtlı Adres Seçin --</option>
@@ -10,7 +14,7 @@
     </select>
     <button type="button" (click)="addNewAddress()">+ Yeni Adres Ekle</button>
   </div>
-
+  
   <div class="section">
     <h3>💳 Kart Seçimi</h3>
     <select>
@@ -20,6 +24,19 @@
     <button type="button" (click)="addNewCard()">+ Yeni Kart Ekle</button>
   </div>
 
+  <label>Payment Method:</label>
+  <select [(ngModel)]="paymentMethod" name="paymentMethod" required>
+    <option value="Credit Card">Stripe</option>
+    <option value="Cash on Delivery">Cash on Delivery</option>
+  </select>
+
+  <div *ngIf="paymentMethod === 'Credit Card'">
+    <label>Card Details:</label>
+    <div id="card-element" style="padding: 10px; border: 1px solid gray; border-radius: 5px;"></div>
+    <div id="card-errors" role="alert" style="color: red; margin-top: 5px;"></div>
+  </div>
+  <p>424242424242424242</p>
+  
   <div class="section">
     <h3>🧾 Taksit Seçimi</h3>
     <select>
@@ -30,10 +47,11 @@
     </select>
   </div>
 
-  <div class="section">
-    <h3>🗒️ Sipariş Notu</h3>
-    <textarea placeholder="Siparişinize eklemek istediğiniz bir not var mı?"></textarea>
-  </div>
+  <p>Shipping Address:</p>
+  <textarea [(ngModel)]="shippingAddress" name="shippingAddress" required></textarea>
 
-  <button class="btn-order" (click)="submitOrder()">🛍️ Siparişi Onayla</button>
-</div>
+  <p>Note (optional):</p>
+  <textarea [(ngModel)]="note" name="note"></textarea>
+  <br>
+  <button type="submit">Complete Order</button>
+</form>
