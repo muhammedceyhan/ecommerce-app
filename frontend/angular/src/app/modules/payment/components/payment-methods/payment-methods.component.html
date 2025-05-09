@@ -1,0 +1,24 @@
+<div class="payment-container">
+  <h2>💳 Ödeme Bilgilerim</h2>
+
+  <div class="form-group">
+    <input type="text" [(ngModel)]="newMethod.cardHolderName" placeholder="Kart Sahibi" />
+    <input type="text" [(ngModel)]="newMethod.cardNumber" placeholder="Kart Numarası" />
+    <input type="text" [(ngModel)]="newMethod.expirationDate" placeholder="Son Kullanma (MM/YY)" />
+    <input type="text" [(ngModel)]="newMethod.cvc" placeholder="CVC" />
+    <button (click)="addCard()">Kart Ekle</button>
+  </div>
+
+  <div class="card-list" *ngIf="paymentMethods.length > 0">
+    <div class="card-item" *ngFor="let card of paymentMethods">
+      <p><strong>Kart:</strong> **** **** **** {{ card.cardNumber.slice(-4) }}</p>
+      <p><strong>Sahibi:</strong> {{ card.cardHolderName }}</p>
+      <p><strong>Son Kullanma:</strong> {{ card.expirationDate }}</p>
+      <button (click)="deleteCard(card.id!)">Sil</button>
+    </div>
+  </div>
+
+  <div *ngIf="paymentMethods.length === 0">
+    <p>Henüz kayıtlı kartınız yok.</p>
+  </div>
+</div>

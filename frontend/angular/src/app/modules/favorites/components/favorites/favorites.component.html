@@ -1,0 +1,18 @@
+<div class="favorites-container">
+  <h2>❤️ Favori Ürünlerim</h2>
+
+  <div *ngIf="favorites.length === 0" class="empty">
+    <p>Hiç favori ürününüz yok.</p>
+  </div>
+
+  <div class="favorite-list" *ngIf="favorites.length > 0">
+    <div class="favorite-card" *ngFor="let fav of favorites">
+      <img [src]="fav.productImageUrl" alt="{{ fav.productName }}" />
+      <div class="info">
+        <h3>{{ fav.productName }}</h3>
+        <p>{{ fav.productPrice | currency:'TRY' }}</p>
+        <button (click)="removeFromFavorites(fav.id!)">❌ Kaldır</button>
+      </div>
+    </div>
+  </div>
+</div>

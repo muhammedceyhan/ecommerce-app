@@ -11,9 +11,11 @@ declare var Stripe: any;
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.scss'],
   standalone: false
 })
-export class CheckoutComponent implements AfterViewInit {
+
+export class CheckoutComponent implements AfterViewInit,OnInit {
   paymentMethod = 'Credit Card';
   shippingAddress = '';
   note = '';
@@ -23,6 +25,25 @@ export class CheckoutComponent implements AfterViewInit {
 
   userId: number = 1; // Gerçek projede AuthService'den alınmalı
 
+userAddresses: string[] = [
+  'Ev: Antalya, Muratpaşa, 07010',
+  'Ofis: İstanbul, Beşiktaş, 34353'
+];
+
+userCards: { last4: string }[] = [
+  { last4: '4242' },
+  { last4: '1111' }
+];
+
+addNewAddress() {
+  alert('Yeni adres ekleme özelliği yakında aktif olacak.');
+}
+
+addNewCard() {
+  alert('Yeni kart ekleme özelliği yakında aktif olacak.');
+}
+
+
   constructor(
     private http: HttpClient,
     private cartService: CartService,
@@ -31,6 +52,7 @@ export class CheckoutComponent implements AfterViewInit {
     if(authService.getUserId()){
       this.userId = this.authService.getUserId() ?? 1;
     }
+
   }
 
   ngAfterViewInit(): void {
@@ -39,6 +61,7 @@ export class CheckoutComponent implements AfterViewInit {
       const elements = this.stripe.elements();
       this.card = elements.create('card');
       this.card.mount('#card-element');
+
 
       this.card.on('change', (event: any) => {
         const displayError = document.getElementById('card-errors');

@@ -1,5 +1,28 @@
+<h2>🧾 Sipariş Tamamlama</h2>
+
+
+
 <form (ngSubmit)="submitOrder()" style="max-width: 500px; margin: auto;">
   <h2>Checkout</h2>
+  
+   <div class="section">
+    <h3>📍 Adres Seçimi</h3>
+    <select>
+      <option disabled selected>-- Kayıtlı Adres Seçin --</option>
+      <!-- backend adres listesi buraya bağlanacak -->
+      <option *ngFor="let address of userAddresses">{{ address }}</option>
+    </select>
+    <button type="button" (click)="addNewAddress()">+ Yeni Adres Ekle</button>
+  </div>
+  
+  <div class="section">
+    <h3>💳 Kart Seçimi</h3>
+    <select>
+      <option disabled selected>-- Kayıtlı Kart Seçin --</option>
+      <option *ngFor="let card of userCards">**** **** **** {{ card.last4 }}</option>
+    </select>
+    <button type="button" (click)="addNewCard()">+ Yeni Kart Ekle</button>
+  </div>
 
   <label>Payment Method:</label>
   <select [(ngModel)]="paymentMethod" name="paymentMethod" required>
@@ -13,6 +36,16 @@
     <div id="card-errors" role="alert" style="color: red; margin-top: 5px;"></div>
   </div>
   <p>424242424242424242</p>
+  
+  <div class="section">
+    <h3>🧾 Taksit Seçimi</h3>
+    <select>
+      <option value="1">Tek Çekim</option>
+      <option value="2">2 Taksit</option>
+      <option value="3">3 Taksit</option>
+      <option value="6">6 Taksit</option>
+    </select>
+  </div>
 
   <p>Shipping Address:</p>
   <textarea [(ngModel)]="shippingAddress" name="shippingAddress" required></textarea>

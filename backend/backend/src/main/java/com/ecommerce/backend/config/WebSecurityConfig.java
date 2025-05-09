@@ -44,6 +44,11 @@ public class WebSecurityConfig {
 
               // /api/admin/** sadece ADMIN rolüne açık
               .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/user/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/user/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/user/**").authenticated()
+                .requestMatchers("/api/payment-methods/**").authenticated()
+                .requestMatchers("/api/favorites/**").authenticated()
 
               // Geri kalanı oturum ister
               .anyRequest().authenticated()

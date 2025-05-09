@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/services/auth.service';
 @Component({
   selector: 'app-cart-page',
   templateUrl: './cart-page.component.html',
+  styleUrls: ['./cart-page.component.scss'],
   standalone: false,
 })
 export class CartPageComponent implements OnInit {
@@ -85,11 +86,18 @@ export class CartPageComponent implements OnInit {
     }
   }
 
-
-  // Ürünü sepetten tamamen kaldır
-  removeItem(item: CartItem): void {
-    this.cart = this.cart.filter(cartItem => cartItem.cartItemId !== item.cartItemId);
+removeItem(item: CartItem): void {
+    this.cartService.removeCartItem(item.cartItemId).subscribe(
+      () => {
+        this.cart = this.cart.filter(cartItem => cartItem.cartItemId !== item.cartItemId);
+        console.log('Item removed from cart (backend + frontend).');
+      },
+      (error) => {
+        console.error('Error removing item from cart:', error);
+      }
+    );
   }
+
 
   // Ana sayfaya dön
   returnToMainPage(): void {

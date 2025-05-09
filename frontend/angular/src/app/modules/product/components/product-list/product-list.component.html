@@ -1,29 +1,38 @@
-<div>
-  <button (click)="goToCart()">Cart</button>
-</div>
-<div style="position: fixed; top: 80px; right: 20px;">
-  <button (click)="manageStore()">Manage Store</button>
-  <button *ngIf="!isLoggedIn()" (click)="goToLogin()" class="login-button">Giriş Yap </button>
-  <button *ngIf="isLoggedIn()"(click)="logout()">🚪 Çıkış Yap</button>
+<div
+  *ngIf="alertMessage"
+  style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+  "
+>
+  {{ alertMessage }}
 </div>
 
-<input type="text"  (keyup)="showSearchResults()" [(ngModel)]="searchTerm" placeholder="Search products"/>
+<div class="product-grid">
+  <div *ngFor="let product of showSearchResults()" class="product-card">
+    <div class="image-wrapper">
+      <img [src]="product.imageUrl" alt="{{ product.name }}" />
+      <div *ngIf="product.stock === 0" class="sold-out">Tükendi</div>
+    </div>
 
-<div style="border: 1px solid black; display: flex; width: 100%;height: fit-content;flex-wrap: wrap;">
-  <div *ngFor="let product of showSearchResults()" class="product-card"
-     style="border: 1px solid black; width: 200px; height: 150px; margin: 15px; display: flex; flex-direction: column; justify-content: space-between;">
-    <img [src]="product.imageUrl" alt="{{ product.name }}" />
+    <button *ngIf="isLoggedIn() && authService.getUserRole() === 'ROLE_USER'"class="favorite-btn"(click)="toggleFavorite(product.id!)">
+      <span *ngIf="isFavorite(product.id!)">💔 Favoriden Çıkar</span>
+      <span *ngIf="!isFavorite(product.id!)">❤️ Favoriye Ekle</span>
+    </button>
+
+
     <h3>{{ product.name }}</h3>
-    <p>Price: {{ product.price }}</p>
-    <button (click)="viewDetail(product.id!)">View Detail</button>
-
-    <!-- Add to Cart Butonu -->
-    <button *ngIf="isLoggedIn() && authService.getUserRole() === 'ROLE_USER'" (click)="addToCart(product.id!)">
-      Add to Cart
-   </button>
-   </div>
-
-</div>
-<br><br><br><br>
-<button (click)="addProduct()">addProduct</button>
+    <p>Fiyat: {{ product.price }}₺</p>
+    <button (click)="viewDetails(product.id)">View Detail</button>
+    <button
+      *ngIf="isLoggedIn() && authService.getUserRole() === 'ROLE_USER'"
+      [disabled]="product.stock === 0"
+      (click)="addToCart(product.id!)">Sepete Ekle </button>
+  </div>
+  </div>
 

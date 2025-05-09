@@ -1,0 +1,13 @@
+<div class="orders-container">
+  <h2>🧾 Siparişlerim</h2>
+
+  <div *ngIf="orders.length === 0" class="empty-orders">
+    <p>Henüz bir siparişiniz yok.</p>
+  </div>
+
+  <div class="order-card" *ngFor="let order of orders">
+    <p><strong>Tarih:</strong> {{ order.purchaseDate | date:'dd/MM/yyyy - HH:mm' }}</p>
+    <p><strong>Toplam:</strong> {{ order.totalPrice | currency:'TRY' }}</p>
+    <p><strong>Durum:</strong> {{ order.status }}</p>
+  </div>
+</div>

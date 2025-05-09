@@ -15,22 +15,101 @@
       <!-- Giriş yaptıysa avatar + dropdown -->
       <ng-container *ngIf="isLoggedIn">
         <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle rounded-circle d-flex justify-content-center align-items-center"
-                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                  style="width: 50px; height: 50px; font-size: 20px;">
+          <button
+            class="btn btn-primary dropdown-toggle rounded-circle d-flex justify-content-center align-items-center"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="width: 50px; height: 50px; font-size: 20px"
+          >
             {{ getUserInitials() }}
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/products">Ana Sayfa</a></li>
-            <li><a class="dropdown-item" routerLink="/orders">Siparişler</a></li>
-            <li><a class="dropdown-item" routerLink="/cart">Sepet ({{ cartItemCount }})</a></li>
-            <li><a class="dropdown-item" routerLink="/wishlist">Favoriler</a></li>
-            <li *ngIf="isAdminUser"><a class="dropdown-item" routerLink="/admin">Admin Panel</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" (click)="logout()">Çıkış Yap</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/products">Ana Sayfa</a>
+            </li>
+            <!-- Yerine: -->
+            <li *ngIf="isUser || isSeller || isAdmin">
+              <a class="dropdown-item" [routerLink]="ordersRoute">Siparişler</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/cart"
+                >Sepet ({{ cartItemCount }})</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/payments"
+                >Ödeme Bilgileri</a
+              >
+            </li>
+            <li>
+            </li>
+            <li *ngIf="isAdminUser">
+              <a class="dropdown-item" routerLink="/admin">Admin Panel</a>
+            </li>
+                        <li><a class="dropdown-item" routerLink="/favorites">Favoriler</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-danger" (click)="logout()"
+                >Çıkış Yap</a
+              >
+            </li>
           </ul>
         </div>
       </ng-container>
     </div>
   </div>
+</nav>
+
+<!-- Alt Sabit Navbar -->
+<nav class="nav-container bottom-navbar">
+  <ul class="nav-menu">
+    <li class="nav-item active">
+      <a routerLink="/products" class="nav-link">
+        <span class="material-icons">home</span>
+        <span class="nav-text">Home</span>
+      </a>
+    </li>
+    <!-- Sadece SELLER -->
+    <li class="nav-item" *ngIf="isSeller">
+      <a routerLink="/seller/store-management" class="nav-link">
+        <span class="material-icons">work</span>
+        <span class="nav-text">Mağaza</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="showCart">
+      <a routerLink="/cart" class="nav-link">
+        <span class="material-icons">shopping_cart</span>
+        <span class="nav-text">Sepet</span>
+      </a>
+    </li>
+
+    <li class="nav-item" *ngIf="showCart">
+      <a routerLink="/user-orders" class="nav-link">
+        <span class="material-icons">shopping_bag</span>
+        <span class="nav-text">Order</span>
+      </a>
+    </li>
+
+    <li class="nav-item" *ngIf="showCart">
+      <a routerLink="/account" class="nav-link">
+        <span class="material-icons">account_circle</span>
+        <span class="nav-text">Account</span>
+      </a>
+    </li>
+
+    <li class="nav-item" *ngIf="showAccount">
+      <a routerLink="/account" class="nav-link">
+        <span class="material-icons">settings</span>
+        <span class="nav-text">Hesap</span>
+      </a>
+    </li>
+
+    <li class="nav-item" *ngIf="isUser">
+      <a routerLink="/payments" class="nav-link">
+        <span class="material-icons">credit_card</span>
+        <span class="nav-text">Kartlarım</span>
+      </a>
+    </li>
+  </ul>
 </nav>

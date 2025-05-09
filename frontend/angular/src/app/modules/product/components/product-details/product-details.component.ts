@@ -6,27 +6,38 @@ import { ProductService } from './../../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.scss'],
   standalone: false,
 })
 export class ProductDetailsComponent implements OnInit {
 
+  alertMessage: string | null = null;
   product!: Product;
   userId = 0;
+  favoriteCount: number = 0;
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
     private cartService: CartService,
-    private authService: AuthService
+    public authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
+
   ) {
     const temp = this.authService.getUserId();
     if(temp == null) {
-      alert("Please Log in!")
+     if (isPlatformBrowser(this.platformId)) {
+       alert('Şifre hatalı!');
+      }
       this.router.navigate(['/login']);
     }
     else{
@@ -41,9 +52,15 @@ export class ProductDetailsComponent implements OnInit {
     if (id) {
         this.productService.getProductById(id).subscribe({
             next: (data) => {
+                console.log('Ürün Detayı:', data);  // <-- EKLE
                 this.product = data;
                 // Ürün detayını çektikten hemen sonra:
-                this.loadProductQuantityInCart(); 
+                this.loadProductQuantityInCart();
+                this.productService.getFavoriteCount(this.product.id!).subscribe({
+                  next: (count) => this.favoriteCount = count,
+                  error: () => console.warn('Favori sayısı alınamadı.')
+              });
+
             },
             error: (err) => {
                 console.error('Failed to load product', err);
@@ -69,26 +86,54 @@ export class ProductDetailsComponent implements OnInit {
   }
 
 
-  // Ürünü sepete ekle
-  addToCart(): void {
- // Şu anda sabit bir kullanıcı id
-    if(this.userId != null) {
-      this.cartService.addProductToCart(this.userId, this.product.id!).subscribe(
-        (response) => {
-          console.log('Product added to cart successfully');
-          // İstersen burada kullanıcıya başarı mesajı gösterebilirsin
-          this.loadProductQuantityInCart()
-        },
-        (error) => {
-          console.error('Error adding product to cart:', error);
-        }
-      );
-    }
-    else{
-      alert("Please Log in!")
-      this.router.navigate(['/login']);
-    }
+//   // Ürünü sepete ekle
+//   addToCart(): void {
+//  // Şu anda sabit bir kullanıcı id
+//     if(this.userId != null) {
+//       this.cartService.addProductToCart(this.userId, this.product.id!).subscribe(
+//         (response) => {
+//           console.log('Product added to cart successfully');
+//           // İstersen burada kullanıcıya başarı mesajı gösterebilirsin
+//           this.loadProductQuantityInCart()
+//         },
+//         (error) => {
+//           console.error('Error adding product to cart:', error);
+//         }
+//       );
+//     }
+//     else{
+//       alert("Please Log in!")
+//       this.router.navigate(['/login']);
+//     }
+//   }
+
+addToCart(): void {
+  if(this.userId != null) {
+    this.cartService.addProductToCart(this.userId, this.product.id!).subscribe(
+      (response) => {
+        console.log('Product added to cart successfully');
+        this.showAlert('Ürün sepete eklendi!');
+        this.loadProductQuantityInCart();
+      },
+      (error) => {
+        console.error('Error adding product to cart:', error);
+        this.showAlert('Ürün sepete eklenemedi!');
+      }
+    );
   }
+  else{
+    alert("Please Log in!");
+    this.router.navigate(['/login']);
+  }
+}
+
+showAlert(message: string): void {
+  this.alertMessage = message;
+  setTimeout(() => {
+    this.alertMessage = null;
+  }, 3000);
+}
+
 
   // Alışveriş listesine dön
   goBack(): void {

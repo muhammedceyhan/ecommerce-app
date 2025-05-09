@@ -1,0 +1,40 @@
+<div class="account-container">
+  <h2>👤 Profilim</h2>
+
+  <div class="info-card">
+    <h4>Kullanıcı Adı</h4>
+    <p>{{ user?.username }}</p>
+  </div>
+
+  <div class="info-card">
+    <h4>E-posta</h4>
+    <p>{{ user?.email }}</p>
+  </div>
+
+<div class="info-card">
+  <h4>Kayıtlı Adres</h4>
+  <ng-container *ngIf="!editingAddress; else addressForm">
+    <p *ngIf="user?.address; else noAddress">{{ user.address }}</p>
+    <ng-template #noAddress><em>Adres bilgisi bulunamadı</em></ng-template>
+    <button (click)="editingAddress = true">Düzenle</button>
+  </ng-container>
+
+  <ng-template #addressForm>
+    <input [(ngModel)]="newAddress" class="form-control" />
+    <button (click)="saveAddress()">Kaydet</button>
+    <button (click)="editingAddress = false">İptal</button>
+  </ng-template>
+</div>
+
+<div class="info-card">
+  <h4>Şifre Değiştir</h4>
+  <input type="password" placeholder="Mevcut Şifre" [(ngModel)]="currentPassword" class="form-control" />
+  <input type="password" placeholder="Yeni Şifre" [(ngModel)]="newPassword" class="form-control" />
+  <input type="password" placeholder="Yeni Şifre (Tekrar)" [(ngModel)]="confirmPassword" class="form-control" />
+  <button (click)="changePassword()">Şifreyi Güncelle</button>
+</div>
+
+<div class="info-card">
+  <h4>Ödeme Bilgilerim</h4>
+  <button routerLink="/payments">Kartlarımı Yönet</button>
+</div>
