@@ -50,11 +50,21 @@
 </div>
 
 <!-- 🔥 Kullanıcı Yorumları -->
-<div *ngIf="reviews.length > 0">
+<div>
   <h3>📝 Kullanıcı Yorumları</h3>
+
+  <div *ngIf="reviews.length === 0">
+    <p>Henüz yorum yapılmamış.</p>
+  </div>
+
   <div *ngFor="let review of reviews" class="review-item">
     <p><strong>Puan:</strong> {{ review.rating }}/5</p>
     <p>{{ review.comment }}</p>
+    <button *ngIf="review.userId === userId || isSeller || authService.isAdmin()"
+            (click)="deleteReview(review.id!)"
+            class="delete-button">
+      ❌ Yorumu Sil
+    </button>
     <hr />
   </div>
 </div>
@@ -85,15 +95,4 @@
   <br />
   <button (click)="submitReview()">Gönder</button>
 </div>
-
-<!-- Kullanıcının kendi yorumuna sil butonu göster -->
-<!-- Eğer admin, user (yorum sahibi) veya seller (ürün sahibi) ise göster -->
-<div *ngFor="let review of reviews">
-  <button *ngIf="review.userId === userId || isSeller || authService.isAdmin()"
-          class="delete-button"
-          (click)="deleteReview(review.id!)">
-    ❌ Yorumu Sil
-  </button>
-</div>
-
-
+  
