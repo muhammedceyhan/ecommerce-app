@@ -30,7 +30,6 @@
   <!-- Sepete Ekleme -->
   <div class="actions">
     <button
-      *ngIf="authService.getUserRole() === 'ROLE_USER'"
       [disabled]="product.stock === 0"
       (click)="addToCart()"
       class="primary"

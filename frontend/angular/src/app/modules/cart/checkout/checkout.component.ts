@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+
+import { Component, AfterViewInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../services/cart.service';
 import { CartItem } from '../models/cart.model';
@@ -15,7 +16,7 @@ declare var Stripe: any;
   standalone: false
 })
 
-export class CheckoutComponent implements AfterViewInit,OnInit {
+export class CheckoutComponent implements AfterViewInit {
   paymentMethod = 'Credit Card';
   shippingAddress = '';
   note = '';

@@ -89,23 +89,19 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     return payload.id || null; // Assuming 'id' exists in the token payload
   }
 
-  getCurrentUser(): { id: number, username: string, email: string, role: string } | null {
+  getCurrentUser(): { id: number, email: string,username: string, role: string } | null {
     const token = this.getToken();
     if (!token) return null;
     const payload = JSON.parse(atob(token.split('.')[1]));
     return {
-      id: payload.id,
-      username: payload.sub, // JWT içeriğine göre değişebilir
-      email: payload.email, // eğer token’da email varsa
+      id: payload.id, // JWT içeriğine göre değişebilir
+      email: payload.sub, // eğer token’da email varsa
+      username: payload.username,
       role: payload.role,
     };
   }
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.tokenKey);
-  }
-
-  getUsername(): string {
-    return localStorage.getItem(this.usernameKey) || '';
   }
 
 
@@ -120,6 +116,9 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
       .set('oldPassword', oldPassword)
       .set('newPassword', newPassword);
     return this.http.post(`${this.baseUrl}/${userId}/change-password`, {}, { params });
+  }
+  getUsernameById(id: number | null): Observable<string> {
+    return this.http.get(`/${id}/username`, { responseType: 'text' });
   }
 
 

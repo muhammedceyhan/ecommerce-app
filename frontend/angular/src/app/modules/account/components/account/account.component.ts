@@ -8,17 +8,29 @@ import { AuthService } from '../../../auth/services/auth.service';
   standalone: false,
 })
 export class AccountComponent implements OnInit {
-  user: any;
+
   editingAddress = false;
 newAddress = '';
 currentPassword = '';
 newPassword = '';
 confirmPassword = '';
 
+user :any
+
   constructor(private authService: AuthService) {}
 
+
+ 
+  
   ngOnInit(): void {
     this.user = this.authService.getCurrentUser();
+    this.wait1sc()
+  }
+
+  async wait1sc(){
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log(this.user)
+
   }
 
   addAddress() {

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,8 +29,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         // Kullanıcı email kontrolü
+        System.out.println("gelen request: " + request.getEmail());
         if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.badRequest().body("This email is already registered.");
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "This email is already taken");
+            return ResponseEntity.status(400).body(error); // ✅ geçerli JSON
         }
 
         // Role kontrolü: Eğer geçerli bir rol verilmediyse, varsayılan olarak 'USER' rolü eklenir
@@ -43,7 +48,9 @@ public class AuthController {
                 passwordEncoder.encode(request.getPassword()), role);
         userRepository.save(user);
 
-        return ResponseEntity.ok("Registration successful!");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Registration successful!");
+        return ResponseEntity.ok(response);
     }
 
     // ✅ Kullanıcı giriş işlemi
@@ -63,7 +70,15 @@ public class AuthController {
         }
 
         // JWT token oluşturuluyor
-        String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId(),user.getUsername(), user.getRole());
         return ResponseEntity.ok(new JwtResponse(token, user.getRole()));
     }
+    @GetMapping("/{id}/username")
+    public ResponseEntity<String> getUsernameById(@PathVariable Long id) {  
+    String username = userRepository.findById(id)
+        .map(User::getUsername)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return ResponseEntity.ok(username);
+}
 }
