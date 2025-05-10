@@ -1,7 +1,13 @@
-<p>dashboard works!</p>
-<h2>Dashboard</h2>
-<p>Total Products: {{ totalProducts }}</p>
-<p>Total Orders: {{ totalOrders }}</p>
 
-<button routerLink="/seller/store-management">Manage Store</button>
-<button routerLink="/seller/orders">View Orders</button>
+<h2>Dashboard</h2>
+
+<h2>📊 Satıcı Paneli</h2>
+<p>🛒 Toplam Ürün: <strong>{{ totalProducts }}</strong></p>
+<p>📦 Toplam Sipariş: <strong>{{ totalOrders }}</strong></p>
+<p>📝 Toplam Yorum: <strong>{{ totalReviews }}</strong></p>
+
+<hr />
+<button routerLink="/seller/store-management">🛒 Mağazayı Yönet</button>
+<button routerLink="/seller/orders">📦 Siparişleri Görüntüle</button>
+<button routerLink="/seller/reviews">📝 Yorumlar</button>
+

@@ -8,10 +8,11 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { OrdersComponent } from './components/orders/orders.component';
 import { StoreManagementComponent } from './components/store-management/store-management.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SellerReviewComponent } from './components/seller-review/seller-review.component';
 
 @NgModule({
   declarations: [StoreManagementComponent, DashboardComponent,
-    ProductsComponent, AddProductComponent,
+    ProductsComponent, AddProductComponent, SellerReviewComponent,
     ],
   imports: [
     CommonModule,

@@ -25,4 +25,17 @@ export class OrdersComponent implements OnInit {
       });
     }
   }
+
+  updateOrderStatus(orderId: number, newStatus: string): void {
+  this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
+    next: () => {
+      alert('Durum güncellendi');
+    },
+    error: (err: any) => {
+      alert('Durum güncellenemedi');
+      console.error(err);
+    }
+  });
+}
+
 }

@@ -7,6 +7,7 @@ import { ProductEditComponent } from './components/product-edit/product-edit.com
 import { OrderManagementComponent } from './components/order-management/order-management.component';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { AdminGuard } from '../../core/guards/admin.guard';
+import { AdminReviewComponent } from './components/admin-review/admin-review.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent,canActivate: [AdminGuard] },
@@ -15,7 +16,9 @@ const routes: Routes = [
   { path: 'products/edit/:id', component: ProductEditComponent },
   { path: 'orders', component: OrderManagementComponent },
   { path: 'users', component: UserManagementComponent },
-  { path: 'admin/users', component: UserManagementComponent, canActivate: [AdminGuard] }
+  { path: 'admin/users', component: UserManagementComponent, canActivate: [AdminGuard] },
+  { path: 'reviews', component: AdminReviewComponent }
+
 
 ];
 

@@ -12,7 +12,17 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long productId;
+    // @ManyToOne
+    // @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    // private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    // @Transient // <-- JPA bunu veritabanına yansıtmaz
+    // private Long productId; // frontend veya geçici kullanım için
+
     private int quantity;
     private Double price; // sipariş zamanındaki ürün fiyatı
 
@@ -22,10 +32,11 @@ public class OrderItem {
     private Order order;
 
     // --- Constructorlar ---
-    public OrderItem() {}
+    public OrderItem() {
+    }
 
-    public OrderItem(Long productId, int quantity, double price, Order order) {
-        this.productId = productId;
+    public OrderItem(Long productId, int quantity, double price, Order order, Product product) {
+        // this.productId = productId;
         this.quantity = quantity;
         this.price = price;
         this.order = order;
@@ -36,14 +47,19 @@ public class OrderItem {
         return id;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
+    // public void setProductId(Long productId) {
+    //     this.productId = productId;
+    //     this.product = new Product();
+    //     this.product.setId(productId); // ilişkiyi elle kuruyoruz
+    // }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+    // public Long getProductId() {
+    //     if (product != null)
+    //         return product.getId();
+    //     return productId;
+    // }
 
+    
     public int getQuantity() {
         return quantity;
     }
@@ -67,4 +83,17 @@ public class OrderItem {
     public void setOrder(Order order) {
         this.order = order;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
 }

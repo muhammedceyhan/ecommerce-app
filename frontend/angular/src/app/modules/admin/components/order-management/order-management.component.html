@@ -15,11 +15,20 @@
   <tbody>
     <tr *ngFor="let order of orders">
       <td>{{ order.id }}</td>
-      <td>{{ order.userId }}</td>
-      <td>{{ order.purchaseDate | date: 'medium' }}</td>
-      <td>{{ order.status }}</td>
-
+      <td>{{ order.userId }} ({{ order.userEmail }})</td>
+      <td>{{ order.purchaseDate | date : "medium" }}</td>
+      <td>
+        {{ order.status }}
+        <select [(ngModel)]="order.status">
+          <option value="Processing">Processing</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <button (click)="updateOrderStatus(order.id, order.status)">
+          Güncelle
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
-

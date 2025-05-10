@@ -31,4 +31,10 @@ export class SellerService {
     return this.http.put(`${this.baseUrl}/${id}`, productData);
   }
 
+  getDashboardStats(sellerId: number): Observable<{ totalProducts: number; totalOrders: number; totalReviews: number }> {
+  return this.http.get<{ totalProducts: number; totalOrders: number; totalReviews: number }>(
+    `http://localhost:8080/api/seller/dashboard/${sellerId}`
+  );
+}
+
 }

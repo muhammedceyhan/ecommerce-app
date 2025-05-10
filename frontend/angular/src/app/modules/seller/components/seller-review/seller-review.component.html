@@ -1,0 +1,29 @@
+<h2>🛍️ Ürün Yorumları</h2>
+
+<div *ngFor="let product of products" class="product-review-box">
+  <ng-container *ngIf="product.id as pid">
+    <h3>{{ product.name }}</h3>
+
+    <!-- Ortalama Puan -->
+    <p *ngIf="productReviews[pid]">
+      Ortalama Puan: {{ productReviews[pid].average.toFixed(1) }} / 5
+    </p>
+
+    <!-- Yıldızlarla Gösterim -->
+    <div class="stars" *ngIf="productReviews[pid]">
+      <ng-container *ngFor="let s of [1,2,3,4,5]">
+        <span [class.filled]="productReviews[pid].average >= s">★</span>
+      </ng-container>
+    </div>
+
+    <!-- Kullanıcı Yorumları -->
+    <div *ngIf="productReviews[pid] && productReviews[pid].reviews.length > 0">
+      <div *ngFor="let review of productReviews[pid].reviews" class="review">
+        <p><strong>Puan:</strong> {{ review.rating }} | {{ review.comment }}</p>
+        <button (click)="deleteReview(pid, review.id!)">❌ Yorumu Sil</button>
+      </div>
+    </div>
+
+    <hr />
+  </ng-container>
+</div>

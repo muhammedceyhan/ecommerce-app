@@ -48,3 +48,52 @@
     {{ alertMessage }}
   </div>
 </div>
+
+<!-- 🔥 Kullanıcı Yorumları -->
+<div *ngIf="reviews.length > 0">
+  <h3>📝 Kullanıcı Yorumları</h3>
+  <div *ngFor="let review of reviews" class="review-item">
+    <p><strong>Puan:</strong> {{ review.rating }}/5</p>
+    <p>{{ review.comment }}</p>
+    <hr />
+  </div>
+</div>
+
+<!-- ⭐ Ortalama Puan -->
+<div *ngIf="averageRating > 0" class="rating-box">
+  <p><strong>Ortalama Puan:</strong> {{ averageRating.toFixed(1) }}/5</p>
+
+  <!-- Yıldızlarla gösterim -->
+  <div class="stars">
+    <ng-container *ngFor="let star of [1,2,3,4,5]">
+      <span [class.filled]="averageRating >= star">★</span>
+    </ng-container>
+  </div>
+</div>
+
+
+<!-- 🔥 Yorum Formu -->
+<div *ngIf="canReview" class="review-form">
+  <h3>Yorum Yap</h3>
+  <textarea [(ngModel)]="newReview.comment" placeholder="Yorum yazınız..."></textarea>
+  <label>
+    Puan:
+    <select [(ngModel)]="newReview.rating">
+      <option *ngFor="let r of [1,2,3,4,5]" [value]="r">{{ r }}</option>
+    </select>
+  </label>
+  <br />
+  <button (click)="submitReview()">Gönder</button>
+</div>
+
+<!-- Kullanıcının kendi yorumuna sil butonu göster -->
+<!-- Eğer admin, user (yorum sahibi) veya seller (ürün sahibi) ise göster -->
+<div *ngFor="let review of reviews">
+  <button *ngIf="review.userId === userId || isSeller || authService.isAdmin()"
+          class="delete-button"
+          (click)="deleteReview(review.id!)">
+    ❌ Yorumu Sil
+  </button>
+</div>
+
+

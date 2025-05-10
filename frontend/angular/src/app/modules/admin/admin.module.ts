@@ -13,6 +13,7 @@ import { OrderManagementComponent } from './components/order-management/order-ma
 
 import { AdminProductService } from './services/admin-product.service';
 import { UserManagementComponent } from './components/user-management/user-management.component';
+import { AdminReviewComponent } from './components/admin-review/admin-review.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UserManagementComponent } from './components/user-management/user-manag
     OrderManagementComponent,
     DashboardComponent,
     OrderManagementComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    AdminReviewComponent
   ],
   imports: [
     CommonModule,
