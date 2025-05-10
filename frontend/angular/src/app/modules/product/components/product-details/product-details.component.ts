@@ -157,6 +157,14 @@ loadProductQuantityInCart(): void {
       error: () => console.warn('Yorumlar alınamadı')
     });
   }
+// loadReviews(): void {
+//   if (!this.product?.id) return;
+
+//   console.log("çalışmayooo")
+
+//   this.reviewService.getReviewsByProduct(this.product.id).subscribe({
+//     next: (res) => {
+//       this.reviews = res;
 
  checkCanReview(): void {
   if (this.userId && this.product?.id) {

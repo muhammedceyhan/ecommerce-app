@@ -6,7 +6,7 @@ public class ProductDTO {
     public double price;
     public String imageUrl;
     public int stock;
-    public String category;
+    public Long categoryId;
     public int inCartNumber;
     public int discountPercentage;
     public double rating;

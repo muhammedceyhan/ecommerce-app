@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SellerService } from '../../services/seller.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Category } from '../../../product/models/category.model';
+import { CategoryService } from '../../../product/services/category.service';
 
 @Component({
   selector: 'app-add-product',
@@ -14,13 +16,16 @@ export class AddProductComponent implements OnInit {
   productForm!: FormGroup;
   isEditMode = false;
   currentProductId: number | null = null;
+  categories: Category[] = [];
+  selectedCategoryId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private sellerService: SellerService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -29,9 +34,9 @@ export class AddProductComponent implements OnInit {
       description: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       stock: [0, [Validators.required, Validators.min(0)]],
-      category: ['', Validators.required],
+      categoryId: [null, Validators.required], // ← kategori ID için
       imgUrl: ['', Validators.required],
-    });
+    })
 
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
@@ -52,6 +57,12 @@ export class AddProductComponent implements OnInit {
         });
       }
     });
+
+    this.waitHalfSecond()
+  }
+  async waitHalfSecond() {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    this.categories = this.categoryService.getAllCategoriesArray();
   }
 
   submitProduct(): void {

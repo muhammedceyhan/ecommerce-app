@@ -16,7 +16,6 @@ export class ProductListAdminComponent implements OnInit {
     private productService: AdminProductService,
     private router: Router
   ) {}
-
   ngOnInit(): void {
     this.fetchProducts();
   }

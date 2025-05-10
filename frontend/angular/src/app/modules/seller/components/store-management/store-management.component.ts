@@ -3,6 +3,8 @@ import { SellerService } from '../../services/seller.service';
 import { Product } from '../../../product/models/product.model';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { Category } from '../../../product/models/category.model';
+import { CategoryService } from '../../../product/services/category.service';
 
 @Component({
   selector: 'app-store-management',
@@ -14,10 +16,12 @@ export class StoreManagementComponent implements OnInit {
   myProducts: Product[] = [];
   userId: number | null = null;
 
+
   constructor(
     private sellerService: SellerService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {

@@ -8,6 +8,7 @@ import { OrderManagementComponent } from './components/order-management/order-ma
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { AdminGuard } from '../../core/guards/admin.guard';
 import { AdminReviewComponent } from './components/admin-review/admin-review.component';
+import { CreateCategoryComponent } from './components/create-category/create-category.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent,canActivate: [AdminGuard] },
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: 'orders', component: OrderManagementComponent },
   { path: 'users', component: UserManagementComponent },
   { path: 'admin/users', component: UserManagementComponent, canActivate: [AdminGuard] },
-  { path: 'reviews', component: AdminReviewComponent }
+  { path: 'reviews', component: AdminReviewComponent },
+  { path: 'newCategory', component: CreateCategoryComponent}
 
 
 ];

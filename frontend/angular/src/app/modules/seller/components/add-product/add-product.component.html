@@ -19,8 +19,13 @@
     <input type="number" formControlName="stock" required>
   </div>
   <div>
-    <label>Category:</label>
-    <input type="text" formControlName="category" required>
+    <label>Kategori Seçin:</label>
+    <select formControlName="categoryId" required>
+      <option [value]="null" disabled selected>-- Seçin --</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">
+        {{ cat.name }}
+      </option>
+    </select>
   </div>
   <div>
     <label>Image URL:</label>
