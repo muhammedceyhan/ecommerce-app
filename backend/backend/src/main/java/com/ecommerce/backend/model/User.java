@@ -1,6 +1,10 @@
 package com.ecommerce.backend.model;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -27,11 +31,13 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.ROLE_USER;  // Varsayılan olarak USER rolü
 
-    @Column(name = "address")
-private String address;
 
-@Column(name = "phone")
-private String phone;
+    // 🔗 İlişki: 1 kullanıcı - N adres
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
+
+    @Column(name = "phone")
+    private String phone;
 
 
     // --- Constructorlar ---
@@ -45,6 +51,7 @@ private String phone;
         this.password = password;
         this.role = role;
     }
+    
 
     // --- Getter & Setterlar ---
 
@@ -88,20 +95,22 @@ private String phone;
         this.role = role;
     }
 
-    public String getAddress() {
-    return address;
-}
 
-public void setAddress(String address) {
-    this.address = address;
-}
 
-public String getPhone() {
-    return phone;
-}
+    public String getPhone() {
+        return phone;
+    }
 
-public void setPhone(String phone) {
-    this.phone = phone;
-}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
 
 }

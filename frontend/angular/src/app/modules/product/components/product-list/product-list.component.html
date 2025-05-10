@@ -30,7 +30,6 @@
     <p>Fiyat: {{ product.price }}₺</p>
     <button (click)="viewDetails(product.id)">View Detail</button>
     <button
-      *ngIf="isLoggedIn() && authService.getUserRole() === 'ROLE_USER'"
       [disabled]="product.stock === 0"
       (click)="addToCart(product.id!)">Sepete Ekle </button>
   </div>

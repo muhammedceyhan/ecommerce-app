@@ -7,6 +7,7 @@ import com.ecommerce.backend.model.Order;
 import com.ecommerce.backend.model.OrderItem;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.repository.OrderRepository;
+import com.ecommerce.backend.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -32,6 +33,9 @@ public class OrderService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     // 🔵 Sipariş oluştur
     public Order createOrder(Order order) {
@@ -107,15 +111,27 @@ public class OrderService {
         order.setPurchaseDate(LocalDateTime.now());
         order.setStatus("Processing");
 
-        // ✅ CheckoutRequest'ten gelen yeni alanlar
         order.setPaymentMethod(checkoutRequest.getPaymentMethod());
         order.setShippingAddress(checkoutRequest.getShippingAddress());
         order.setNote(checkoutRequest.getNote());
 
         List<OrderItem> orderItems = new ArrayList<>();
-        for (Cart cartItem : cartItems) {
-            Product product = productService.getProductById(cartItem.getProductId());
 
+        for (Cart cartItem : cartItems) {
+            // 🔒 Ürünü kilitle ve çek
+            Product product = productRepository.findByIdForUpdate(cartItem.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            // ❗ Stok kontrolü
+            if (product.getStock() < cartItem.getQuantity()) {
+                throw new RuntimeException("Yetersiz stok: " + product.getName());
+            }
+
+            // ✅ Stok düş
+            product.setStock(product.getStock() - cartItem.getQuantity());
+            productRepository.save(product);
+
+            // ✅ Sipariş kalemi oluştur
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(cartItem.getQuantity());
@@ -129,7 +145,7 @@ public class OrderService {
         orderRepository.save(order);
 
         // ✅ Sepeti temizle
-        cartRepository.deleteAllByUserId(userId); // ✅ BU DOĞRU
+        cartRepository.deleteAllByUserId(userId);
 
         return order;
     }
@@ -140,5 +156,6 @@ public class OrderService {
         order.setStatus(status);
         orderRepository.save(order);
     }
+    
 
 }

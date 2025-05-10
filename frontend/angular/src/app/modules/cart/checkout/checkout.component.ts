@@ -1,11 +1,14 @@
 
-import { Component, AfterViewInit} from '@angular/core';
+import { Component, AfterViewInit, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../services/cart.service';
 import { CartItem } from '../models/cart.model';
 import { OrderRequest } from '../models/OrderRequest';
 import { OrderResponse } from '../models/OrderResponse';
 import { AuthService } from '../../auth/services/auth.service';
+import { Address } from '../../auth/models/address.model';
+import { AddressService } from '../../auth/services/address.service';
+
 
 declare var Stripe: any;
 
@@ -16,48 +19,96 @@ declare var Stripe: any;
   standalone: false
 })
 
-export class CheckoutComponent implements AfterViewInit {
+export class CheckoutComponent implements AfterViewInit, OnInit {
   paymentMethod = 'Credit Card';
   shippingAddress = '';
   note = '';
   stripe: any;
   card: any;
   cartItems: CartItem[] = [];
+  addingAddress = false
 
-  userId: number = 1; // Gerçek projede AuthService'den alınmalı
+  selectedAddressId: number | null = null;
+  addresses: Address[] = [];
+  newAddress: Address = {
+    title: '',
+    street: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    isDefault: false
+  };
 
-userAddresses: string[] = [
-  'Ev: Antalya, Muratpaşa, 07010',
-  'Ofis: İstanbul, Beşiktaş, 34353'
-];
+  
+  userAddresses: Address[] = [];
 
-userCards: { last4: string }[] = [
-  { last4: '4242' },
-  { last4: '1111' }
-];
+  userCards: { last4: string }[] = [
+    { last4: '4242' },
+    { last4: '1111' }
+  ];
+  ngOnInit(): void {
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.addressService.getAddressesByUser(userId).subscribe(addresses => {
+        this.addresses = addresses;
+      });
+    }
+    
+  }
+  onAddressSelected() {
+    const selected = this.addresses.find(addr => addr.id === this.selectedAddressId);
+    if (selected) {
+      this.shippingAddress = `${selected.title} - ${selected.street}, ${selected.city}, ${selected.country} (${selected.postalCode})`;
+    }
+  }
+  addNewAddress(){
+    this.addingAddress = true;
+  }
+  addAddress() {
+    const userId = this.authService.getUserId();
+    if (!userId) return;
+    console.log(this.newAddress)
+    this.addressService.addAddress(userId, this.newAddress).subscribe(saved => {
+      
+      this.addresses.push(saved);
+      this.newAddress = {
+        title: '',
+        street: '',
+        city: '',
+        postalCode: '',
+        country: '',
+        isDefault: false
+      };
+    });
+  }
 
-addNewAddress() {
-  alert('Yeni adres ekleme özelliği yakında aktif olacak.');
-}
 
-addNewCard() {
-  alert('Yeni kart ekleme özelliği yakında aktif olacak.');
-}
+  addNewCard() {
+    alert('Yeni kart ekleme özelliği yakında aktif olacak.');
+  }
 
 
   constructor(
     private http: HttpClient,
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private addressService: AddressService
   ) {
     if(authService.getUserId()){
       this.userId = this.authService.getUserId() ?? 1;
     }
+    this.addressService.getDefaultAddress(this.userId).subscribe(address=> {
+      if(address){
+      this.shippingAddress = `${address.title} - ${address.street}, ${address.city}, ${address.country} (${address.postalCode})`;
+      }else{
+        this.addingAddress = true
+      }
+    })
 
   }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  userId = 1; // Gerçek projede AuthService'den alınmalı
+
+  
 
   ngAfterViewInit(): void {
     if (this.paymentMethod === 'Credit Card') {

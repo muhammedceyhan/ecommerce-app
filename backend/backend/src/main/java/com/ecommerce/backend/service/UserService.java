@@ -25,7 +25,7 @@ public class UserService {
         return userRepository.findById(id).map(user -> {
             user.setUsername(updatedData.getUsername());
             user.setEmail(updatedData.getEmail());
-            user.setAddress(updatedData.getAddress());
+            user.setAddresses(updatedData.getAddresses());
             user.setPhone(updatedData.getPhone());
             return userRepository.save(user);
         }).orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));

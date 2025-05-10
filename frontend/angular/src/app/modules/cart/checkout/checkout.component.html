@@ -1,57 +1,49 @@
-<h2>🧾 Sipariş Tamamlama</h2>
+<form (ngSubmit)="submitOrder()" #checkoutForm="ngForm" style="max-width: 500px; margin: auto;">
+  <h2>🧾 Sipariş Tamamlama</h2>
 
-
-
-<form (ngSubmit)="submitOrder()" style="max-width: 500px; margin: auto;">
-  <h2>Checkout</h2>
-  
-   <div class="section">
-    <h3>📍 Adres Seçimi</h3>
-    <select>
-      <option disabled selected>-- Kayıtlı Adres Seçin --</option>
-      <!-- backend adres listesi buraya bağlanacak -->
-      <option *ngFor="let address of userAddresses">{{ address }}</option>
-    </select>
-    <button type="button" (click)="addNewAddress()">+ Yeni Adres Ekle</button>
-  </div>
-  
-  <div class="section">
-    <h3>💳 Kart Seçimi</h3>
-    <select>
-      <option disabled selected>-- Kayıtlı Kart Seçin --</option>
-      <option *ngFor="let card of userCards">**** **** **** {{ card.last4 }}</option>
-    </select>
-    <button type="button" (click)="addNewCard()">+ Yeni Kart Ekle</button>
-  </div>
-
-  <label>Payment Method:</label>
-  <select [(ngModel)]="paymentMethod" name="paymentMethod" required>
-    <option value="Credit Card">Stripe</option>
-    <option value="Cash on Delivery">Cash on Delivery</option>
-  </select>
-
+  <!-- Stripe Kart Alanı -->
   <div *ngIf="paymentMethod === 'Credit Card'">
     <label>Card Details:</label>
     <div id="card-element" style="padding: 10px; border: 1px solid gray; border-radius: 5px;"></div>
     <div id="card-errors" role="alert" style="color: red; margin-top: 5px;"></div>
-  </div>
-  <p>424242424242424242</p>
-  
-  <div class="section">
-    <h3>🧾 Taksit Seçimi</h3>
-    <select>
-      <option value="1">Tek Çekim</option>
-      <option value="2">2 Taksit</option>
-      <option value="3">3 Taksit</option>
-      <option value="6">6 Taksit</option>
-    </select>
+    <p>Test Kart: 4242 4242 4242 4242</p>
   </div>
 
+  <!-- 📦 Adres Seçimi -->
+  <div class="section">
+    <h3>🚚 Kayıtlı Adres Seçin</h3>
+    <select [(ngModel)]="selectedAddressId" (change)="onAddressSelected()" name="selectedAddress">
+      <option [ngValue]="null" disabled selected>-- Adres Seçin --</option>
+      <option *ngFor="let addr of addresses" [ngValue]="addr.id">
+        {{ addr.title }} - {{ addr.street }}, {{ addr.city }}
+      </option>
+    </select>
+    <button type="button" (click)="addingAddress = !addingAddress">+ Yeni Adres Ekle</button>
+  </div>
+
+  <!-- 🆕 Yeni Adres Formu -->
+  <div *ngIf="addingAddress">
+    <h3>Yeni Adres Bilgileri</h3>
+    <input [(ngModel)]="newAddress.title" name="title" placeholder="Adres Başlığı" required>
+    <input [(ngModel)]="newAddress.street" name="street" placeholder="Sokak" required>
+    <input [(ngModel)]="newAddress.city" name="city" placeholder="Şehir" required>
+    <input [(ngModel)]="newAddress.postalCode" name="postalCode" placeholder="Posta Kodu" required>
+    <input [(ngModel)]="newAddress.country" name="country" placeholder="Ülke" required>
+    <label>
+      <input type="checkbox" [(ngModel)]="newAddress.isDefault" name="isDefault">
+      Varsayılan Adres
+    </label>
+    <button type="button" (click)="addAddress()">Ekle</button>
+  </div>
+
+  <!-- Gönderilecek adres -->
   <p>Shipping Address:</p>
   <textarea [(ngModel)]="shippingAddress" name="shippingAddress" required></textarea>
 
+  <!-- Not -->
   <p>Note (optional):</p>
   <textarea [(ngModel)]="note" name="note"></textarea>
+
   <br>
   <button type="submit">Complete Order</button>
 </form>

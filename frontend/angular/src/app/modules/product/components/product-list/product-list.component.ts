@@ -130,20 +130,25 @@ toggleFavorite(productId: number): void {
   }
 
 
-addToCart(productId: number): void {
-  const userId = this.authService.getUserId();
-  if (userId) {
-    this.cartService.addProductToCart(userId, productId).subscribe({
-      next: () => {
-        this.showAlert("Ürün sepete eklendi!");
-      },
-      error: (err) => {
-        console.error(err);
-        this.showAlert("Bir hata oluştu!");
-      }
-    });
+  addToCart(productId: number): void {
+    const userId = this.authService.getUserId();
+    
+    if (userId) {
+      this.cartService.addProductToCart(userId, productId).subscribe({
+        next: (res) => {
+          if (res) {
+            this.showAlert("✅ Ürün sepete eklendi!");
+          }else{
+          this.showAlert("🚨 Ürün eklenemedi")
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.showAlert("🚨 Bir hata oluştu!");
+        }
+      });
+    }
   }
-}
 
 showAlert(message: string): void {
   this.alertMessage = message;
