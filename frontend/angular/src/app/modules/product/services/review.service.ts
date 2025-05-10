@@ -35,4 +35,9 @@ export class ReviewService {
   getReviewsByUser(userId: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.baseUrl}/user/${userId}`);
   }
+
+  canUserReview(userId: number, productId: number): Observable<{ canReview: boolean, orderId?: number }> {
+  return this.http.get<{ canReview: boolean, orderId?: number }>(`${this.baseUrl}/can-review/${userId}/${productId}`);
+}
+
 }

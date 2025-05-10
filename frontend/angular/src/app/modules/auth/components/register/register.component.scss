@@ -1,0 +1,78 @@
+/* login.component.scss */
+.auth-container {
+  position: relative;
+  width: 800px;
+  height: 500px;
+  background: #fff;
+  border-radius: 30px;
+  display: flex;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.form-panel {
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.registration-panel {
+  background: #f7f7f7;
+}
+
+.login-panel {
+  background: #4e89ff;
+  color: #fff;
+  text-align: center;
+}
+
+.form-panel h2 {
+  margin-bottom: 20px;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  border: none;
+  border-radius: 30px;
+  background: #e9e9e9;
+}
+
+.input-box i {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 50px;
+  border: none;
+  border-radius: 30px;
+  background: #4e89ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.social-text {
+  margin: 20px 0 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.social-icons a {
+  margin: 0 10px;
+  color: #444;
+  font-size: 20px;
+}

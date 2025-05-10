@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    
-List<Order> findByUserId(Long userId);
+
+    List<Order> findByUserId(Long userId);
 
     @Query("SELECT DISTINCT o FROM Order o JOIN o.items i WHERE i.product.id IN :productIds")
     List<Order> findOrdersByProductIds(List<Long> productIds);
@@ -25,5 +25,10 @@ List<Order> findByUserId(Long userId);
 
     @Query("SELECT DISTINCT o FROM Order o JOIN o.items i WHERE i.product.seller.id = :sellerId")
     List<Order> findOrdersBySellerId(Long sellerId);
+
+    @Query("SELECT o FROM Order o JOIN o.items i WHERE o.userId = :userId AND i.product.id = :productId AND o.status = :status")
+    List<Order> findDeliveredOrdersWithProduct(@Param("userId") Long userId,
+            @Param("productId") Long productId,
+            @Param("status") String status);
 
 }

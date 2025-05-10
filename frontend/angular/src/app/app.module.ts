@@ -13,7 +13,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { OrdersComponent } from './modules/seller/components/orders/orders.component';
 import { PaymentMethodsComponent } from './modules/payment/components/payment-methods/payment-methods.component';
-
+import { errorInterceptor }  from './core/interceptors/error.interceptor';
 
 
 @NgModule({
@@ -29,6 +29,7 @@ import { PaymentMethodsComponent } from './modules/payment/components/payment-me
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+
   ],
   providers: [
     provideClientHydration(withEventReplay()),
@@ -37,9 +38,7 @@ import { PaymentMethodsComponent } from './modules/payment/components/payment-me
       useClass: AuthInterceptor,
       multi: true  // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
     },
-provideHttpClient(withFetch()),  // 👈 sadece bunu ekle
-    //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
-
+    provideHttpClient(withFetch()),  // 👈 sadece bunu ekle
   ],
   bootstrap: [AppComponent]
 })
