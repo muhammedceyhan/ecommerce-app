@@ -15,15 +15,16 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    public String generateToken(String email, Long id, Role role) {
+    public String generateToken(String email, Long id, String username, Role role) {
         Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-
+    
         return Jwts.builder()
-                .setSubject(email)
-                .claim("id", id) // ✅ Buraya userId claim'i ekledik
-                .claim("role", role.name())
+                .setSubject(email)                    // payload.sub → email
+                .claim("id", id)                      // payload.id
+                .claim("username", username)          // ✅ payload.username
+                .claim("role", role.name())           // payload.role
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 gün
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
