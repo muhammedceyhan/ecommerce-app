@@ -9,11 +9,18 @@ import { environment } from '../../../../environments/environment';
 })
 export class AdminOrderService {
 
-  private apiUrl = `${environment.apiUrl}/orders`;
+  //private apiUrl = `${environment.apiUrl}/orders`;
+  private apiUrl = 'http://localhost:8080/api/orders';
+
 
   constructor(private http: HttpClient) {}
 
   getAllOrders(): Observable<AdminOrder[]> {
     return this.http.get<AdminOrder[]>(this.apiUrl);
   }
+
+  updateOrderStatus(orderId: number, newStatus: string): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${orderId}/status?status=${newStatus}`, {});
+}
+
 }

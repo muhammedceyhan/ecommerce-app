@@ -13,6 +13,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
     private User seller;
+
     
     public User getSeller() {
         return seller;

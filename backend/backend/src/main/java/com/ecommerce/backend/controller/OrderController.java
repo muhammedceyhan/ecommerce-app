@@ -1,5 +1,6 @@
 package com.ecommerce.backend.controller;
 
+import com.ecommerce.backend.dto.AdminOrderDTO;
 import com.ecommerce.backend.dto.CheckoutRequest;
 import com.ecommerce.backend.model.Order;
 import com.ecommerce.backend.model.OrderItem;
@@ -7,7 +8,8 @@ import com.ecommerce.backend.model.OrderResponse;
 import com.ecommerce.backend.service.OrderService;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-
+import com.ecommerce.backend.model.User;
+import com.ecommerce.backend.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,9 +27,8 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
-
-
+    @Autowired
+    private UserRepository userRepository;
 
     // 🔵 Sipariş oluştur
     @PostMapping
@@ -38,15 +39,32 @@ public class OrderController {
 
     // 🔵 Tüm siparişleri getir
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<AdminOrderDTO>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+
+        List<AdminOrderDTO> dtoList = orders.stream().map(order -> {
+            String email = "Unknown";
+            if (order.getUserId() != null) {
+                email = userRepository.findById(order.getUserId())
+                        .map(User::getEmail)
+                        .orElse("Unknown");
+            }
+            return new AdminOrderDTO(order, email);
+        }).toList();
+
+        return ResponseEntity.ok(dtoList);
     }
 
     // 🔵 Kullanıcının kendi siparişlerini listele
     @GetMapping("/user/{userId}")
     public List<Order> getOrdersByUserId(@PathVariable Long userId) {
-        return orderService.getOrdersByUserId(userId);
+    return orderService.getOrdersByUserId(userId);
+    }
+
+    @PreAuthorize("hasRole('SELLER')")
+    @GetMapping("/seller/{sellerId}")
+    public List<Order> getOrdersBySellerId(@PathVariable Long sellerId) {
+        return orderService.getOrdersBySellerId(sellerId);
     }
 
 
@@ -57,11 +75,10 @@ public class OrderController {
         }
         return null;
     }
-    
+
 
     @PostMapping("/checkout")
     public ResponseEntity<OrderResponse> checkout(@RequestParam Long userId, @RequestBody CheckoutRequest request) {
-        
 
         try {
             Order order = orderService.createOrderFromCart(userId, request);
@@ -69,52 +86,63 @@ public class OrderController {
 
             if ("Credit Card".equalsIgnoreCase(request.getPaymentMethod())) {
                 PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
-                    .setAmount(calculateTotalAmount(order.getItems())* 100)
-                    .setCurrency("usd")
-                    .setPaymentMethod(request.getPaymentMethodId())
-                    .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.AUTOMATIC) // ✅
-                    .build(); // confirm = false by default
+                        .setAmount(calculateTotalAmount(order.getItems()) * 100)
+                        .setCurrency("usd")
+                        .setPaymentMethod(request.getPaymentMethodId())
+                        .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.AUTOMATIC) // ✅
+                        .build(); // confirm = false by default
 
                 PaymentIntent intent = PaymentIntent.create(params);
 
                 return ResponseEntity.ok(new OrderResponse(
-                    order.getId(),
-                    "success",
-                    "Stripe clientSecret created",
-                    intent.getClientSecret()  // ✅ BURASI
+                        order.getId(),
+                        "success",
+                        "Stripe clientSecret created",
+                        intent.getClientSecret() // ✅ BURASI
                 ));
             } else {
                 return ResponseEntity.ok(new OrderResponse(
-                    order.getId(),
-                    "pending",
-                    "Cash on Delivery siparişi oluşturuldu",
-                    null
-                ));
+                        order.getId(),
+                        "pending",
+                        "Cash on Delivery siparişi oluşturuldu",
+                        null));
             }
 
         } catch (Exception e) {
-            System.out.println("Burda hata varrr: "+ e);
+            System.out.println("Burda hata varrr: " + e);
             return ResponseEntity.status(500).body(new OrderResponse(
-                null, "failed", e.getMessage(), null
-            ));
+                    null, "failed", e.getMessage(), null));
         }
     }
+
     private long calculateTotalAmount(List<OrderItem> items) {
         return items.stream()
-            .mapToLong(item -> item.getPrice().longValue() * item.getQuantity())
-            .sum();
+                .mapToLong(item -> item.getPrice().longValue() * item.getQuantity())
+                .sum();
     }
 
-@PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
-@PutMapping("/{orderId}/status")
-public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestParam String status) {
-    try {
-        orderService.updateOrderStatus(orderId, status);
-        return ResponseEntity.ok("Order status updated successfully.");
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-}
+    // @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
+    // @PutMapping("/{orderId}/status")
+    // public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId,
+    // @RequestParam String status) {
+    // try {
+    // orderService.updateOrderStatus(orderId, status);
+    // return ResponseEntity.ok("Order status updated successfully.");
+    // } catch (RuntimeException e) {
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    // }
+    // }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId,
+            @RequestParam("status") String status) {
+        try {
+            orderService.updateOrderStatus(orderId, status);
+            return ResponseEntity.ok("Order status updated");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
 
 }

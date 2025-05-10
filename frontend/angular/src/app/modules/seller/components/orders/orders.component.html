@@ -1,4 +1,4 @@
-<p>orders works!</p>
+
 <h2>My Orders</h2>
 <div *ngIf="orders.length === 0">No orders yet.</div>
 
@@ -19,7 +19,18 @@
       <td>{{ order.buyerName }}</td>
       <td>{{ order.note }}</td>
       <td>{{ order.paymentMethod }}</td>
-      <td>{{ order.status }}</td>
+      <td>
+        <select [(ngModel)]="order.status">
+          <option>Pending</option>
+          <option>Shipped</option>
+          <option>Delivered</option>
+          <option>Cancelled</option>
+        </select>
+        <button (click)="updateOrderStatus(order.id, order.status)">
+          Güncelle
+        </button>
+      </td>
+
       <td>{{ order.purchaseDate | date }}</td>
     </tr>
   </tbody>

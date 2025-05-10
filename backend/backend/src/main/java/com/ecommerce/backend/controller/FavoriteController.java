@@ -1,5 +1,6 @@
 package com.ecommerce.backend.controller;
 
+import com.ecommerce.backend.dto.FavoriteCountDTO;
 import com.ecommerce.backend.dto.FavoriteDTO;
 import com.ecommerce.backend.model.Favorite;
 import com.ecommerce.backend.model.Product;
@@ -67,5 +68,16 @@ public ResponseEntity<List<FavoriteDTO>> getFavoritesWithProduct(@PathVariable L
     public ResponseEntity<Integer> getFavoriteCount(@PathVariable Long productId) {
         return ResponseEntity.ok(favoriteService.getFavoriteCountByProductId(productId));
     }
+
+
+    @GetMapping("/counts/by-seller/{sellerId}")
+public ResponseEntity<List<FavoriteCountDTO>> getFavoriteCountsBySeller(@PathVariable Long sellerId) {
+    List<Product> products = productRepository.findBySellerId(sellerId);
+    List<FavoriteCountDTO> counts = products.stream().map(p -> 
+        new FavoriteCountDTO(p.getId(), favoriteService.getFavoriteCountByProductId(p.getId()))
+    ).toList();
+    return ResponseEntity.ok(counts);
+}
+
 
 }

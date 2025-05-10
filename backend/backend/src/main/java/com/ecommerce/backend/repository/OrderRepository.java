@@ -8,20 +8,22 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByUserId(Long userId);
-    @Query("SELECT DISTINCT o FROM Order o JOIN o.items i WHERE i.productId IN :productIds")
-    List<Order> findOrdersByProductIds(@Param("productIds") List<Long> productIds);
+    
+List<Order> findByUserId(Long userId);
 
-    @Query("SELECT SUM(i.quantity) FROM OrderItem i WHERE i.productId IN :productIds")
+    @Query("SELECT DISTINCT o FROM Order o JOIN o.items i WHERE i.product.id IN :productIds")
+    List<Order> findOrdersByProductIds(List<Long> productIds);
+
+    @Query("SELECT SUM(i.quantity) FROM OrderItem i WHERE i.product.id IN :productIds")
     Integer getTotalSalesByProductIds(@Param("productIds") List<Long> productIds);
 
-    @Query("SELECT SUM(i.price * i.quantity) FROM OrderItem i WHERE i.productId IN :productIds")
+    @Query("SELECT SUM(i.price * i.quantity) FROM OrderItem i WHERE i.product.id IN :productIds")
     Double getTotalRevenueByProductIds(@Param("productIds") List<Long> productIds);
 
-    @Query("SELECT i.productId, SUM(i.quantity) as totalQuantity " +
-       "FROM OrderItem i WHERE i.productId IN :productIds " +
-       "GROUP BY i.productId ORDER BY totalQuantity DESC")
+    @Query("SELECT i.product.id, SUM(i.quantity) as totalQuantity FROM OrderItem i WHERE i.product.id IN :productIds GROUP BY i.product.id ORDER BY totalQuantity DESC")
     List<Object[]> getTopSellingProducts(@Param("productIds") List<Long> productIds);
 
+    @Query("SELECT DISTINCT o FROM Order o JOIN o.items i WHERE i.product.seller.id = :sellerId")
+    List<Order> findOrdersBySellerId(Long sellerId);
 
 }

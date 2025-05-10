@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategory(String category);  // Kategorilere göre arama için (opsiyonel)
 
     List<Product> findByInCartNumberGreaterThan(int number);
+
+    
 }

@@ -1,0 +1,66 @@
+<h2>🛡️ Admin Yorum Paneli</h2>
+
+<!-- Arama Kutusu -->
+<input
+  type="text"
+  placeholder="Ürün adı veya yorum ara..."
+  [(ngModel)]="searchTerm"
+  (input)="applyFilters()"
+  style="margin-bottom: 12px; padding: 6px; width: 100%; max-width: 400px;"
+/>
+
+<!-- Sıralama Butonları -->
+<div class="sort-controls">
+  <button (click)="changeSort('product')">
+    Ürün adına göre sırala ({{ sortDirection === 'asc' ? '↑' : '↓' }})
+  </button>
+  <button (click)="changeSort('rating')">
+    Puanına göre sırala ({{ sortDirection === 'asc' ? '↑' : '↓' }})
+  </button>
+</div>
+
+<!-- Yorum Listesi -->
+<div *ngFor="let entry of filteredReviews" class="review-box">
+  <p><strong>Ürün:</strong> {{ entry.product.name }}</p>
+  <p><strong>Kategori:</strong> {{ entry.product.category }}</p>
+  <p><strong>Yorum:</strong> {{ entry.review.comment }}</p>
+  <p><strong>Puan:</strong> {{ entry.review.rating }}/5</p>
+  <button (click)="deleteReview(entry.review.id!)">❌ Yorumu Sil</button>
+  <hr />
+</div>
+
+
+<!-- Yorum satırına tıklayınca detay modalı -->
+<div
+  *ngFor="let entry of filteredReviews"
+  class="review-box"
+  (click)="openModal(entry)"
+  style="cursor: pointer;"
+>
+  <p><strong>Ürün:</strong> {{ entry.product.name }}</p>
+  <p><strong>Yorum:</strong> {{ entry.review.comment | slice:0:50 }}...</p>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" *ngIf="selectedReview">
+  <div class="modal-content">
+    <h3>📝 Yorum Detayı</h3>
+    <p><strong>Ürün:</strong> {{ selectedReview.product.name }}</p>
+    <p><strong>Kategori:</strong> {{ selectedReview.product.category }}</p>
+    <p><strong>Puan:</strong> {{ selectedReview.review.rating }} / 5</p>
+    <p><strong>Yorum:</strong> {{ selectedReview.review.comment }}</p>
+    <p><strong>Tarih:</strong> {{ selectedReview.review.commentDate | date:'medium' }}</p>
+
+    <button (click)="selectedReview = null">Kapat</button>
+  </div>
+</div>
+
+<button (click)="changeSort('date')">
+  Tarihe göre sırala ({{ sortDirection === 'asc' ? '↑' : '↓' }})
+</button>
+
+<label>
+  <input type="checkbox" [(ngModel)]="hideBadReviews" (change)="applyFilters()" />
+  🔽 Sadece kötü yorumları gizle (1–2–3 puan)
+</label>

@@ -21,12 +21,18 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-    this.dashboardService.getStats().subscribe(stats => {
+  this.dashboardService.getStats().subscribe({
+    next: (stats) => {
       this.totalUsers = stats.totalUsers;
       this.totalProducts = stats.totalProducts;
       this.totalOrders = stats.totalOrders;
-    });
-  }
+    },
+    error: (err) => {
+      console.error('Dashboard verisi yüklenemedi:', err);
+    }
+  });
+}
+
 
   logout(): void {
     this.authService.logout();

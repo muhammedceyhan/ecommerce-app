@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../services/cart.service';
 import { CartItem } from '../models/cart.model';
@@ -53,6 +53,9 @@ addNewCard() {
       this.userId = this.authService.getUserId() ?? 1;
     }
 
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
   ngAfterViewInit(): void {
