@@ -1,6 +1,8 @@
 package com.ecommerce.backend.controller;
 
 import java.util.List;
+
+import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.security.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ecommerce.backend.model.ProductDTO;
 import com.ecommerce.backend.model.User;
+import com.ecommerce.backend.repository.CategoryRepository;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class ProductController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -47,7 +53,8 @@ public Product addProduct(@RequestBody ProductDTO dto) {
     product.setPrice(dto.price);
     product.setImageUrl(dto.imageUrl);
     product.setStock(dto.stock);
-    product.setCategory(dto.category);
+    Category category = categoryRepository.findById(dto.categoryId).orElseThrow();
+    product.setCategory(category);
     product.setDiscountPercentage(dto.discountPercentage);
     product.setRating(dto.rating);
     product.setInSale(dto.isInSale);

@@ -167,6 +167,8 @@ loadProductQuantityInCart(): void {
 loadReviews(): void {
   if (!this.product?.id) return;
 
+  console.log("çalışmayooo")
+
   this.reviewService.getReviewsByProduct(this.product.id).subscribe({
     next: (res) => {
       this.reviews = res;

@@ -36,7 +36,9 @@ public class Product {
     @Column(nullable = false)
     private int stock; // stok adedi
 
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id") // ürün tablosunda 'category_id' kolonuna karşılık gelir
+    private Category category;
 
     @Column(nullable = false)
     private int inCartNumber;
@@ -62,7 +64,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(String name, String description, double price, String imageUrl, int stock, String category, int inCartNumber,
+    public Product(String name, String description, double price, String imageUrl, int stock, Category category, int inCartNumber,
                     int discountPercentage, double rating, boolean isFavorite, boolean isInWishlist, boolean isInCompare, boolean isInSale) {
         this.name = name;
         this.description = description;
@@ -128,14 +130,6 @@ public class Product {
         this.stock = stock;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public int getInCartNumber() {
         return inCartNumber;
     }
@@ -190,6 +184,14 @@ public class Product {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
     
     

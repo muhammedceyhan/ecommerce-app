@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminProductService } from '../../services/admin-product.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { CategoryService } from '../../../product/services/category.service';
 
 @Component({
   selector: 'app-product-create',
@@ -17,14 +18,15 @@ export class ProductCreateComponent {
     private fb: FormBuilder,
     private productService: AdminProductService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    public categoryService : CategoryService
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       stock: [0, [Validators.required, Validators.min(0)]],
       description: [''],
-      category: [''],
+      categoryId: [null, Validators.required], // ← kategori ID için
       imageUrl: [''],
       inCartNumber: [0],
       discountPercentage: [0],

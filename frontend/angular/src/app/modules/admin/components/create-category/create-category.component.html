@@ -1,0 +1,8 @@
+<h2>🆕 Yeni Kategori Oluştur</h2>
+
+<form [formGroup]="categoryForm" (ngSubmit)="createCategory()" style="max-width: 400px;">
+  <label>Kategori Adı:</label>
+  <input formControlName="name" type="text" placeholder="örn: Elektronik" required />
+  <br><br>
+  <button type="submit" [disabled]="categoryForm.invalid">Oluştur</button>
+</form>

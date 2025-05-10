@@ -22,8 +22,13 @@
   </div>
 
   <div>
-    <label>Kategori:</label>
-    <input type="text" formControlName="category">
+    <label>Kategori Seçin:</label>
+    <select formControlName="categoryId" required>
+      <option [value]="null" disabled selected>-- Seçin --</option>
+      <option *ngFor="let cat of categoryService.getAllCategoriesArray()" [value]="cat.id">
+        {{ cat.name }}
+      </option>
+    </select>
   </div>
 
   <div>

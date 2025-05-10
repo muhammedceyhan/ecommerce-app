@@ -1,5 +1,6 @@
 package com.ecommerce.backend.repository;
 
+import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 
 import jakarta.persistence.LockModeType;
@@ -18,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findBySellerId(Long sellerId);  // Seller'ın ürünlerini getirmek için
     
-    List<Product> findByCategory(String category);  // Kategorilere göre arama için (opsiyonel)
+    List<Product> findByCategory(Category category);  // Kategorilere göre arama için (opsiyonel)
 
     List<Product> findByInCartNumberGreaterThan(int number);
 

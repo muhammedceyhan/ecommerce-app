@@ -14,6 +14,7 @@ import { OrderManagementComponent } from './components/order-management/order-ma
 import { AdminProductService } from './services/admin-product.service';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { AdminReviewComponent } from './components/admin-review/admin-review.component';
+import { CreateCategoryComponent } from './components/create-category/create-category.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AdminReviewComponent } from './components/admin-review/admin-review.com
     DashboardComponent,
     OrderManagementComponent,
     UserManagementComponent,
-    AdminReviewComponent
+    AdminReviewComponent,
+    CreateCategoryComponent
   ],
   imports: [
     CommonModule,
