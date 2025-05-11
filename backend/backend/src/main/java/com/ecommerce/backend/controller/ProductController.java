@@ -2,6 +2,7 @@ package com.ecommerce.backend.controller;
 
 import java.util.List;
 
+import com.ecommerce.backend.dto.ProductResponse;
 import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.security.JwtUtil;
@@ -38,10 +39,12 @@ public class ProductController {
 
 
 
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
+  @GetMapping
+public List<ProductResponse> getAllProducts() {
+    return productService.getAllProductResponses();
+}
+
+
 
     @PreAuthorize("hasRole('SELLER')")
 @PostMapping()
@@ -119,9 +122,4 @@ public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         return null;
     }
 
-    
-
-
-
-
-}
+    }

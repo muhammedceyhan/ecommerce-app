@@ -13,6 +13,17 @@
   {{ alertMessage }}
 </div>
 
+<!-- Kategori Filtresi -->
+<div class="category-filter">
+  <button (click)="selectCategory(null)" [class.active]="selectedCategoryId === null">Tümü</button>
+  <button *ngFor="let cat of categories"
+          (click)="selectCategory(cat.id)"
+          [class.active]="selectedCategoryId === cat.id">
+    {{ cat.name }}
+  </button>
+</div>
+
+
 <div class="product-grid">
   <div *ngFor="let product of showSearchResults()" class="product-card">
     <div class="image-wrapper">
@@ -27,6 +38,7 @@
 
 
     <h3>{{ product.name }}</h3>
+    <p>Kategori: {{ product.categoryName }}</p>
     <p>Fiyat: {{ product.price }}₺</p>
     <button (click)="viewDetails(product.id)">View Detail</button>
     <button

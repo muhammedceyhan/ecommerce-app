@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/user/**").authenticated()
                 .requestMatchers("/api/payment-methods/**").authenticated()
                 .requestMatchers("/api/favorites/**").authenticated()
+                  .requestMatchers(HttpMethod.GET, "/api/categories").permitAll() // ✅ bu satır
 
               // Geri kalanı oturum ister
               .anyRequest().authenticated()

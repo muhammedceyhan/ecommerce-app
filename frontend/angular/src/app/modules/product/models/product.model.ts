@@ -7,8 +7,10 @@ export interface Product{
   price: number;
   imageUrl: string;
   stock:number;
-  category?:string;
+
   discountPercentage: number;
   rating: number;
   isInSale: boolean;
+  categoryId: number; // ürün hangi kategoriye ait
+  categoryName: string; // ❗ artık bunu kullanacaksın
 }
