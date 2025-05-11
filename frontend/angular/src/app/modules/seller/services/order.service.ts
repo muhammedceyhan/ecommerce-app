@@ -19,7 +19,7 @@ export class OrderService {
   }
 
   updateOrderStatus(orderId: number, newStatus: string): Observable<any> {
-  return this.http.put(`${this.apiUrl}/${orderId}/status?status=${newStatus}`, {});
+return this.http.put(`${this.apiUrl}/${orderId}/status?status=${newStatus}`, {});
 }
 
 }

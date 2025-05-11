@@ -2,32 +2,38 @@
 
 <h2>Sipariş Yönetimi</h2>
 
-<table border="1" cellpadding="8" cellspacing="0">
+<table class="admin-order-table">
   <thead>
     <tr>
       <th>ID</th>
-      <th>Kullanıcı ID</th>
-      <th>Satın Alma Tarihi</th>
-      <th>Durum</th>
-
+      <th>Kullanıcı</th>
+      <th>Tarih</th>
+      <th>Durum (Mevcut)</th>
+      <th>Yeni Durum</th>
+      <th>İşlem</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let order of orders">
       <td>{{ order.id }}</td>
       <td>{{ order.userId }} ({{ order.userEmail }})</td>
-      <td>{{ order.purchaseDate | date : "medium" }}</td>
+      <td>{{ order.purchaseDate | date : 'medium' }}</td>
+      <td>{{ order.status }}</td>
       <td>
-        {{ order.status }}
-        <select [(ngModel)]="order.status">
-          <option value="Processing">Processing</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
+        <select [(ngModel)]="order.newStatus">
+          <option [value]="'Pending'">Pending</option>
+          <option [value]="'Processing'">Processing</option>
+          <option [value]="'Shipped'">Shipped</option>
+          <option [value]="'Delivered'">Delivered</option>
+          <option [value]="'Cancelled'">Cancelled</option>
         </select>
-        <button (click)="updateOrderStatus(order.id, order.status)">
-          Güncelle
-        </button>
+      </td>
+      <td>
+<button
+  [disabled]="!order.newStatus"
+  (click)="updateOrderStatus(order.id, order.newStatus!)">
+  Güncelle
+</button>
       </td>
     </tr>
   </tbody>

@@ -62,17 +62,33 @@ public class OrderService {
         return orderRepository.findByUserId(userId);
     }
 
+    // public List<Order> getOrdersBySellerId(Long sellerId) {
+    // List<Product> sellerProducts = productService.getProductsByUserId(sellerId);
+    // List<Long> productIds = sellerProducts.stream()
+    // .map(Product::getId)
+    // .toList(); // Java 16+ için .toList(), Java 8 için
+    // .collect(Collectors.toList())
+
+    // if (productIds.isEmpty()) {
+    // return List.of(); // satıcının hiç ürünü yoksa boş liste döner
+    // }
+
+    // return orderRepository.findOrdersByProductIds(productIds);
+    // }
+
     public List<Order> getOrdersBySellerId(Long sellerId) {
         List<Product> sellerProducts = productService.getProductsByUserId(sellerId);
         List<Long> productIds = sellerProducts.stream()
                 .map(Product::getId)
-                .toList(); // Java 16+ için .toList(), Java 8 için .collect(Collectors.toList())
+                .toList();
 
-        if (productIds.isEmpty()) {
-            return List.of(); // satıcının hiç ürünü yoksa boş liste döner
-        }
+        if (productIds.isEmpty())
+            return List.of();
 
-        return orderRepository.findOrdersByProductIds(productIds);
+        return orderRepository.findOrdersByProductIds(productIds)
+                .stream()
+                .filter(order -> !order.getStatus().equalsIgnoreCase("Cancelled")) // 👈 sadece bu satır eklendi
+                .toList();
     }
 
     public Integer getTotalSalesBySeller(Long sellerId) {
@@ -150,12 +166,12 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
     public void updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(status);
         orderRepository.save(order);
     }
-    
 
 }

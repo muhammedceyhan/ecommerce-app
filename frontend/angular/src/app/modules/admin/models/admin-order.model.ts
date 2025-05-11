@@ -3,5 +3,6 @@ export interface AdminOrder {
   userId: number;
   userEmail: string;
   purchaseDate: string;
-  status: 'PREPARING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'; // Şu anda PREPARING kullanıyoruz
+  status: 'PREPARING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+  newStatus?: 'PREPARING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
 }

@@ -1,6 +1,7 @@
+<table class="orders-table" *ngIf="orders.length > 0">
 
 <h2>My Orders</h2>
-<div *ngIf="orders.length === 0">No orders yet.</div>
+
 
 <table *ngIf="orders.length > 0">
   <thead>
@@ -9,7 +10,9 @@
       <th>Buyer</th>
       <th>Note</th>
       <th>Payment</th>
-      <th>Status</th>
+      <th>Current</th>
+      <th>Update</th>
+      <th>Action</th>
       <th>Date</th>
     </tr>
   </thead>
@@ -19,19 +22,30 @@
       <td>{{ order.buyerName }}</td>
       <td>{{ order.note }}</td>
       <td>{{ order.paymentMethod }}</td>
+
+      <!-- CURRENT STATUS -->
+      <td>{{ order.status }}</td>
+
+      <!-- NEW STATUS DROPDOWN -->
       <td>
-        <select [(ngModel)]="order.status">
-          <option>Pending</option>
-          <option>Shipped</option>
-          <option>Delivered</option>
-          <option>Cancelled</option>
+        <select [(ngModel)]="order.newStatus">
+          <option [value]="'Pending'">Pending</option>
+          <option [value]="'Processing'">Processing</option>
+          <option [value]="'Shipped'">Shipped</option>
+          <option [value]="'Delivered'">Delivered</option>
+          <option [value]="'Cancelled'">Cancelled</option>
         </select>
-        <button (click)="updateOrderStatus(order.id, order.status)">
+      </td>
+
+      <!-- GÜNCELLEME BUTONU -->
+      <td>
+        <button (click)="updateOrderStatus(order.id, order.newStatus)">
           Güncelle
         </button>
       </td>
 
-      <td>{{ order.purchaseDate | date }}</td>
+      <td>{{ order.purchaseDate | date : "medium" }}</td>
     </tr>
   </tbody>
+</table>
 </table>

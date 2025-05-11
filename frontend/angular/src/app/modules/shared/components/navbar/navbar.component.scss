@@ -114,13 +114,13 @@
 
 .nav-container {
   background: var(--surface);
-  padding: 1.25rem 2rem;
+  padding: 0.5rem 2rem;
   border-radius: 1.5rem;
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   background-color: #1e272e;
   position: fixed;
-  bottom: 30px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -140,7 +140,7 @@
 
 .nav-link {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: var(--secondary);
@@ -156,7 +156,7 @@
 .nav-text {
   font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   color: var(--primary);
   transform: translateY(10px);
   transition: all 0.3s ease;
@@ -210,5 +210,21 @@
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+  height: 60px; // kesin yükseklik
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #1e272e;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+
 
 

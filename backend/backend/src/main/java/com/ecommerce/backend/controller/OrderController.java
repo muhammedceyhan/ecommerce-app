@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -58,7 +60,7 @@ public class OrderController {
     // 🔵 Kullanıcının kendi siparişlerini listele
     @GetMapping("/user/{userId}")
     public List<Order> getOrdersByUserId(@PathVariable Long userId) {
-    return orderService.getOrdersByUserId(userId);
+        return orderService.getOrdersByUserId(userId);
     }
 
     @PreAuthorize("hasRole('SELLER')")
@@ -67,7 +69,6 @@ public class OrderController {
         return orderService.getOrdersBySellerId(sellerId);
     }
 
-
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -75,7 +76,6 @@ public class OrderController {
         }
         return null;
     }
-
 
     @PostMapping("/checkout")
     public ResponseEntity<OrderResponse> checkout(@RequestParam Long userId, @RequestBody CheckoutRequest request) {
@@ -133,15 +133,19 @@ public class OrderController {
     // }
     // }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @PutMapping("/{orderId}/status")
-    public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId,
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
+    public ResponseEntity<Map<String, String>> updateOrderStatus(@PathVariable Long orderId,
             @RequestParam("status") String status) {
         try {
             orderService.updateOrderStatus(orderId, status);
-            return ResponseEntity.ok("Order status updated");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Order status updated");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 

@@ -42,12 +42,13 @@
                 >Ödeme Bilgileri</a
               >
             </li>
-            <li>
-            </li>
+            <li></li>
             <li *ngIf="isAdminUser">
               <a class="dropdown-item" routerLink="/admin">Admin Panel</a>
             </li>
-                        <li><a class="dropdown-item" routerLink="/favorites">Favoriler</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/favorites">Favoriler</a>
+            </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item text-danger" (click)="logout()"
@@ -78,6 +79,14 @@
         <span class="nav-text">Mağaza</span>
       </a>
     </li>
+
+    <li class="nav-item" *ngIf="isAdminUser">
+      <a routerLink="/admin" class="nav-link">
+        <span class="material-icons"> admin_panel_settings </span>
+        <span class="nav-text">Panel</span>
+      </a>
+    </li>
+
     <li class="nav-item" *ngIf="showCart">
       <a routerLink="/cart" class="nav-link">
         <span class="material-icons">shopping_cart</span>

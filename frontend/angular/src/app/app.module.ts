@@ -1,6 +1,10 @@
 import { NavbarComponent } from './modules/shared/components/navbar/navbar.component';
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,14 +18,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { OrdersComponent } from './modules/seller/components/orders/orders.component';
 import { PaymentMethodsComponent } from './modules/payment/components/payment-methods/payment-methods.component';
 
-
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    OrdersComponent,
-  ],
+  @NgModule({
+  declarations: [AppComponent, NavbarComponent, OrdersComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,12 +33,19 @@ import { PaymentMethodsComponent } from './modules/payment/components/payment-me
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true  // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
+      multi: true, // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
     },
-provideHttpClient(withFetch()),  // 👈 sadece bunu ekle
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor, // 👈 BU SATIR AKTİF OLSUN
+      multi: true,
+    },
+
+    provideHttpClient(withFetch()), // 👈 sadece bunu ekle
     //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
 
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
