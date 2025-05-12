@@ -14,7 +14,19 @@ public class Product {
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
     private User seller;
 
+    @Column(nullable = false)
+    private boolean active = true; // Varsayılan olarak yayında
+
     
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public User getSeller() {
         return seller;
     }
@@ -61,11 +73,13 @@ public class Product {
     @Column(nullable = false)
     private boolean isInSale;
 
+    public Product() {
+    }
 
-    public Product() {}
-
-    public Product(String name, String description, double price, String imageUrl, int stock, Category category, int inCartNumber,
-                    int discountPercentage, double rating, boolean isFavorite, boolean isInWishlist, boolean isInCompare, boolean isInSale) {
+    public Product(String name, String description, double price, String imageUrl, int stock, Category category,
+            int inCartNumber,
+            int discountPercentage, double rating, boolean isFavorite, boolean isInWishlist, boolean isInCompare,
+            boolean isInSale) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -193,6 +207,5 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-    
-    
+
 }

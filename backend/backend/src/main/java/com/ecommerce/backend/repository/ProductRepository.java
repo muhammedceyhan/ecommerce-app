@@ -17,17 +17,14 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findBySellerId(Long sellerId);  // Seller'ın ürünlerini getirmek için
-    
-    List<Product> findByCategory(Category category);  // Kategorilere göre arama için (opsiyonel)
+    List<Product> findBySellerId(Long sellerId); // Seller'ın ürünlerini getirmek için
+
+    List<Product> findByCategory(Category category); // Kategorilere göre arama için (opsiyonel)
 
     List<Product> findByInCartNumberGreaterThan(int number);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT p FROM Product p WHERE p.id = :productId")
-    Optional<Product> findByIdForUpdate(@Param("productId") Long productId);
+    @Query("SELECT p FROM Product p WHERE p.id = :id")
+    Optional<Product> findByIdForUpdate(@Param("id") Long id);
 
-    
-
-    
 }

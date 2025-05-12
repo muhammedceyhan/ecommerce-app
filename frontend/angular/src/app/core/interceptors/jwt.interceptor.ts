@@ -1,5 +1,7 @@
-// jwt.interceptor.ts
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -11,6 +13,7 @@ export class JwtInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Sadece tarayıcıda çalışırken localStorage’a bak
     let token: string | null = null;
+
     if (isPlatformBrowser(this.platformId)) {
       token = localStorage.getItem('token');
     }

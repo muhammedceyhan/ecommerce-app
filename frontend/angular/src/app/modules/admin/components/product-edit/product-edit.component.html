@@ -4,33 +4,38 @@
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
   <label>
     Ad:
-    <input formControlName="name" />
-  </label><br />
+    <input formControlName="name" /> </label
+  ><br />
 
   <label>
     Fiyat:
-    <input type="number" formControlName="price" />
-  </label><br />
+    <input type="number" formControlName="price" /> </label
+  ><br />
 
   <label>
     Stok:
-    <input type="number" formControlName="stock" />
-  </label><br />
+    <input type="number" formControlName="stock" /> </label
+  ><br />
 
   <label>
     Açıklama:
-    <textarea formControlName="description"></textarea>
-  </label><br />
+    <textarea formControlName="description"></textarea></label
+  ><br />
 
   <label>
     Kategori:
-    <input formControlName="category" />
-  </label><br />
+    <input formControlName="category" /> </label
+  ><br />
 
   <label>
     Görsel URL:
-    <input formControlName="imageUrl" />
-  </label><br />
+    <input formControlName="imageUrl" /> </label
+  ><br />
+
+  <label>
+    Yayında mı?
+    <input type="checkbox" formControlName="active" /> </label
+  ><br />
 
   <button type="submit" [disabled]="productForm.invalid">Güncelle</button>
 </form>

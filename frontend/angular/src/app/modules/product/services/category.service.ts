@@ -12,19 +12,19 @@ export class CategoryService {
   constructor(private http: HttpClient) {
     this.getAllCategoriesObservable().subscribe(categories => {
       this.categories = categories;
-    })
+    });
   }
 
   createCategory(category: { name: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}`, category);
   }
-  
-  
+
+
 
   getAllCategoriesObservable(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiUrl).pipe(
       tap(data => this.categories = data)
-      
+
     );
   }
   getAllCategoriesArray(): Category[] {

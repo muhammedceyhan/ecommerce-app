@@ -1,3 +1,5 @@
+<button routerLink="/admin">⬅️ Admin Paneline Dön</button>
+
 <h2>🛡️ Admin Yorum Paneli</h2>
 
 <!-- Arama Kutusu -->
@@ -22,7 +24,7 @@
 <!-- Yorum Listesi -->
 <div *ngFor="let entry of filteredReviews" class="review-box">
   <p><strong>Ürün:</strong> {{ entry.product.name }}</p>
-  <p><strong>Kategori:</strong> {{ entry.product.category }}</p>
+  <p><strong>Kategori:</strong> {{ entry.product.categoryName }}</p>
   <p><strong>Yorum:</strong> {{ entry.review.comment }}</p>
   <p><strong>Puan:</strong> {{ entry.review.rating }}/5</p>
   <button (click)="deleteReview(entry.review.id!)">❌ Yorumu Sil</button>
@@ -47,7 +49,7 @@
   <div class="modal-content">
     <h3>📝 Yorum Detayı</h3>
     <p><strong>Ürün:</strong> {{ selectedReview.product.name }}</p>
-    <p><strong>Kategori:</strong> {{ selectedReview.product.category }}</p>
+    <p><strong>Kategori:</strong> {{ selectedReview.product.categoryName }}</p>
     <p><strong>Puan:</strong> {{ selectedReview.review.rating }} / 5</p>
     <p><strong>Yorum:</strong> {{ selectedReview.review.comment }}</p>
     <p><strong>Tarih:</strong> {{ selectedReview.review.commentDate | date:'medium' }}</p>

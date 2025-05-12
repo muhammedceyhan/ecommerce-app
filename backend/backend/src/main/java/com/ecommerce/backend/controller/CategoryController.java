@@ -32,4 +32,6 @@ public class CategoryController {
         categoryRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    
 }

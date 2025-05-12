@@ -16,24 +16,30 @@ export class OrderManagementComponent implements OnInit {
   constructor(private orderService: AdminOrderService) {}
 
   ngOnInit(): void {
-    this.fetchOrders();
-  }
+  this.fetchOrders();
+}
 
+fetchOrders(): void {
+  this.orderService.getAllOrders().subscribe({
+    next: (data) => {
+      this.orders = data.map(order => ({
+        ...order,
+        newStatus: order.status
+      }));
+    },
+    error: (error) => {
+      console.error('Siparişler alınamadı:', error);
+    }
+  });
+}
 
-  fetchOrders(): void {
-    this.orderService.getAllOrders().subscribe({
-      next: (data) => {
-        this.orders = data;
-      },
-      error: (error) => {
-        console.error('Siparişler alınamadı:', error);
-      }
-    });
-  }
-
-  updateOrderStatus(orderId: number, newStatus: string): void {
+updateOrderStatus(orderId: number, newStatus:  AdminOrder['status']): void {
   this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
     next: () => {
+      const updatedOrder = this.orders.find(o => o.id === orderId);
+      if (updatedOrder) {
+        updatedOrder.status = newStatus;
+      }
       alert('Durum güncellendi');
     },
     error: (err) => {
@@ -42,5 +48,6 @@ export class OrderManagementComponent implements OnInit {
     }
   });
 }
+
 
 }

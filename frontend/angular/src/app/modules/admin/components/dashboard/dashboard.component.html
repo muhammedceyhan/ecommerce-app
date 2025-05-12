@@ -1,25 +1,26 @@
-<h1>Admin Paneli</h1>
-
+<h2>Admin Paneli</h2>
 <nav>
   <button (click)="logout()">🚪 Çıkış Yap</button>
   <button routerLink="/admin/products">Ürünleri Yönet</button>
   <button routerLink="/admin/orders">Siparişleri Yönet</button>
   <button routerLink="/admin/users">Kullanıcıları Yönet</button>
   <button routerLink="/admin/reviews">Yorumları Yönet</button>
-  <button routerLink = "/admin/dashboard">📊 Dashboard</button>
-  <!-- <button routerLink = "/admin/reviews">📝 Yorum Yönetimi</button> -->
-  <!-- <li><a routerLink="/admin/dashboard">📊 Dashboard</a></li>
-  <li><a routerLink="/admin/reviews">📝 Yorum Yönetimi</a></li> -->
+
 
 </nav>
 <br>
-<h2>Admin Paneli</h2>
+
+
+<h1>Admin-Dashboard</h1>
 
 <div class="stats">
   <div class="card">Toplam Kullanıcı: {{ totalUsers }}</div>
   <div class="card">Toplam Ürün: {{ totalProducts }}</div>
   <div class="card">Toplam Sipariş: {{ totalOrders }}</div>
 </div>
+<br><br><br><br>
+
+<app-dashboard-chart></app-dashboard-chart>
 
 
 <router-outlet></router-outlet>

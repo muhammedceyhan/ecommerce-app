@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminProductService } from '../../services/admin-product.service';
 import { AdminProduct } from '../../models/admin-product.model';
 import { Location } from '@angular/common';  // dikkat: bunu import et!
+import { CategoryService } from '../../../product/services/category.service';
 
 
 @Component({
@@ -22,7 +23,9 @@ export class ProductEditComponent implements OnInit {
     private fb: FormBuilder,
     private productService: AdminProductService,
     private router: Router,
-    private location: Location, 
+    private location: Location,
+    public categoryService : CategoryService
+
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
@@ -30,7 +33,8 @@ export class ProductEditComponent implements OnInit {
       stock: [0, [Validators.required, Validators.min(0)]],
       description: [''],
       category: [''],
-      imageUrl: ['']
+      imageUrl: [''],
+      active: [true]
     });
   }
 

@@ -1,21 +1,18 @@
-package com.ecommerce.backend.model;
+package com.ecommerce.backend.dto;
 
-public class ProductDTO {
+public class ProductResponse {
+    public Long id;
     public String name;
     public String description;
     public double price;
     public String imageUrl;
     public int stock;
     public Long categoryId;
-    public int inCartNumber;
+    public String categoryName;
     public int discountPercentage;
     public double rating;
     public boolean isFavorite;
     public boolean isInWishlist;
     public boolean isInCompare;
     public boolean isInSale;
-    public Long sellerId;
-    public boolean active; // DTO'dan da gelsin
-
-
 }

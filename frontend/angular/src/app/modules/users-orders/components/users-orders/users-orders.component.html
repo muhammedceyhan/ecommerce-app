@@ -6,8 +6,17 @@
   </div>
 
   <div class="order-card" *ngFor="let order of orders">
-    <p><strong>Tarih:</strong> {{ order.purchaseDate | date:'dd/MM/yyyy - HH:mm' }}</p>
-    <p><strong>Toplam:</strong> {{ order.totalPrice | currency:'TRY' }}</p>
+    <p>
+      <strong>Tarih:</strong>
+      {{ order.purchaseDate | date : "dd/MM/yyyy - HH:mm" }}
+    </p>
+    <p><strong>Toplam:</strong> {{ order.totalPrice | currency : "TRY" }}</p>
     <p><strong>Durum:</strong> {{ order.status }}</p>
+    <p
+      *ngIf="order.status === 'Cancelled'"
+      style="color: red; font-weight: bold"
+    >
+      ❗ Siparişiniz iptal edildi
+    </p>
   </div>
 </div>

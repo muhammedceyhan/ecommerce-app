@@ -16,6 +16,7 @@ import { AddressComponent } from './components/address/address.component';
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -23,7 +24,8 @@ import { AddressComponent } from './components/address/address.component';
     AuthRoutingModule,
     HttpClientModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+
   ]
 })
 export class AuthModule {}

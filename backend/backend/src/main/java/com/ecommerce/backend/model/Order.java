@@ -18,7 +18,10 @@ public class Order {
 
     private Double totalPrice;
 
-    
+    @Column(name = "payment_intent_id")
+    private String paymentIntentId;
+
+
     private LocalDateTime orderDate;
 
     @Column(nullable = false)
@@ -35,6 +38,9 @@ private String note;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderItem> items;
+
+    @Column(name = "shipment_status")
+private String shipmentStatus = "PENDING";
 
     // --- Constructorlar ---
     public Order() {}
@@ -123,5 +129,26 @@ private String note;
     public void setNote(String note) {
         this.note = note;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPaymentIntentId() {
+        return paymentIntentId;
+    }
+
+    public void setPaymentIntentId(String paymentIntentId) {
+        this.paymentIntentId = paymentIntentId;
+    }
+    
+    public String getShipmentStatus() {
+    return shipmentStatus;
+}
+
+public void setShipmentStatus(String shipmentStatus) {
+    this.shipmentStatus = shipmentStatus;
+}
+
     
 }

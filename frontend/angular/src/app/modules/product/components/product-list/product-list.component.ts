@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../modules/auth/services/auth.service';
 import { CartService } from '../../../cart/services/cart.service';
 import { FavoritesService } from '../../../favorites/services/favorites.service';
-
+import { Category } from '../../models/category.model';
+import { CategoryService } from '../../services/category.service';
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -21,8 +22,13 @@ export class ProductListComponent implements OnInit {
   favorites: number[] = [];  // Favori ürün ID'leri
   products: Product[] = [];
   private cartService: CartService;
+  categories: Category[] = [];
+  selectedCategoryId: number | null = null;
+
+
   constructor(private productService: ProductService, private router: Router, public authService: AuthService,
-     cartService: CartService,   private favoritesService: FavoritesService  // 🔴 EKLENMESİ GEREKEN KISIM
+     cartService: CartService,   private favoritesService: FavoritesService ,    private categoryService: CategoryService,
+  // 🔴 EKLENMESİ GEREKEN KISIM
 ) {
     this.cartService = cartService;
     this.productService.getAllProducts().subscribe(data => this.products = data);
@@ -30,7 +36,9 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
   this.productService.getAllProducts().subscribe(data => this.products = data);
-
+    this.categoryService.getAllCategoriesObservable().subscribe((data) => {
+      this.categories = data;
+    });
   const userId = this.authService.getUserId();
   if (userId) {
     this.favoritesService.getFavoritesByUser(userId).subscribe({
@@ -73,15 +81,16 @@ toggleFavorite(productId: number): void {
   goToCart(){
     this.router.navigate(['/cart'])
   }
-  showSearchResults(): Product[] {
-    let showedProducts: Product[] = [];
-    this.products.forEach(product => {
-      if(product.name.toLowerCase().includes(this.searchTerm.toLowerCase())){
-        showedProducts.push(product);
-      }
-    });
-    return showedProducts;
-  }
+
+  // showSearchResults(): Product[] {
+  //   let showedProducts: Product[] = [];
+  //   this.products.forEach(product => {
+  //     if(product.name.toLowerCase().includes(this.searchTerm.toLowerCase())){
+  //       showedProducts.push(product);
+  //     }
+  //   });
+  //   return showedProducts;
+  // }
 
   logout(): void {
     this['authService'].logout();
@@ -97,10 +106,11 @@ toggleFavorite(productId: number): void {
       description: "New Product Description",
       stock: 10,
       imageUrl: "",
-      category: "New Category",
+      categoryName: "New Category",
       discountPercentage: 10,
       rating: 10,
-      isInSale: true
+      isInSale: true,
+      categoryId: 0
     }
     this.productService.addProduct(newProduct).subscribe(data => {
       this.products.push(data);
@@ -132,7 +142,7 @@ toggleFavorite(productId: number): void {
 
   addToCart(productId: number): void {
     const userId = this.authService.getUserId();
-    
+
     if (userId) {
       this.cartService.addProductToCart(userId, productId).subscribe({
         next: (res) => {
@@ -165,6 +175,18 @@ viewDetails(productId: number | undefined) {
   }
 }
 
+
+selectCategory(categoryId: number | null): void {
+    this.selectedCategoryId = categoryId;
+  }
+
+  showSearchResults(): Product[] {
+    return this.products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesCategory = this.selectedCategoryId === null || product.categoryId === this.selectedCategoryId;
+      return matchesSearch && matchesCategory;
+    });
+  }
 
 
 }

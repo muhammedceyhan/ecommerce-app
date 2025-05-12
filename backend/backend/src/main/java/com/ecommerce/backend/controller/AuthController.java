@@ -21,9 +21,12 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private PasswordEncoder passwordEncoder;
-    @Autowired private JwtUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // ✅ Kullanıcı kayıt işlemi
     @PostMapping("/register")
@@ -36,12 +39,12 @@ public class AuthController {
             return ResponseEntity.status(400).body(error); // ✅ geçerli JSON
         }
 
-        // Role kontrolü: Eğer geçerli bir rol verilmediyse, varsayılan olarak 'USER' rolü eklenir
+        // Role kontrolü: Eğer geçerli bir rol verilmediyse, varsayılan olarak 'USER'
+        // rolü eklenir
         Role role = request.getRole();
         if (role == null) {
-            role = Role.ROLE_USER;      // enumunuzda bu şekilde tanımlı olmalı
+            role = Role.ROLE_USER; // enumunuzda bu şekilde tanımlı olmalı
         }
-
 
         // Kullanıcı oluşturuluyor
         User user = new User(request.getUsername(), request.getEmail(),
@@ -64,21 +67,26 @@ public class AuthController {
 
         User user = userOptional.get();
 
+        // ⛔ Yasaklı kontrolü
+        if (user.isBanned()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Kullanıcı yasaklanmış.");
+        }
         // Şifre kontrolü
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Şifre yanlış");
         }
 
         // JWT token oluşturuluyor
-        String token = jwtUtil.generateToken(user.getEmail(), user.getId(),user.getUsername(), user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getUsername(), user.getRole());
         return ResponseEntity.ok(new JwtResponse(token, user.getRole()));
     }
-    @GetMapping("/{id}/username")
-    public ResponseEntity<String> getUsernameById(@PathVariable Long id) {  
-    String username = userRepository.findById(id)
-        .map(User::getUsername)
-        .orElseThrow(() -> new RuntimeException("User not found"));
 
-    return ResponseEntity.ok(username);
-}
+    @GetMapping("/{id}/username")
+    public ResponseEntity<String> getUsernameById(@PathVariable Long id) {
+        String username = userRepository.findById(id)
+                .map(User::getUsername)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(username);
+    }
 }

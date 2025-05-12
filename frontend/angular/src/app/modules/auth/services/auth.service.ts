@@ -121,6 +121,9 @@ login(credentials: { email: string, password: string }): Observable<{ token: str
     return this.http.get(`/${id}/username`, { responseType: 'text' });
   }
 
+ getCurrentUserFromBackend(userId: number): Observable<AuthUser> {
+  return this.http.get<AuthUser>(`http://localhost:8080/api/user/${userId}`);
+}
 
 }
 
