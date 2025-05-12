@@ -56,6 +56,7 @@ public Product addProduct(@RequestBody ProductDTO dto) {
     product.setPrice(dto.price);
     product.setImageUrl(dto.imageUrl);
     product.setStock(dto.stock);
+    product.setActive(dto.active); // Aktiflik ayarı DTO'dan alınır
     Category category = categoryRepository.findById(dto.categoryId).orElseThrow();
     product.setCategory(category);
     product.setDiscountPercentage(dto.discountPercentage);
@@ -85,6 +86,7 @@ public Product addProduct(@RequestBody ProductDTO dto) {
     @PutMapping("/{id}")
 public Product updateProductById(@PathVariable Long id, @RequestBody Product product) {
     product.setId(id); // ID'yi manuel set ediyoruz
+    product.setActive(product.isActive()); // veya frontend'den gelen değer neyse
     return productService.updateProduct(product);
 }
 

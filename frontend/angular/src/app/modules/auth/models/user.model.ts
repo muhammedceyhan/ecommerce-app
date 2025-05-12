@@ -5,4 +5,6 @@ export interface AuthUser {
   email: string;
   password: string;
   role: 'USER' | 'ADMIN' |'SELLER';
+  balance?: number; // 🔥 BURAYI EKLE
+
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.backend.controller;
 
+import com.ecommerce.backend.dto.UpdateRoleRequest;
 import com.ecommerce.backend.model.Role;
 import com.ecommerce.backend.model.User;
 import com.ecommerce.backend.repository.UserRepository;
@@ -37,7 +38,7 @@ public class AdminController {
 
     // 🔵 3. Kullanıcının rolünü değiştir
     @PutMapping("/users/{id}/role")
-    public ResponseEntity<String> updateUserRole(@PathVariable Long id, @RequestBody String newRole) {
+    public ResponseEntity<String> updateUserRole(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -46,12 +47,13 @@ public class AdminController {
         User user = userOptional.get();
 
         try {
-            Role roleEnum = Role.from(newRole); // "USER" veya "ROLE_USER" gibi yazılsa bile doğruya çeviriyor
+            Role roleEnum = Role.from(request.getRole()); // örn: ROLE_SELLER
             user.setRole(roleEnum);
             userRepository.save(user);
             return ResponseEntity.ok("User role updated successfully.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Invalid role: " + newRole);
+            return ResponseEntity.badRequest().body("Invalid role: " + request.getRole());
         }
     }
+
 }

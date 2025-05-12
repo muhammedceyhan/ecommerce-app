@@ -1,0 +1,81 @@
+:host {
+  display: block;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 0.5rem;
+}
+
+li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+li a:hover {
+  color: #007bff;
+}
+
+@media (max-width: 600px) {
+  button {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  li a {
+    font-size: 1.1rem;
+  }
+}
+
+/* store-management.component.scss */
+
+:host {
+  display: block;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: 0.2s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}

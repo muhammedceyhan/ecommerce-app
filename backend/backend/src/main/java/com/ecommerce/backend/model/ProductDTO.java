@@ -15,6 +15,7 @@ public class ProductDTO {
     public boolean isInCompare;
     public boolean isInSale;
     public Long sellerId;
+    public boolean active; // DTO'dan da gelsin
 
 
 }

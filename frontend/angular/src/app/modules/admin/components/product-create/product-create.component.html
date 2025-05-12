@@ -3,17 +3,17 @@
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
   <div>
     <label>Ürün Adı:</label>
-    <input type="text" formControlName="name">
+    <input type="text" formControlName="name" />
   </div>
 
   <div>
     <label>Fiyat:</label>
-    <input type="number" formControlName="price">
+    <input type="number" formControlName="price" />
   </div>
 
   <div>
     <label>Stok:</label>
-    <input type="number" formControlName="stock">
+    <input type="number" formControlName="stock" />
   </div>
 
   <div>
@@ -25,7 +25,10 @@
     <label>Kategori Seçin:</label>
     <select formControlName="categoryId" required>
       <option [value]="null" disabled selected>-- Seçin --</option>
-      <option *ngFor="let cat of categoryService.getAllCategoriesArray()" [value]="cat.id">
+      <option
+        *ngFor="let cat of categoryService.getAllCategoriesArray()"
+        [value]="cat.id"
+      >
         {{ cat.name }}
       </option>
     </select>
@@ -33,46 +36,51 @@
 
   <div>
     <label>Resim URL:</label>
-    <input type="text" formControlName="imageUrl">
+    <input type="text" formControlName="imageUrl" />
   </div>
 
   <div>
     <label>Sepetteki Ürün Sayısı:</label>
-    <input type="number" formControlName="inCartNumber">
+    <input type="number" formControlName="inCartNumber" />
   </div>
 
   <div>
     <label>İndirim Yüzdesi:</label>
-    <input type="number" formControlName="discountPercentage">
+    <input type="number" formControlName="discountPercentage" />
   </div>
 
   <div>
     <label>Rating:</label>
-    <input type="number" formControlName="rating">
+    <input type="number" formControlName="rating" />
   </div>
 
   <div>
     <label>Favori mi?</label>
-    <input type="checkbox" formControlName="isFavorite">
+    <input type="checkbox" formControlName="isFavorite" />
   </div>
 
   <div>
     <label>İstek Listesinde mi?</label>
-    <input type="checkbox" formControlName="isInWishlist">
+    <input type="checkbox" formControlName="isInWishlist" />
   </div>
 
   <div>
     <label>Karşılaştırmada mı?</label>
-    <input type="checkbox" formControlName="isInCompare">
+    <input type="checkbox" formControlName="isInCompare" />
   </div>
 
   <div>
     <label>İndirimde mi?</label>
-    <input type="checkbox" formControlName="isInSale">
+    <input type="checkbox" formControlName="isInSale" />
+  </div>
+  <div>
+    <label>Ürün Yayında mı?</label>
+    <input type="checkbox" formControlName="active" />
   </div>
 
   <div>
     <button type="submit">Ürünü Kaydet</button>
     <button type="button" (click)="goBack()">Geri Dön</button>
   </div>
+
 </form>

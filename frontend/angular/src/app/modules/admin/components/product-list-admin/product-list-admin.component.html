@@ -11,7 +11,7 @@
       <th>Fiyat</th>
       <th>Stok</th>
       <th>Kategori</th>
-      <th>İşlemler</th>
+      <th>Durum</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +21,7 @@
       <td>{{ product.price }}</td>
       <td>{{ product.stock }}</td>
       <td>{{ product.category }}</td>
+      <td>{{ product.active ? 'Aktif' : 'Pasif' }}</td>
       <td>
         <button (click)="editProduct(product.id!)">Düzenle</button>
         <button (click)="deleteProduct(product.id!)">Sil</button>

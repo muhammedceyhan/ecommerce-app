@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+   @Column(name = "balance")
+    private Double balance = 1000.0;
+
+
 
     @Enumerated(EnumType.STRING)  // Enum olarak saklanmasını sağlıyoruz
     @Column(nullable = false)
@@ -112,5 +116,15 @@ public class User {
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
+
+    public Double getBalance() {
+        return balance != null ? balance : 0.0;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    
 
 }

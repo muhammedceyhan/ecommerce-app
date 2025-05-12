@@ -6,4 +6,5 @@ export interface AdminProduct {
   description?: string;
   category?: string;
   imageUrl?: string;
+  active: boolean;
 }

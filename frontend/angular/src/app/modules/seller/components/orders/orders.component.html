@@ -1,52 +1,62 @@
 <table class="orders-table" *ngIf="orders.length > 0">
-<button routerLink="/seller/store-management">🛒 Mağazayı Yönet</button>
+  <button routerLink="/seller/store-management">🛒 Mağazayı Yönet</button>
 
-<h2>My Orders</h2>
+  <h2>Orders</h2>
 
+  <table *ngIf="orders.length > 0">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Buyer</th>
+        <th>Note</th>
+        <th>Payment</th>
+        <th>Current</th>
+        <th>Update</th>
+        <th>Action</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.productName }}</td>
+        <td>{{ order.buyerName }}</td>
+        <td>{{ order.note }}</td>
+        <td>{{ order.paymentMethod }}</td>
 
-<table *ngIf="orders.length > 0">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Buyer</th>
-      <th>Note</th>
-      <th>Payment</th>
-      <th>Current</th>
-      <th>Update</th>
-      <th>Action</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.productName }}</td>
-      <td>{{ order.buyerName }}</td>
-      <td>{{ order.note }}</td>
-      <td>{{ order.paymentMethod }}</td>
+        <!-- CURRENT STATUS -->
+        <td>{{ order.status }}</td>
+        <td>
+          <span class="badge bg-warning" *ngIf="order.status === 'Processing'"
+            >İşleniyor</span
+          >
+          <span class="badge bg-success" *ngIf="order.status === 'Shipped'"
+            >Kargoda</span
+          >
+          <span class="badge bg-danger" *ngIf="order.status === 'Cancelled'"
+            >İptal Edildi</span
+          >
+        </td>
 
-      <!-- CURRENT STATUS -->
-      <td>{{ order.status }}</td>
+        <!-- NEW STATUS DROPDOWN -->
+        <td>
+          <select [(ngModel)]="order.newStatus">
+            <option [value]="'Pending'">Pending</option>
+            <option [value]="'Processing'">Processing</option>
+            <option [value]="'Shipped'">Shipped</option>
+            <option [value]="'Delivered'">Delivered</option>
+            <option [value]="'Cancelled'">Cancelled</option>
+          </select>
+        </td>
 
-      <!-- NEW STATUS DROPDOWN -->
-      <td>
-        <select [(ngModel)]="order.newStatus">
-          <option [value]="'Pending'">Pending</option>
-          <option [value]="'Processing'">Processing</option>
-          <option [value]="'Shipped'">Shipped</option>
-          <option [value]="'Delivered'">Delivered</option>
-          <option [value]="'Cancelled'">Cancelled</option>
-        </select>
-      </td>
+        <!-- GÜNCELLEME BUTONU -->
+        <td>
+          <button (click)="updateOrderStatus(order.id, order.newStatus)">
+            Güncelle
+          </button>
+        </td>
 
-      <!-- GÜNCELLEME BUTONU -->
-      <td>
-        <button (click)="updateOrderStatus(order.id, order.newStatus)">
-          Güncelle
-        </button>
-      </td>
-
-      <td>{{ order.purchaseDate | date : "medium" }}</td>
-    </tr>
-  </tbody>
-</table>
+        <td>{{ order.purchaseDate | date : "medium" }}</td>
+      </tr>
+    </tbody>
+  </table>
 </table>

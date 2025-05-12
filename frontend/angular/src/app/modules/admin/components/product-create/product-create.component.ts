@@ -34,11 +34,12 @@ export class ProductCreateComponent {
       isFavorite: [false],
       isInWishlist: [false],
       isInCompare: [false],
-      isInSale: [false]
+      isInSale: [false],
+      active: [true]  // varsayılan olarak yayında
     });
   }
 
-  
+
   onSubmit(): void {
     if (this.productForm.invalid) {
       return;

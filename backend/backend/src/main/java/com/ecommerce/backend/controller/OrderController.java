@@ -9,6 +9,7 @@ import com.ecommerce.backend.service.OrderService;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.ecommerce.backend.model.User;
+import com.ecommerce.backend.repository.OrderRepository;
 import com.ecommerce.backend.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private OrderRepository orderRepository;
     // 🔵 Sipariş oluştur
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
@@ -93,7 +95,8 @@ public class OrderController {
                         .build(); // confirm = false by default
 
                 PaymentIntent intent = PaymentIntent.create(params);
-
+                order.setPaymentIntentId(intent.getId()); // ödeme oluşturulduktan hemen sonra
+                orderRepository.save(order); // paymentIntentId içeren haliyle kaydet
                 return ResponseEntity.ok(new OrderResponse(
                         order.getId(),
                         "success",
@@ -147,6 +150,13 @@ public class OrderController {
             error.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
+    }
+
+    @PutMapping("/cancel/{orderId}")
+    @PreAuthorize("hasRole('SELLER')")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
+        orderService.cancelOrderBySeller(orderId);
+        return ResponseEntity.ok("Order cancelled and refund issued");
     }
 
 }

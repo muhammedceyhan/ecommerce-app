@@ -18,6 +18,8 @@ public class Order {
 
     private Double totalPrice;
 
+    @Column(name = "payment_intent_id")
+    private String paymentIntentId;
 
     private LocalDateTime orderDate;
 
@@ -123,5 +125,18 @@ private String note;
     public void setNote(String note) {
         this.note = note;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPaymentIntentId() {
+        return paymentIntentId;
+    }
+
+    public void setPaymentIntentId(String paymentIntentId) {
+        this.paymentIntentId = paymentIntentId;
+    }
+    
     
 }

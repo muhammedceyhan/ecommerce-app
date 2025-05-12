@@ -32,6 +32,7 @@ public class WebSecurityConfig {
               .requestMatchers("/error").permitAll()
               // Ürünler GET herkese açık
               .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+              .requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
 
               // Test-users: hem liste hem kullanıcı bazlı GET herkese açık
               .requestMatchers(HttpMethod.GET,
@@ -50,7 +51,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/payment-methods/**").authenticated()
                 .requestMatchers("/api/favorites/**").authenticated()
                   .requestMatchers(HttpMethod.GET, "/api/categories").permitAll() // ✅ bu satır
-
+                
               // Geri kalanı oturum ister
               .anyRequest().authenticated()
           )

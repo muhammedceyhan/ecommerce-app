@@ -15,6 +15,8 @@ import { AdminProductService } from './services/admin-product.service';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { AdminReviewComponent } from './components/admin-review/admin-review.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
+import { DashboardChartComponent } from './components/dashboard-chart/dashboard-chart.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { CreateCategoryComponent } from './components/create-category/create-cat
     OrderManagementComponent,
     UserManagementComponent,
     AdminReviewComponent,
-    CreateCategoryComponent
+    CreateCategoryComponent,
+    DashboardChartComponent
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { CreateCategoryComponent } from './components/create-category/create-cat
     HttpClientModule,
     AdminRoutingModule,
     RouterModule,
+    NgChartsModule
   ],
   providers: [AdminProductService],
 })
