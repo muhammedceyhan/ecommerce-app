@@ -4,6 +4,8 @@ import com.ecommerce.backend.model.Cart;
 import com.ecommerce.backend.model.CartDTO;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.repository.CartRepository;
+import com.ecommerce.backend.repository.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,17 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     public void addProductToCart(Long userId, Long productId) {
         Optional<Cart> existingItem = cartRepository.findByUserIdAndProductId(userId, productId);
+        Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new RuntimeException("Ürün bulunamadı"));
 
+    if (!product.isActive()) {
+        throw new RuntimeException("Bu ürün yayında değil ve sepete eklenemez.");
+    }
         if (existingItem.isPresent()) {
             Cart cart = existingItem.get();
             cart.setQuantity(cart.getQuantity() + 1);
