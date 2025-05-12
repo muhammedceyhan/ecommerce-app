@@ -4,7 +4,9 @@ export interface AdminProduct {
   price: number;
   stock: number;
   description?: string;
-  category?: string;
+  
   imageUrl?: string;
   active: boolean;
+  category: { id: number; name: string }; // ✅ ekle
+  seller: { id: number; email: string };  // ✅ ekle
 }

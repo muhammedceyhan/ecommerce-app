@@ -9,7 +9,7 @@ import { environment } from '../../../../../environments/environment';
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class UserManagementComponent implements OnInit {
   users: AdminUser[] = [];
@@ -17,21 +17,20 @@ export class UserManagementComponent implements OnInit {
   constructor(
     private userService: AdminUserService,
     private router: Router,
-    private http: HttpClient // Rol güncellemek için küçük bir patch işlemi için
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
     this.fetchUsers();
   }
 
-  // Kullanıcıları getir
   fetchUsers(): void {
     this.userService.getAllUsers().subscribe((data) => {
       this.users = data;
     });
   }
 
-  // Kullanıcıyı sil
+
   deleteUser(id: number): void {
     if (confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) {
       this.userService.deleteUser(id).subscribe(() => {
@@ -40,30 +39,63 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  // 🔥 Kullanıcı rolünü değiştir
+
   changeUserRole(userId: number, newRole: string): void {
-    if (confirm(`Rolü değiştirmek istediğinize emin misiniz? (${newRole})`)) {
-      this.http.put(`${environment.apiUrl}/admin/users/${userId}/role`, newRole, {
-        headers: { 'Content-Type': 'text/plain' }
-      }).subscribe({
+  if (confirm(`Rolü değiştirmek istediğinize emin misiniz? (${newRole})`)) {
+    const roleBody = { role: newRole };
+
+    this.http
+      .put(`${environment.apiUrl}/admin/users/${userId}/role`, roleBody, { responseType: 'text' })
+      .subscribe({
         next: () => {
           alert('Rol başarıyla değiştirildi.');
-          this.fetchUsers(); // Listeyi güncelle
+          this.fetchUsers();
         },
         error: (error) => {
           console.error('Rol değiştirme hatası:', error);
           alert('Rol değiştirilemedi.');
         }
       });
-    }
   }
+}
 
-  goBack() {
-    this.router.navigate(['/admin']);
+
+  getSimpleRole(fullRole: string): string {
+    return fullRole.replace('ROLE_', '');
   }
 
   getSelectValue(event: Event): string {
     return (event.target as HTMLSelectElement).value;
   }
 
+ banUser(userId: number): void {
+  this.http
+    .put(`${environment.apiUrl}/admin/users/${userId}/ban`, null, { responseType: 'text' })
+    .subscribe({
+      next: () => {
+        const user = this.users.find((u) => u.id === userId);
+        if (user) user.banned = true;
+        alert('Kullanıcı banlandı.');
+      },
+      error: () => alert('Banlama işlemi başarısız.')
+    });
+}
+
+unbanUser(userId: number): void {
+  this.http
+    .put(`${environment.apiUrl}/admin/users/${userId}/unban`, null, { responseType: 'text' })
+    .subscribe({
+      next: () => {
+        const user = this.users.find((u) => u.id === userId);
+        if (user) user.banned = false;
+        alert('Ban kaldırıldı.');
+      },
+      error: () => alert('Ban kaldırma işlemi başarısız.')
+    });
+}
+
+
+  goBack() {
+    this.router.navigate(['/admin']);
+  }
 }

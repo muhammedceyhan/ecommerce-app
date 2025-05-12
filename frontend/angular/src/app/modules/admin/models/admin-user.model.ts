@@ -3,4 +3,6 @@ export interface AdminUser {
   username: string;
   email: string;
   role: 'USER' | 'ADMIN';
+  banned: boolean;
+
 }

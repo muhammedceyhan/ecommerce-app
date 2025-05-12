@@ -20,15 +20,22 @@
       <td>{{ user.role }}</td>
 
       <td>
-        <select [value]="user.role" (change)="changeUserRole(user.id!, getSelectValue($event))">
-          <option value="ROLE_USER">Kullanıcı</option>
-          <option value="ROLE_SELLER">Satıcı</option>
-          <option value="ROLE_ADMIN">Yönetici</option>
+        <select
+          [value]="getSimpleRole(user.role)"
+          (change)="changeUserRole(user.id || 0, getSelectValue($event))"
+        >
+          <option value="USER">Kullanıcı</option>
+          <option value="SELLER">Satıcı</option>
+          <option value="ADMIN">Yönetici</option>
         </select>
       </td>
 
       <td>
         <button (click)="deleteUser(user.id!)">Sil</button>
+        <button *ngIf="!user.banned" (click)="banUser(user.id!)">Banla</button>
+        <button *ngIf="user.banned" (click)="unbanUser(user.id!)">
+          Banı Kaldır
+        </button>
       </td>
     </tr>
   </tbody>

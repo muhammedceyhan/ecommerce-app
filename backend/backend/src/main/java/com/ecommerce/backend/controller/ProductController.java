@@ -82,13 +82,40 @@ public Product addProduct(@RequestBody ProductDTO dto) {
     }
     
 
-    @PreAuthorize("hasRole('SELLER')")
-    @PutMapping("/{id}")
-public Product updateProductById(@PathVariable Long id, @RequestBody Product product) {
-    product.setId(id); // ID'yi manuel set ediyoruz
-    product.setActive(product.isActive()); // veya frontend'den gelen değer neyse
+//     @PreAuthorize("hasRole('SELLER','ADMIN')")
+//     @PutMapping("/{id}")
+// public Product updateProductById(@PathVariable Long id, @RequestBody Product product) {
+//     product.setId(id); // ID'yi manuel set ediyoruz
+//     product.setActive(product.isActive()); // veya frontend'den gelen değer neyse
+//     return productService.updateProduct(product);
+// }
+
+@PutMapping("/{id}")
+@PreAuthorize("hasAnyRole('SELLER', 'ADMIN')")
+public Product updateProductById(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    Product product = new Product();
+    product.setId(id);
+    product.setName(dto.name);
+    product.setDescription(dto.description);
+    product.setPrice(dto.price);
+    product.setImageUrl(dto.imageUrl);
+    product.setStock(dto.stock);
+    product.setActive(dto.active);
+    product.setDiscountPercentage(dto.discountPercentage);
+    product.setRating(dto.rating);
+    product.setInSale(dto.isInSale);
+
+    Category category = categoryRepository.findById(dto.categoryId)
+        .orElseThrow(() -> new RuntimeException("Kategori bulunamadı"));
+    product.setCategory(category);
+
+    User seller = userRepository.findById(dto.sellerId)
+        .orElseThrow(() -> new RuntimeException("Satıcı bulunamadı"));
+    product.setSeller(seller);
+
     return productService.updateProduct(product);
 }
+
 
 @DeleteMapping("/{id}")
 public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
@@ -123,5 +150,16 @@ public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         }
         return null;
     }
+
+@PutMapping("/admin/products/{id}/toggle-status")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<?> toggleProductStatus(@PathVariable Long id) {
+    Product product = productService.getProductById(id);
+    product.setActive(!product.isActive());
+    productService.updateProduct(product);
+    return ResponseEntity.ok("Ürün durumu değiştirildi.");
+}
+
+
 
     }

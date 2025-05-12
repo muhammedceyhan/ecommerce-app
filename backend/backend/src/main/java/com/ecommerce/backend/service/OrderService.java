@@ -125,7 +125,6 @@ public class OrderService {
         order.setNote(checkoutRequest.getNote());
         order.setShipmentStatus("PENDING");
 
-
         List<OrderItem> orderItems = new ArrayList<>();
 
         // Alıcının bilgisi alınır
@@ -137,6 +136,10 @@ public class OrderService {
         for (Cart cartItem : cartItems) {
             Product product = productRepository.findByIdForUpdate(cartItem.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (!product.isActive()) {
+                throw new RuntimeException("Ürün yayında değil: " + product.getName());
+            }
 
             if (product.getStock() < cartItem.getQuantity()) {
                 throw new RuntimeException("Yetersiz stok: " + product.getName());

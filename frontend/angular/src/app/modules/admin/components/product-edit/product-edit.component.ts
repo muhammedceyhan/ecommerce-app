@@ -28,14 +28,16 @@ export class ProductEditComponent implements OnInit {
 
   ) {
     this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
-      stock: [0, [Validators.required, Validators.min(0)]],
-      description: [''],
-      category: [''],
-      imageUrl: [''],
-      active: [true]
-    });
+  name: ['', Validators.required],
+  price: [0, [Validators.required, Validators.min(0)]],
+  stock: [0, [Validators.required, Validators.min(0)]],
+  description: [''],
+  categoryId: [null, Validators.required],     // ✅ düzeltildi
+  sellerId: [null],                            // ✅ backend zorunluysa
+  imageUrl: [''],
+  active: [true]
+});
+
   }
 
   ngOnInit(): void {
@@ -44,8 +46,13 @@ export class ProductEditComponent implements OnInit {
 
     // Ürünü backend'den getir
     this.productService.getProductById(this.productId).subscribe((product: AdminProduct) => {
-      this.productForm.patchValue(product); // Formu doldur
-    });
+  this.productForm.patchValue({
+    ...product,
+    categoryId: product.category?.id, // ✅ category nesnesinden ID'yi al
+    sellerId: product.seller?.id      // ✅ seller nesnesinden ID'yi al
+  });
+});
+
   }
 
   goBack(): void {
