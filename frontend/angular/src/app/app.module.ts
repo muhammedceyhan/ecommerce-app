@@ -16,7 +16,12 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor'; // kendi d
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { OrdersComponent } from './modules/seller/components/orders/orders.component';
+
 import { NgChartsModule } from 'ng2-charts';
+
+import { PaymentMethodsComponent } from './modules/payment/components/payment-methods/payment-methods.component';
+import { errorInterceptor }  from './core/interceptors/error.interceptor';
+
 
 
   @NgModule({
@@ -28,7 +33,9 @@ import { NgChartsModule } from 'ng2-charts';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+
     NgChartsModule
+
 
 
   ],
@@ -40,6 +47,7 @@ import { NgChartsModule } from 'ng2-charts';
       multi: true, // Birden fazla interceptor'ı çalıştırabilmek için 'multi' özelliği aktif
     },
 
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor, // 👈 BU SATIR AKTİF OLSUN
@@ -49,6 +57,8 @@ import { NgChartsModule } from 'ng2-charts';
     provideHttpClient(withFetch()), // 👈 sadece bunu ekle
     //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
 
+
+    provideHttpClient(withFetch()),  // 👈 sadece bunu ekle
   ],
   bootstrap: [AppComponent],
 })

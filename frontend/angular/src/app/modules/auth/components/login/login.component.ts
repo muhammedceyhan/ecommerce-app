@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-login',
 
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
   standalone: false,
 })
 export class LoginComponent implements OnInit {

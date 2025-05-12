@@ -1,26 +1,52 @@
-<h2>Kayıt Ol</h2>
+<div class="auth-container">
+  <div class="form-panel">
+    <h2>Kayıt Ol</h2>
 
-<button (click)="goBack()">Geri</button>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="input-box">
+        <input
+          type="text"
+          formControlName="fullName"
+          placeholder="Kullanıcı Adı"
+        />
+      </div>
 
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <!-- register.component.html -->
-  <label for="fullName">Kullanıcı Adı:</label>
-  <input id="fullName" type="text" formControlName="fullName" />
+      <div class="input-box">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Email"
+        />
+      </div>
 
-  <label>Email:</label>
-  <input type="email" formControlName="email" /><br /><br />
+      <div class="input-box">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Şifre"
+        />
+      </div>
 
-  <label>Şifre:</label>
-  <input type="password" formControlName="password" /><br /><br />
+      <div class="input-box">
+        <select formControlName="role">
+          <option value="USER">Kullanıcı</option>
+          <option value="SELLER">Satıcı</option>
+          <option value="ADMIN">Yönetici</option>
+        </select>
+      </div>
 
-  <!-- register.component.html :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1} -->
-<label>Rol:</label>
-  <select formControlName="role">
-    <option value="ROLE_USER">Kullanıcı</option>
-    <option value="ROLE_SELLER">Satıcı</option>
-    <option value="ROLE_ADMIN">Yönetici</option>
-  </select>
-<br /><br />
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid"
+        class="btn"
+      >
+        Kayıt Ol
+      </button>
+    </form>
 
-  <button type="submit" [disabled]="registerForm.invalid">Kayıt Ol</button>
-</form>
+    <div class="links">
+      <button (click)="goBack()" class="link-btn">Geri</button>
+      <a routerLink="/auth/login" class="link">Zaten hesabınız var? Giriş Yap</a>
+    </div>
+  </div>
+</div>
