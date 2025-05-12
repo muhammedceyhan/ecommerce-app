@@ -12,17 +12,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne
-    // @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    // private Product product;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // @Transient // <-- JPA bunu veritabanına yansıtmaz
-    // private Long productId; // frontend veya geçici kullanım için
-
+  
     private int quantity;
     private Double price; // sipariş zamanındaki ürün fiyatı
 
@@ -46,19 +40,7 @@ public class OrderItem {
     public Long getId() {
         return id;
     }
-
-    // public void setProductId(Long productId) {
-    //     this.productId = productId;
-    //     this.product = new Product();
-    //     this.product.setId(productId); // ilişkiyi elle kuruyoruz
-    // }
-
-    // public Long getProductId() {
-    //     if (product != null)
-    //         return product.getId();
-    //     return productId;
-    // }
-
+    
     
     public int getQuantity() {
         return quantity;

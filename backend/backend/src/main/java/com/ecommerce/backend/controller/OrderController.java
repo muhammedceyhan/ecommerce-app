@@ -124,18 +124,8 @@ public class OrderController {
                 .sum();
     }
 
-    // @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
-    // @PutMapping("/{orderId}/status")
-    // public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId,
-    // @RequestParam String status) {
-    // try {
-    // orderService.updateOrderStatus(orderId, status);
-    // return ResponseEntity.ok("Order status updated successfully.");
-    // } catch (RuntimeException e) {
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    // }
-    // }
 
+    
     @PutMapping("/{orderId}/status")
     @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     public ResponseEntity<Map<String, String>> updateOrderStatus(@PathVariable Long orderId,

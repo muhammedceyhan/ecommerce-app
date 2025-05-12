@@ -56,4 +56,30 @@ public class AdminController {
         }
     }
 
+    @PutMapping("/users/{id}/ban")
+public ResponseEntity<String> banUser(@PathVariable Long id) {
+    Optional<User> optionalUser = userRepository.findById(id);
+    if (optionalUser.isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+
+    User user = optionalUser.get();
+    user.setBanned(true);
+    userRepository.save(user);
+    return ResponseEntity.ok("User banned successfully.");
+}
+
+@PutMapping("/users/{id}/unban")
+public ResponseEntity<String> unbanUser(@PathVariable Long id) {
+    Optional<User> optionalUser = userRepository.findById(id);
+    if (optionalUser.isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+
+    User user = optionalUser.get();
+    user.setBanned(false);
+    userRepository.save(user);
+    return ResponseEntity.ok("User unbanned successfully.");
+}
+
 }

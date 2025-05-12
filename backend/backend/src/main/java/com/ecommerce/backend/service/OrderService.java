@@ -123,6 +123,8 @@ public class OrderService {
         order.setPaymentMethod(checkoutRequest.getPaymentMethod());
         order.setShippingAddress(checkoutRequest.getShippingAddress());
         order.setNote(checkoutRequest.getNote());
+        order.setShipmentStatus("PENDING");
+
 
         List<OrderItem> orderItems = new ArrayList<>();
 
@@ -174,8 +176,8 @@ public class OrderService {
         order.setItems(orderItems);
         order.setTotalPrice(total);
         orderRepository.save(order);
-       
-     cartRepository.deleteAllByUserId(userId);
+
+        cartRepository.deleteAllByUserId(userId);
         return order;
     }
 
@@ -184,6 +186,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(status);
+        order.setShipmentStatus("CANCELLED");
         orderRepository.save(order);
     }
 
@@ -191,7 +194,7 @@ public class OrderService {
     public void cancelOrderBySeller(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
 
-        if (!order.getStatus().equals("SHIPPED")) {
+        if (!order.getStatus().equalsIgnoreCase("SHIPPED")) {
             order.setStatus("CANCELLED");
 
             // Stripe Refund
@@ -200,18 +203,21 @@ public class OrderService {
                 paymentMethodService.refundPayment(paymentIntentId);
             }
 
-            // Alıcı (buyer) bakiyesini geri yükle
+            // Alıcıya iade
             User buyer = userRepository.findById(order.getUserId()).orElseThrow();
             buyer.setBalance(buyer.getBalance() + order.getTotalPrice());
-
-            // Satıcıyı siparişteki ilk üründen al ve bakiyesini düş
-            Product product = order.getItems().get(0).getProduct();
-            User seller = product.getSeller(); // veya getSeller()
-            seller.setBalance(seller.getBalance() - order.getTotalPrice());
-
-            // Veritabanına kaydet
             userRepository.save(buyer);
-            userRepository.save(seller);
+
+            // Her ürün için ilgili satıcının bakiyesi düşürülür
+            for (OrderItem item : order.getItems()) {
+                Product product = item.getProduct();
+                User seller = product.getSeller();
+
+                double refundAmount = item.getPrice() * item.getQuantity();
+                seller.setBalance(seller.getBalance() - refundAmount);
+                userRepository.save(seller);
+            }
+
             orderRepository.save(order);
         }
     }

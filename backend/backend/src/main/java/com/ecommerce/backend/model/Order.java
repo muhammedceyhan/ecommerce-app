@@ -38,6 +38,9 @@ private String note;
     @JsonManagedReference
     private List<OrderItem> items;
 
+    @Column(name = "shipment_status")
+private String shipmentStatus = "PENDING";
+
     // --- Constructorlar ---
     public Order() {}
 
@@ -138,5 +141,13 @@ private String note;
         this.paymentIntentId = paymentIntentId;
     }
     
+    public String getShipmentStatus() {
+    return shipmentStatus;
+}
+
+public void setShipmentStatus(String shipmentStatus) {
+    this.shipmentStatus = shipmentStatus;
+}
+
     
 }
